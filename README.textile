@@ -1,0 +1,41 @@
+h1. textile.js
+
+Attempt at an implementation of fully featured Textile parser in JavaScript that runs reasonably fast and mostly avoids outputting broken HTML.
+
+
+h2. Install
+
+bc. $ npm install textilejs
+
+
+h2. Options
+
+The basic interface mimics "marked":https://github.com/chjj/marked. So if you use that in your project then you can support Textile as well with minimal effort.
+
+Currently, no option is supported. :-)
+
+
+h2. Usage
+
+bc. console.log( textile( "I am using __textile__." ) );
+
+You can also get to the syntax tree, which uses "JsonML":http://www.jsonml.org/.
+
+bc. var jsonml = textile.parse( text );
+console.log( jsonml );
+
+
+h2. CLI
+
+    $ textile -o hello.html
+    hello world
+    ^D
+    $ cat hello.html
+    <p>hello world</p>
+
+
+h2. License
+
+Copyright (c) 2012, Borgar Þorsteinsson (MIT License).
+
+See LICENSE.

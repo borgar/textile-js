@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+var fs = require('fs')
+  , util = require('util')
+  , textile = require('../')
+  ;
+
+// clean arguments
+var args = [];
+process.argv.slice(2).forEach(function ( m, i, s ) {
+  if ( s = /^([^=]+)=(.*)$/.exec( m ) ) {
+    args.push( s[1], s[2] );
+  }
+  else {
+    args.push( m );
+  }
+})
+
+// parse arguments
+var options = {};
+while ( args.length ) {
+  var arg = args.shift();
+  if ( arg === '-t' || arg === '--tokens' ) {
+    options.tokens = true;
+  }
+  else if ( arg === '-i' || arg === '--input' ) {
+    options.input = args.shift();
+  }
+  else if ( arg === '-o' || arg === '--output' ) {
+    options.output = args.shift();
+  }
+  else {
+    if ( !options.files ) { options.files = []; }
+    options.files.shift( arg );
+  }
+}
+
+// input overrides file arguments
+if ( options.input ) {
+  options.files = [ options.input ];
+}
+
+// writer
+var data = "";
+function write_data () {
+  data = options.tokens
+            ? JSON.stringify( textile.jsonml( data ), null, 2 )
+            : textile( data )
+            ;
+  if ( options.output ) {
+    fs.writeFileSync( options.output, data );
+  }
+  else {
+    process.stdout.write( data + '\n' );
+  }
+}
+
+// file or stdin?
+if ( options.files ) {
+  data = fs.readFileSync( options.files[0], 'utf8' );
+  write_data();
+}
+else {
+  var stdin = process.stdin;
+  stdin.setEncoding( 'utf8' );
+  stdin.on( 'data', function ( text ) {
+    data += text;
+  });
+  stdin.on( 'end', write_data );
+  stdin.resume();
+}
