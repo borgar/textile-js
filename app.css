@@ -1,0 +1,220 @@
+html {
+  overflow: hidden;
+  height: 100%;
+}
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 13px;
+  background: #ddd;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+textarea {
+  font-family: "andale mono", "lucida console", monospace;
+  font-size: 12px;
+  display: block;
+  resize: none;
+}
+label {
+  display: block;
+  padding: 4px 0;
+  font-weight: bold;
+  color: #777;
+}
+.col {
+  margin: 0;
+  padding: 1em 0;
+  position: relative;
+  width: 45%;
+  height: 100%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+body > h1 {
+  margin : 0;
+  padding : 10px 3% 0;
+  font-size : 20px;
+  color : #444;
+}
+#col_left {
+  float: left;
+  left: 3%;
+}
+#col_right {
+  float: right;
+  right: 4%;
+}
+.panel {
+  background: #fff;
+  border: 1px solid #aaaaaa;
+  outline: none;
+  display: block;
+  margin: 0;
+  padding: 4px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  height: 400px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+#text_preview {
+  overflow: auto;
+}
+#md_input {
+  background: #f6f6f6;
+}
+#credit1 {
+  background : url(http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png) 0 0 no-repeat;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  text-indent: -999em;
+  display: block;
+  overflow: hidden;
+  height: 145px;
+  width: 149px;
+}
+#credit2 {
+  position : absolute;
+  bottom : 15px;
+  right : 4%;
+  color : #aaa;
+  font-size : 11px;
+}
+.drophover {
+  cursor: copy;
+  /* no-drop, not-allowed */
+  border: 1px solid black;
+  background-color: #ccf;
+}
+.tools {
+  position: absolute;
+  top: 1em;
+  right: 0;
+  padding: 0;
+}
+.tab-closed {
+  display: none;
+}
+.tabs-active {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.tabs-active li {
+  display: inline-block;
+}
+.tabs-active li a {
+  display: block;
+  padding: 4px 10px;
+  text-decoration: none;
+  color: #999;
+  background: #eee;
+  margin: 0 1px;
+}
+.tabs-active .current a {
+  color: #555;
+  background: #fff;
+  padding-bottom: 5px;
+  margin: -1px 0;
+  border: 1px solid #aaaaaa;
+  border-bottom: 0;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: -webkit-gradient(linear, left top, right top, color-stop(0, #dddddd), color-stop(1, #ffffff));
+}
+::-webkit-scrollbar:horizontal {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #dddddd), color-stop(1, #ffffff));
+}
+::-webkit-scrollbar-corner {
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0, #dddddd), color-stop(0.6, #ffffff));
+}
+::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment {
+  height: 0;
+  width: 0;
+  display: block;
+  background-color: transparent;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb:horizontal, ::-webkit-scrollbar-thumb:vertical {
+  border: 1px solid #bbbbbb;
+  height: 50px;
+  width: 50px;
+  -webkit-border-radius: 6px;
+  background: -webkit-gradient(linear, left top, right top, color-stop(0, #dddddd), color-stop(1, #bbbbbb));
+}
+::-webkit-scrollbar-thumb:horizontal {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #dddddd), color-stop(1, #bbbbbb));
+}
+
+#text_preview {
+  padding: 0 1em 4px 1em;
+  color: #444;
+  font-size: 13px;
+  line-height: 1.4;
+}
+#text_preview h1 {
+  line-height: 1.1;
+  font-size: 2em;
+}
+#text_preview h2 {
+  line-height: 1.1;
+  font-size: 1.6em;
+}
+#text_preview h3 {
+  line-height: 1.14;
+  font-size: 1.36em;
+}
+#text_preview h4 {
+  line-height: 1.2;
+  font-size: 1.14em;
+}
+#text_preview h5 {
+  line-height: 1.24;
+  font-size: 1em;
+}
+#text_preview h6 {
+  line-height: 1.24;
+  font-size: 1em;
+}
+#text_preview code {
+  background: #f4f4f4;
+}
+#text_preview table {
+  border-collapse : collapse;
+}
+#text_preview table th,
+#text_preview table td {
+  padding : 4px 8px;
+  border : 1px solid #aaa;
+}
+#text_preview ul {
+  margin-left: 0;
+  padding-left: 2em;
+}
+#text_preview acronym {
+  text-decoration : none;
+  border-bottom : 1px dotted #888;
+  cursor: help;
+}
+#text_preview blockquote {
+  margin-left: .6em;
+  padding-left: 1em;
+  border-left: .4em solid #ddd;
+}
+#text_preview pre > code {
+  display: block;
+}
+#text_preview .caps {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: .1em;
+}
