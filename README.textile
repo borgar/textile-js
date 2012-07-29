@@ -2,6 +2,8 @@ h1. textile.js
 
 Attempt at an implementation of fully featured Textile parser in JavaScript that runs reasonably fast and mostly avoids outputting broken HTML.
 
+Give it a go in "a live textile web editor":http://borgar.github.com/textile-js/.
+
 
 h2. Install
 
