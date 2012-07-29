@@ -29,11 +29,11 @@ console.log( jsonml );
 
 h2. CLI
 
-    $ textile -o hello.html
-    hello world
-    ^D
-    $ cat hello.html
-    <p>hello world</p>
+bc. $ textile -o hello.html
+hello world
+^D
+$ cat hello.html
+<p>hello world</p>
 
 
 h2. License
