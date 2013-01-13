@@ -7,7 +7,7 @@ Give it a go in "a live textile web editor":http://borgar.github.com/textile-js/
 
 h2. Install
 
-bc. $ npm install textilejs
+bc. $ npm install textile-js
 
 
 h2. Options
