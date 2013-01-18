@@ -25,6 +25,7 @@ var $testfiles = [
   'converted/table.js',
   'converted/textism.js',
   'converted/threshold.js',
+  'block_comments.js',
   'jstextile-tests.js'
 ];
 
