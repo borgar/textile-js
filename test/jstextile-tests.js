@@ -268,7 +268,7 @@ equal(textile.convert( // HTML comment
 
 
 
-equal(textile.convert( // HTML comment
+equal(textile.convert(
 
 "line\n"+
 "\n"+
@@ -286,7 +286,7 @@ equal(textile.convert( // HTML comment
 
 
 
-equal(textile.convert( // HTML comment
+equal(textile.convert(
 
 "REYKJAVÍK"
 
@@ -295,6 +295,106 @@ equal(textile.convert( // HTML comment
 "<p><span class=\"caps\">REYKJAVÍK</span></p>"
 
 );
+
+
+
+equal(textile.convert( // Multiple classes
+
+  "p(first second). some text"
+
+), // Should output
+
+  "<p class=\"first second\">some text</p>"
+
+,"2 css classes");
+
+
+
+equal(textile.convert( // Multiple classes
+
+  "p(first second third). some text"
+
+), // Should output
+
+  "<p class=\"first second third\">some text</p>"
+
+,"3 css classes");
+
+
+
+equal(textile.convert( // Multiple classes
+
+  "p(first second third#someid). some text"
+
+), // Should output
+
+  "<p class=\"first second third\" id=\"someid\">some text</p>"
+
+,"3 css classes + id");
+
+
+equal(textile.convert( // Multiple classes
+
+  "\"(foo bar) text (link title)\":http://example.com/"
+
+), // Should output
+
+  "<p><a class=\"foo bar\" href=\"http://example.com/\" title=\"link title\">text</a></p>"
+
+,"2 classes + title on a link");
+
+
+equal(textile.convert( // Multiple classes
+
+  "| a |(eee fee). b |\n"+
+  "| a |( b )|"
+
+), // Should output
+
+  "<table>\n"+
+  "\t<tr>\n"+
+  "\t\t<td> a </td>\n"+
+  "\t\t<td class=\"eee fee\">b </td>\n"+
+  "\t</tr>\n"+
+  "\t<tr>\n"+
+  "\t\t<td> a </td>\n"+
+  "\t\t<td>( b )</td>\n"+
+  "\t</tr>\n"+
+  "</table>"
+
+,"dual classes on table cells");
+
+
+
+
+equal(textile.convert( // Multiple classes
+
+  "_(span)_\n"+
+  "_(span span)_\n"+
+  "_(span) span_\n"+
+  "_(span) span (span)_\n"+
+  "_(span span) span (span span)_"
+
+), // Should output
+
+  "<p><em>(span)</em><br />\n"+
+  "<em>(span span)</em><br />\n"+
+  "<em>(span) span</em><br />\n"+
+  "<em>(span) span (span)</em><br />\n"+
+  "<em>(span span) span (span span)</em></p>"
+
+,"spans in parens");
+
+
+equal(textile.convert( // Multiple classes
+
+  "_{display:block}(span) span (span)_"
+
+), // Should output
+
+  "<p><em style=\"display:block\">(span) span (span)</em></p>"
+
+,"partal attr span parse");
 
 
 
