@@ -397,6 +397,29 @@ equal(textile.convert( // Multiple classes
 ,"partal attr span parse");
 
 
+equal(textile.convert( // inline code with leading @
+
+  "a @@var@ test"
+
+), // Should output
+
+  "<p>a <code>@var</code> test</p>"
+
+,"inline code with leading @");
+
+
+
+equal(textile.convert( // inline code with a single @
+
+  "a @@@ test"
+
+), // Should output
+
+  "<p>a <code>@</code> test</p>"
+
+,"inline code with a single @");
+
+
 
 
 });
