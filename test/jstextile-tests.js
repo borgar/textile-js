@@ -422,4 +422,12 @@ equal(textile.convert( // inline code with a single @
 
 
 
+var t1 = Date.now();
+textile.convert("!a()aaaaaaaaaaaaaaaaaaaaaaaaaa");
+var t2 = Date.now();
+ok( ( t2 - t1 < 10 ), 'image parsing speed bug' );
+
+
+
+
 });
