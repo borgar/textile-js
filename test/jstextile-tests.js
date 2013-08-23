@@ -420,6 +420,17 @@ equal(textile.convert( // inline code with a single @
 ,"inline code with a single @");
 
 
+equal(textile.convert( // empty named block
+
+  "h1."
+  
+), // Should output
+
+  "<h1></h1>"
+
+,"empty named block");
+
+
 
 
 var t1 = Date.now();
