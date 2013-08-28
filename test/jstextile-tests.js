@@ -421,6 +421,42 @@ equal(textile.convert( // inline code with a single @
 
 
 
+equal(textile.convert( // empty block 1
+
+  "h1."
+
+), // Should output
+
+  "<p>h1.</p>"
+
+,"empty block #1");
+
+
+
+equal(textile.convert( // empty block 2
+
+  "h1. "
+
+), // Should output
+
+  "<h1></h1>"
+
+,"empty block #2");
+
+
+
+equal(textile.convert( // empty block 3
+
+  "h1{display:block}. "
+
+), // Should output
+
+  '<h1 style="display:block"></h1>'
+
+,"empty block #3");
+
+
+
 
 var t1 = Date.now();
 textile.convert("!a()aaaaaaaaaaaaaaaaaaaaaaaaaa");
