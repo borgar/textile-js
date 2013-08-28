@@ -444,7 +444,6 @@ equal(textile.convert( // empty block 2
 ,"empty block #2");
 
 
-
 equal(textile.convert( // empty block 3
 
   "h1{display:block}. "
@@ -455,6 +454,95 @@ equal(textile.convert( // empty block 3
 
 ,"empty block #3");
 
+equal(textile.convert( // non list 1
+
+  "*"
+
+), // Should output
+
+  "<p>*</p>"
+
+,"non list #1");
+
+equal(textile.convert( // non list 2
+
+  "#"
+
+), // Should output
+
+  "<p>#</p>"
+
+,"non list #2");
+
+equal(textile.convert( // non list 3
+
+  "*\n"
+
+), // Should output
+
+  "<p>*</p>"
+
+,"non list #3");
+
+equal(textile.convert( // non list 4
+
+  "#\n"
+
+), // Should output
+
+  "<p>#</p>"
+
+,"non list #4");
+
+equal(textile.convert( // non list 5
+
+  "*\ntest"
+
+), // Should output
+
+  "<p>*<br />\ntest</p>"
+
+,"non list #5");
+
+equal(textile.convert( // empty list 1
+
+  "* \n"
+
+), // Should output
+
+  "<p>* </p>"
+
+,"empty list #1");
+
+equal(textile.convert( // empty list 2
+
+  "# \n"
+
+), // Should output
+
+  "<p># </p>"
+
+,"empty list #2");
+
+equal(textile.convert( // insert empty list 1
+
+  "*\n\ntest"
+
+), // Should output
+
+  "<p>*</p>\n<p>test</p>"
+
+,"insert empty list #1");
+
+equal(textile.convert( // insert empty list 2
+
+  "#\n\ntest"
+
+), // Should output
+
+  "<p>#</p>\n<p>test</p>"
+
+,"insert empty list #2");
 
 
 
