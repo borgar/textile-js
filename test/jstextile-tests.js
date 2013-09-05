@@ -545,6 +545,30 @@ equal(textile.convert( // insert empty list 2
 ,"insert empty list #2");
 
 
+equal(textile.convert( // empty attributes (1)
+
+  '<input type="checkbox" checked>'
+
+), // Should output
+
+  '<p><input type="checkbox" checked /></p>'
+
+,"empty attributes (1)");
+
+
+
+equal(textile.convert( // empty attributes (2)
+
+  '<iframe width="100" height="100" src="//example.com" frameborder="0" allowfullscreen></iframe>'
+
+), // Should output
+
+  '<p><iframe width="100" height="100" src="//example.com" frameborder="0" allowfullscreen></iframe></p>'
+
+,"empty attributes (2)");
+
+
+
 
 var t1 = Date.now();
 textile.convert("!a()aaaaaaaaaaaaaaaaaaaaaaaaaa");
