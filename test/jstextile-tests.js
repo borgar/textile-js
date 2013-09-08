@@ -569,6 +569,55 @@ equal(textile.convert( // empty attributes (2)
 
 
 
+equal(textile.convert( // bold line vs. list
+
+  '*{color:red}bold red*'
+
+), // Should output
+
+  '<p><strong style="color:red">bold red</strong></p>'
+
+,"bold line vs. list");
+
+
+equal(textile.convert( // strict list matching (1)
+
+  '*{color:red} item*\n\n'+
+  '* item*\n\n'+
+  '*item*'
+
+), // Should output
+
+  '<ul>\n'+
+  '\t<li style="color:red">item*</li>\n'+
+  '</ul>\n'+
+  '<ul>\n'+
+  '\t<li>item*</li>\n'+
+  '</ul>\n'+
+  '<p><strong>item</strong></p>'
+
+,"strict list matching (1)");
+
+equal(textile.convert( // strict list matching (2)
+
+  '*{color:red} item\n\n'+
+  '* item\n\n'+
+  '*item'
+
+), // Should output
+
+  '<ul>\n'+
+  '\t<li style="color:red">item</li>\n'+
+  '</ul>\n'+
+  '<ul>\n'+
+  '\t<li>item</li>\n'+
+  '</ul>\n'+
+  '<p>*item</p>'
+
+,"strict list matching (2)");
+
+
+
 
 var t1 = Date.now();
 textile.convert("!a()aaaaaaaaaaaaaaaaaaaaaaaaaa");
