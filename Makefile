@@ -6,4 +6,7 @@ clean:
 	@rm textile.js
 	@rm textile.min.js
 
-.PHONY: clean all
+test:
+	@node test/index.js
+
+.PHONY: clean all test

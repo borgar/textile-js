@@ -111,9 +111,10 @@ function test ( testName /*, expected, callback, async */ ) {
 // load tests - done first so it won't affect time measurement
 
 $testfiles = $testfiles.map(function ( fn ) {
+  var full_fn = require('path').join( __dirname, fn );
   try {
     return {
-      script: require('fs').readFileSync( fn, 'utf8' ),
+      script: require('fs').readFileSync( full_fn, 'utf8' ),
       filename: fn,
     };
   }
