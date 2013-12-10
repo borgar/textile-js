@@ -1983,3 +1983,16 @@ equal(textile.convert( // The textile
 
 });
 
+
+// =[ 117 ]==============================================================================
+
+
+equal(textile.convert( // The textile
+
+  "fn1. This is _emphasized‎_ *strong*"
+
+), // Should output
+
+  "<p class=\"footnote\" id=\"fn1\"><a href=\"#fnr1\"><sup>1</sup></a> This is <em>emphasized‎</em> <strong>strong</strong></p>"
+
+,"footnote inline textile");
