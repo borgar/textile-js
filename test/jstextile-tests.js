@@ -627,4 +627,20 @@ ok( ( t2 - t1 < 10 ), 'image parsing speed bug' );
 
 
 
+
+/* parse inline textile in footnotes */
+
+equal(textile.convert( // The textile
+
+  "fn1. This is _emphasized_ *strong*"
+
+), // Should output
+
+  "<p class=\"footnote\" id=\"fn1\"><a href=\"#fnr1\"><sup>1</sup></a> This is <em>emphasized</em> <strong>strong</strong></p>"
+
+,"footnote inline textile");
+
+
+
+
 });
