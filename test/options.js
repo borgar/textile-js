@@ -15,6 +15,45 @@ equal(
   "<p>Some paragraph\nwith a linebreak.</p>"
 );
 
+
+// linebreak option works in tables
+equal(textile.convert( // The textile
+  "|a|b\nc|d|\n"+
+  "|a|b|c|\n"
+), // Should output
+  "<table>\n"+
+  "\t<tr>\n"+
+  "\t\t<td>a</td>\n"+
+  "\t\t<td>b<br />\nc</td>\n"+
+  "\t\t<td>d</td>\n"+
+  "\t</tr>\n"+
+  "\t<tr>\n"+
+  "\t\t<td>a</td>\n"+
+  "\t\t<td>b</td>\n"+
+  "\t\t<td>c</td>\n"+
+  "\t</tr>\n"+
+  "</table>"
+);
+equal(textile.convert( // The textile
+  "|a|b\nc|d|\n"+
+  "|a|b|c|\n"
+, { breaks: false }), // Should output
+  "<table>\n"+
+  "\t<tr>\n"+
+  "\t\t<td>a</td>\n"+
+  "\t\t<td>b\nc</td>\n"+
+  "\t\t<td>d</td>\n"+
+  "\t</tr>\n"+
+  "\t<tr>\n"+
+  "\t\t<td>a</td>\n"+
+  "\t\t<td>b</td>\n"+
+  "\t\t<td>c</td>\n"+
+  "\t</tr>\n"+
+  "</table>"
+);
+
+
+
 // setting a global option makes it the subsequent default
 textile.setOptions({ breaks: false });
 equal(
