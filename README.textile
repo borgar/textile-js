@@ -12,9 +12,9 @@ bc. $ npm install textile-js
 
 h2. Options
 
-The basic interface mimics "marked":https://github.com/chjj/marked. So if you use that in your project then you can support Textile as well with minimal effort.
+The basic interface mimics "marked":https://github.com/chjj/marked, the popular markdown parser. So if you use that in your project then you can support Textile as well with minimal effort.
 
-Currently, no option is supported. :-)
+Currently, the only supported option is @breaks@ which can be used to enable/disable the default behavior of line-breaking single newlines within blocks.
 
 
 h2. Usage
