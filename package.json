@@ -2,7 +2,7 @@
   "name": "textile-js",
   "description": "A full-featured JavaScript Textile parser",
   "author": "Borgar Þorsteinsson",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "./lib/textile-js",
   "bin": "./bin/textile",
   "preferGlobal": false,
