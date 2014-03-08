@@ -1,4 +1,4 @@
-test('options.yml', function () {
+test('jstextile options', function () {
 
 var paragraph = "Some paragraph\nwith a linebreak.";
 
