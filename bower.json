@@ -7,6 +7,6 @@
         "bin",
         "test",
         "Makefile",
-        "index.js",
+        "index.js"
     ]
 }
