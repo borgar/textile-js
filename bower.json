@@ -1,0 +1,12 @@
+{
+    "name": "textile-js",
+    "version": "0.1.8",
+    "description": "A full-featured JavaScript Textile parser",
+    "main": "lib/textile-.js",
+    "ignore": [
+        "bin",
+        "test",
+        "Makefile",
+        "index.js",
+    ]
+}
