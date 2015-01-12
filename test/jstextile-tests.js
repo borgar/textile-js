@@ -643,4 +643,22 @@ equal(textile.convert( // The textile
 
 
 
+/* greedy globbing block parser bug [#21] */
+
+equal(textile.convert( // The textile
+
+  "pab\n\npabcde\n\nbqabcdef\n\nlast line ending in period+space. \n"
+
+), // Should output
+
+  '<p>pab</p>\n'+
+  '<p>pabcde</p>\n'+
+  '<p>bqabcdef</p>\n'+
+  '<p>last line ending in period+space. </p>'
+
+,"block parser bug (#21)");
+
+
+
+
 });
