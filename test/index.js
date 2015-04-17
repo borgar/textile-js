@@ -27,6 +27,7 @@ var $testfiles = [
   'converted/threshold.js',
   'block_comments.js',
   'jstextile-tests.js',
+  'linebreaks.js',
   'options.js'
 ];
 
