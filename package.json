@@ -1,8 +1,8 @@
 {
   "name": "textile-js",
   "description": "A full-featured JavaScript Textile parser",
-  "author": "Borgar Þorsteinsson",
-  "version": "0.1.11",
+  "author": "Borgar Þorsteinsson <borgar@borgar.net>",
+  "version": "1.0.0",
   "main": "./lib/textile-js",
   "bin": "./bin/textile",
   "preferGlobal": false,
@@ -10,5 +10,6 @@
   "homepage": "https://github.com/borgar/textile-js",
   "bugs": { "url": "http://github.com/borgar/textile-js/issues" },
   "keywords": [ "textile", "markup", "html" ],
-  "tags": [ "textile", "markup", "html" ]
+  "tags": [ "textile", "markup", "html" ],
+  "license": "MIT"
 }

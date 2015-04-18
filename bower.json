@@ -1,6 +1,6 @@
 {
     "name": "textile-js",
-    "version": "0.1.11",
+    "version": "1.0.0",
     "description": "A full-featured JavaScript Textile parser",
     "main": "lib/textile.js",
     "author": "Borgar Þorsteinsson",
