@@ -118,8 +118,7 @@ equal(textile.convert( // The textile
   "<p>ok</p></dd>\n"+
   "\t<dt>regular term</dt>\n"+
   "\t<dd>no</dd>\n"+
-  "</dl>\n"+
-  ""
+  "</dl>"
 
 ,"long definition list");
 

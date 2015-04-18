@@ -14,7 +14,7 @@ var textile = require('../lib/textile.js');
 var $testfiles = [
   'converted/basic.js',
 //  'converted/code.js',
-//  'converted/definitions.js',
+  'converted/definitions.js',
   'converted/extra_whitespace.js',
   'converted/filter_pba.js',
 //  'converted/html.js',

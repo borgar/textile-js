@@ -581,4 +581,95 @@ equal(textile.convert( // The textile
 
 
 
+
+// definitions
+
+equal(textile.convert( // The textile
+
+  "- term := you can have line breaks\r\n"+
+  "just like other lists\r\n"+
+  "- line-spanning\r\n"+
+  "term := hey, slick!"
+
+), // Should output
+
+  "<dl>\n"+
+  "\t<dt>term</dt>\n"+
+  "\t<dd>you can have line breaks<br />\n"+
+  "just like other lists</dd>\n"+
+  "\t<dt>line-spanning<br />\n"+
+  "term</dt>\n"+
+  "\t<dd>hey, slick!</dd>\n"+
+  "</dl>"
+
+,"with line breaks");
+
+
+equal(textile.convert( // The textile
+
+  "You can have multiple terms before a definition:\r\n"+
+  "\r\n"+
+  "- textile\r\n"+
+  "- fabric\r\n"+
+  "- cloth := woven threads"
+
+), // Should output
+
+  "<p>You can have multiple terms before a definition:</p>\n"+
+  "<dl>\n"+
+  "\t<dt>textile</dt>\n"+
+  "\t<dt>fabric</dt>\n"+
+  "\t<dt>cloth</dt>\n"+
+  "\t<dd>woven threads</dd>\n"+
+  "</dl>"
+
+,"double terms");
+
+
+equal(textile.convert( // The textile
+
+  "- textile\r\n"+
+  "- fabric\r\n"+
+  "- cloth"
+
+), // Should output
+
+  "<p>- textile<br />\n"+
+  "- fabric<br />\n"+
+  "- cloth</p>"
+
+,"not a definition list");
+
+
+equal(textile.convert( // The textile
+
+  "here is a long definition\r\n"+
+  "\r\n"+
+  "- some term := \r\n"+
+  "*sweet*\r\n"+
+  "\r\n"+
+  "yes\r\n"+
+  "\r\n"+
+  "ok =:\r\n"+
+  "- regular term := no"
+
+), // Should output
+
+  "<p>here is a long definition</p>\n"+
+  "<dl>\n"+
+  "\t<dt>some term</dt>\n"+
+  "\t<dd><p><strong>sweet</strong></p>\n"+
+  "<p>yes</p>\n"+
+  "<p>ok</p></dd>\n"+
+  "\t<dt>regular term</dt>\n"+
+  "\t<dd>no</dd>\n"+
+  "</dl>"
+
+,"long definition list");
+
+
+
+
+
+
 });
