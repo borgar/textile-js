@@ -661,4 +661,19 @@ equal(textile.convert( // The textile
 
 
 
+/* trailing space linebreak bug [#26] */
+
+equal(textile.convert( // The textile
+
+  "Line 1 \nLine 2\nLine 3"
+
+), // Should output
+
+  '<p>Line 1 <br />\nLine 2<br />\nLine 3</p>'
+
+,"trailing space linebreak bug (#26)");
+
+
+
+
 });
