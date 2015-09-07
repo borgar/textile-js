@@ -674,6 +674,33 @@ equal(textile.convert( // The textile
 ,"trailing space linebreak bug (#26)");
 
 
+/* support unicode symbols */
+
+equal(textile.convert( // The textile
+
+  "Trademark(tm)\n\
+Registered(R)\n\
+Copyright (C) 2008\n\
+One quarter (1/4) symbol\n\
+One half (1/2) symbol\n\
+Three quarters (3/4) symbol\n\
+Degree (o) symbol\n\
+Plus/minus (+/-) symbol"
+
+), // Should output
+
+  '<p>Trademark&#8482;<br />\n\
+Registered&#174;<br />\n\
+Copyright &#169; 2008<br />\n\
+One quarter &#188; symbol<br />\n\
+One half &#189; symbol<br />\n\
+Three quarters &#190; symbol<br />\n\
+Degree &#176; symbol<br />\n\
+Plus/minus &#177; symbol</p>'
+
+,"support unicode symbols (#27)");
+
+
 
 
 });
