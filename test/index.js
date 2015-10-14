@@ -169,9 +169,8 @@ $testfiles.forEach(function ( $test ) {
       else {
         fail++;
         total_fail++;
+        report.push( [ '    ', pad( r, '    ' ), '. ', ( res[0] ? '' : '[FAIL]: ' ), res[1] ].join('') );
       }
-      report.push( '    %s. %s%s',
-          pad(r,'    '), res[0]?'':'[FAIL]: ', res[1] );
     }
 
     total_tests += test.results.length;
