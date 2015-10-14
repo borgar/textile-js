@@ -703,4 +703,49 @@ Plus/minus &#177; symbol</p>'
 
 
 
+/* footnotes should not appear directly inside tags [#28] */
+
+equal(textile.convert( // The textile
+
+  "*[1234]* _[1234]_"
+
+), // Should output
+
+  '<p><strong>[1234]</strong> <em>[1234]</em></p>'
+
+,"footnotes should not appear directly inside tags (#26)");
+
+
+
+/* footnotes have to directly follow text [#28] */
+
+equal(textile.convert( // The textile
+
+  "[1234]"
+
+), // Should output
+
+  '<p>[1234]</p>'
+
+,"footnotes have to directly follow text (#26)");
+
+
+
+
+/* footnote links can be disabled with ! */
+
+equal(textile.convert( // The textile
+
+  "foobar[1234!]"
+
+), // Should output
+
+  '<p>foobar<sup class="footnote" id="fnr1234">1234</sup></p>'
+
+,"footnote links can be disabled with !");
+
+
+
+
+
 });
