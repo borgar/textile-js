@@ -20,6 +20,7 @@ var $testfiles = [
 //  'converted/html.js',
   'converted/images.js',
 //  'converted/instiki.js',
+  'converted/lists.js',
   'converted/links.js',
   'converted/poignant.js',
   'converted/table.js',

@@ -426,8 +426,8 @@ equal(textile.convert( // strict list matching (1)
 
 ), // Should output
 
-  '<ul>\n'+
-  '\t<li style="color:red">item*</li>\n'+
+  '<ul style="color:red">\n'+
+  '\t<li>item*</li>\n'+
   '</ul>\n'+
   '<ul>\n'+
   '\t<li>item*</li>\n'+
@@ -444,8 +444,8 @@ equal(textile.convert( // strict list matching (2)
 
 ), // Should output
 
-  '<ul>\n'+
-  '\t<li style="color:red">item</li>\n'+
+  '<ul style="color:red">\n'+
+  '\t<li>item</li>\n'+
   '</ul>\n'+
   '<ul>\n'+
   '\t<li>item</li>\n'+

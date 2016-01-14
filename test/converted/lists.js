@@ -32,7 +32,7 @@ equal(textile.convert( // The textile
   "<ul>\n"+
   "\t<li>first line</li>\n"+
   "\t<li>second<br />\n"+
-  "  line</li>\n"+
+  "line</li>\n"+
   "\t<li>third line</li>\n"+
   "</ul>"
 
@@ -383,7 +383,7 @@ equal(textile.convert( // The textile
 
 // =[ 14 ]==============================================================================
 
-
+/*
 equal(textile.convert( // The textile
 
   " * notice the leading space\n"+
@@ -399,11 +399,11 @@ equal(textile.convert( // The textile
   "</ul>"
 
 ,"unordered list with leading spaces");
-
+*/
 
 // =[ 15 ]==============================================================================
 
-
+/*
 equal(textile.convert( // The textile
 
   " # notice the leading space\n"+
@@ -419,7 +419,7 @@ equal(textile.convert( // The textile
   "</ol>"
 
 ,"ordered list with leading spaces");
-
+*/
 
 // =[ 16 ]==============================================================================
 
@@ -454,10 +454,10 @@ equal(textile.convert( // The textile
 ), // Should output
 
   "<ul>\n"+
-  "\t<li style=\"text-align:left;\">one</li>\n"+
-  "\t<li style=\"text-align:right;\">two</li>\n"+
-  "\t<li style=\"text-align:justify;\">three</li>\n"+
-  "\t<li style=\"text-align:center;\">four</li>\n"+
+  "\t<li style=\"text-align:left\">one</li>\n"+
+  "\t<li style=\"text-align:right\">two</li>\n"+
+  "\t<li style=\"text-align:justify\">three</li>\n"+
+  "\t<li style=\"text-align:center\">four</li>\n"+
   "</ul>"
 
 ,"unordered with alignments");
@@ -468,7 +468,7 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  "(class#id)# one\n"+
+  "#(class#id) one\n"+
   "# two\n"+
   "# three"
 
@@ -488,7 +488,7 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  "(#my-id)# one\n"+
+  "#(#my-id) one\n"+
   "# two\n"+
   "# three"
 
@@ -508,7 +508,7 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  "(my-class)# one\n"+
+  "#(my-class) one\n"+
   "# two\n"+
   "# three"
 
@@ -548,6 +548,7 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
+  "#.\n"+
   "#(class#id) one\n"+
   "# two\n"+
   "# three"
@@ -568,13 +569,14 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  "{color:blue}# one\n"+
+  "#{color:blue}.\n"+
+  "# one\n"+
   "# two\n"+
   "# three"
 
 ), // Should output
 
-  "<ol style=\"color:blue;\">\n"+
+  "<ol style=\"color:blue\">\n"+
   "\t<li>one</li>\n"+
   "\t<li>two</li>\n"+
   "\t<li>three</li>\n"+
@@ -588,19 +590,20 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  "*{color:red} Item one\n"+
-  "* Item two\n"+
-  "* Item three"
+  "#(class#id).\n"+
+  "#(first) Item 1\n"+
+  "#(second) Item 2\n"+
+  "#(third) Item 3"
 
 ), // Should output
 
-  "<ul>\n"+
-  "\t<li style=\"color:red;\">Item one</li>\n"+
-  "\t<li>Item two</li>\n"+
-  "\t<li>Item three</li>\n"+
-  "</ul>"
+  '<ol class="class" id="id">\n'+
+  '\t<li class="first">Item 1</li>\n'+
+  '\t<li class="second">Item 2</li>\n'+
+  '\t<li class="third">Item 3</li>\n'+
+  '</ol>'
 
-,"changed from threshold list attributes");
+,"item and list attributes");
 
 
 // =[ 25 ]==============================================================================
@@ -608,11 +611,11 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  "(# one"
+  "#( one"
 
 ), // Should output
 
-  "<ol style=\"padding-left:1em;\">\n"+
+  "<ol style=\"padding-left:1em\">\n"+
   "\t<li>one</li>\n"+
   "</ol>"
 
@@ -621,30 +624,31 @@ equal(textile.convert( // The textile
 
 // =[ 26 ]==============================================================================
 
-
+/*
+// PHP doesn't really allow padding on list items so let's not get into nuances here
 equal(textile.convert( // The textile
 
-  "((myclass)# one"
+  "#((myclass) one"
 
 ), // Should output
 
-  "<ol style=\"padding-left:1em;\" class=\"myclass\">\n"+
+  "<ol style=\"padding-left:1em\" class=\"myclass\">\n"+
   "\t<li>one</li>\n"+
   "</ol>"
 
 ,"with one padding-left increment and class");
-
+*/
 
 // =[ 27 ]==============================================================================
 
 
 equal(textile.convert( // The textile
 
-  "((# two"
+  "#(( two"
 
 ), // Should output
 
-  "<ol style=\"padding-left:2em;\">\n"+
+  "<ol style=\"padding-left:2em\">\n"+
   "\t<li>two</li>\n"+
   "</ol>"
 
@@ -656,11 +660,11 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  ")# one"
+  "#) one"
 
 ), // Should output
 
-  "<ol style=\"padding-right:1em;\">\n"+
+  "<ol style=\"padding-right:1em\">\n"+
   "\t<li>one</li>\n"+
   "</ol>"
 
@@ -672,11 +676,11 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  "()# two"
+  "#() two"
 
 ), // Should output
 
-  "<ol style=\"padding-left:1em;padding-right:1em;\">\n"+
+  "<ol style=\"padding-left:1em;padding-right:1em\">\n"+
   "\t<li>two</li>\n"+
   "</ol>"
 
@@ -688,11 +692,11 @@ equal(textile.convert( // The textile
 
 equal(textile.convert( // The textile
 
-  ")(# two"
+  "#)( two"
 
 ), // Should output
 
-  "<ol style=\"padding-left:1em;padding-right:1em;\">\n"+
+  "<ol style=\"padding-right:1em;padding-left:1em\">\n"+
   "\t<li>two</li>\n"+
   "</ol>"
 
@@ -701,19 +705,85 @@ equal(textile.convert( // The textile
 
 // =[ 31 ]==============================================================================
 
-
+/*
+// PHP doesn't really allow padding on list items so let's not get into nuances here
 equal(textile.convert( // The textile
 
-  "()(myclass)# two"
+  "#()(myclass) two"
 
 ), // Should output
 
-  "<ol style=\"padding-left:1em;padding-right:1em;\" class=\"myclass\">\n"+
+  "<ol style=\"padding-left:1em;padding-right:1em\" class=\"myclass\">\n"+
   "\t<li>two</li>\n"+
   "</ol>\n"+
   ""
 
 ,"with padding-left and padding-right increments and class");
+*/
+
+
+// =[ 32 ]==============================================================================
+
+
+equal(textile.convert( // The textile
+
+  "# one\n"+
+  "# two\n"+
+  "#.\n"+
+  "# tree"
+
+), // Should output
+
+  "<ol>\n"+
+  "\t<li>one</li>\n"+
+  "\t<li>two</li>\n"+
+  "\t<li>tree</li>\n"+
+  "</ol>"
+
+,"list control items occuring-mid list should be ignored");
+
+
+// =[ 33 ]==============================================================================
+
+
+equal(textile.convert( // The textile
+
+'#(class#id).\n'+
+'#(first) Item 1\n'+
+'##.\n'+
+'##(sub1) Sub item 1\n'+
+'## Sub item 2\n'+
+'#(second) Item 2\n'+
+'##_(sub3) Sub item 3\n'+
+'## Sub item 4\n'+
+'\n'+
+'#_(third) Item 3\n'+
+'##_(sub5) Sub item 5\n'+
+'## Sub item 6'
+
+), // Should output
+
+'<ol class="class" id="id">\n'+
+'\t<li class="first">Item 1\n'+
+'\t<ol>\n'+
+'\t\t<li class="sub1">Sub item 1</li>\n'+
+'\t\t<li>Sub item 2</li>\n'+
+'\t</ol></li>\n'+
+'\t<li class="second">Item 2\n'+
+'\t<ol start="3" class="sub3">\n'+
+'\t\t<li>Sub item 3</li>\n'+
+'\t\t<li>Sub item 4</li>\n'+
+'\t</ol></li>\n'+
+'</ol>\n'+
+'<ol start="3" class="third">\n'+
+'\t<li>Item 3\n'+
+'\t<ol start="5" class="sub5">\n'+
+'\t\t<li>Sub item 5</li>\n'+
+'\t\t<li>Sub item 6</li>\n'+
+'\t</ol></li>\n'+
+'</ol>'
+
+,"complicated case with continues and classes");
 
 
 });
