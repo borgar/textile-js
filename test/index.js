@@ -24,6 +24,7 @@ var $testfiles = [
   'converted/links.js',
   'converted/poignant.js',
   'converted/table.js',
+  'tables-extended.js',
   'converted/textism.js',
   'converted/threshold.js',
   'block_comments.js',
