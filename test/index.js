@@ -170,14 +170,15 @@ $testfiles.forEach(function ( $test ) {
       else {
         fail++;
         total_fail++;
-        report.push( [ '    ', pad( r, '    ' ), '. ', ( res[0] ? '' : '[FAIL]: ' ), res[1] ].join('') );
+        // report.push( [ '    ', pad( r, '    ' ), '. ', ( res[0] ? '' : '[FAIL]: ' ), res[1] ].join('') );
+        report.push( [ '    ', pad( r, '    ' ), '. ', ( res[0] ? '' : '[FAIL]: ' ) ].join('') );
       }
     }
 
     total_tests += test.results.length;
 
-    console.log( '%s. %s (%s, %s, %s)', 
-        pad( t, '    ' ), test.name, fail, ok, test.results.length );
+    console.log( '%s. %s (%s, %s, %s)',
+        pad( t, '    ' ), test.name||'', fail, ok, test.results.length );
 
     if ( fail ) {
       console.log( report.join('\n') );
@@ -189,5 +190,9 @@ $testfiles.forEach(function ( $test ) {
   console.timeEnd( 'Tests total time' );
   console.log( '%s tests of %s passed, %s failed',
                     total_ok, total_tests, total_fail );
+
+  if ( total_fail ) {
+    process.exit( 1 );
+  }
 
 })();
