@@ -1,5 +1,5 @@
 /*
- * This file implements a subset of the QUnit functions/features to allow 
+ * This file implements a subset of the QUnit functions/features to allow
  * running simple QUnit tests in Node.JS.
  *
  * Copyright (c) 2012 Borgar Þorsteinsson
@@ -72,7 +72,7 @@ function deepEqual ( rest, exp, msg ) {
 function test ( testName /*, expected, callback, async */ ) {
 
   var tmap = {
-    'object':'environment', 
+    'object':'environment',
     'boolean':'async',
     'function':'callback',
     'number':'expected'
@@ -88,7 +88,7 @@ function test ( testName /*, expected, callback, async */ ) {
     results: []
   };
   $tests.push( $tests.current_test );
-  
+
   for (var i=1,l=arguments.length; i<l; i++) {
     $tests.current_test[ tmap[ typeof arguments[i] ] || 'error' ] = arguments[i];
   }
@@ -104,7 +104,7 @@ function test ( testName /*, expected, callback, async */ ) {
       $tests.current_test.results.push([ false, 'Expected ' + $tests.current_test.expected + ' assertions, but ' + $tests.current_test.results.length + ' were run' ]);
     }
   }
-  
+
 }
 
 
@@ -129,7 +129,7 @@ $testfiles = $testfiles.map(function ( fn ) {
 });
 
 
-console.log( '' ); // padding 
+console.log( '' ); // padding
 console.time( 'Tests total time' ); // time the run
 
 // run the tests
@@ -153,7 +153,7 @@ $testfiles.forEach(function ( $test ) {
 
   function pad ( s, l ) {
     s = l + s;
-    return s.substr( s.length - l.length, l.length );  
+    return s.substr( s.length - l.length, l.length );
   }
   var total_ok = 0, total_fail = 0, total_tests = 0;
   for (var t=0,tl=$tests.length; t<tl; t++) {
