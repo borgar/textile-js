@@ -1,20 +1,29 @@
 #!/usr/bin/env node
 
-var fs = require('fs')
-  , util = require('util')
-  , textile = require('../')
-  ;
+var fs = require( 'fs' );
+
+var textile;
+var nodeVersion = process && process.versions && process.versions.node;
+// is this node version mostly ES6 complete
+if ( parseInt( nodeVersion || 0, 10 ) > 5 ) {
+  // serve code from src dir
+  textile = require( '../src' );
+}
+else {
+  // serve transpiled code
+  textile = require( '../dist/textile' );
+}
 
 // clean arguments
 var args = [];
-process.argv.slice(2).forEach(function ( m, i, s ) {
-  if ( s = /^([^=]+)=(.*)$/.exec( m ) ) {
+process.argv.slice( 2 ).forEach( function ( m, i, s ) {
+  if ( ( s = /^([^=]+)=(.*)$/.exec( m ) ) ) {
     args.push( s[1], s[2] );
   }
   else {
     args.push( m );
   }
-})
+});
 
 // parse arguments
 var options = {};
@@ -41,12 +50,10 @@ if ( options.input ) {
 }
 
 // writer
-var data = "";
-function write_data () {
-  data = options.tokens
-            ? JSON.stringify( textile.jsonml( data ), null, 2 )
-            : textile( data )
-            ;
+var data = '';
+function writeData () {
+  data = options.tokens ? JSON.stringify( textile.jsonml( data ), null, 2 )
+                        : textile( data );
   if ( options.output ) {
     fs.writeFileSync( options.output, data );
   }
@@ -58,14 +65,14 @@ function write_data () {
 // file or stdin?
 if ( options.files ) {
   data = fs.readFileSync( options.files[0], 'utf8' );
-  write_data();
+  writeData();
 }
 else {
-  var stdin = process.stdin;
+  const stdin = process.stdin;
   stdin.setEncoding( 'utf8' );
   stdin.on( 'data', function ( text ) {
     data += text;
   });
-  stdin.on( 'end', write_data );
+  stdin.on( 'end', writeData );
   stdin.resume();
 }

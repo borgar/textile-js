@@ -1,14 +1,12 @@
-test('extened table syntax', function () {
+// extened table syntax
+import test from 'ava';
+import textile from '../src';
 
-
-equal(textile.convert( // the textile
-
-"|_. First Header |_. Second Header |\n\
-| Content Cell | Content Cell |"
-
-), // Should output
-
-"<table>\n\
+test( 'headers and cells', function ( t ) {
+  let tx = "|_. First Header |_. Second Header |\n\
+| Content Cell | Content Cell |";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<tr>\n\
 \t\t<th>First Header </th>\n\
 \t\t<th>Second Header </th>\n\
@@ -17,20 +15,15 @@ equal(textile.convert( // the textile
 \t\t<td> Content Cell </td>\n\
 \t\t<td> Content Cell </td>\n\
 \t</tr>\n\
-</table>"
-
-, "headers and cells");
-
+</table>", tx );
+});
 
 
-equal(textile.convert(
-
-"|=. Your caption goes here\n\
-|foo|bar|"
-
-), // Should output
-
-"<table>\n\
+test( 'captions', function ( t ) {
+  let tx = "|=. Your caption goes here\n\
+|foo|bar|";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<caption>Your caption goes here</caption>\n\
 \t<tbody>\n\
 \t\t<tr>\n\
@@ -38,22 +31,17 @@ equal(textile.convert(
 \t\t\t<td>bar</td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
+</table>", tx );
+});
 
-, "captions");
 
-
-equal(textile.convert( // the textile
-
-"|=. caption |\n\
-| foo |\n\
-\n\
+test( 'tailing pipes should be stripped from captions', function ( t ) {
+  let tx = "|=. caption |\n\
+| foo |\n\n\
 |=. caption\n\
-| foo |"
-
-), // Should output
-
-"<table>\n\
+| foo |";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<caption>caption</caption>\n\
 \t<tbody>\n\
 \t\t<tr>\n\
@@ -68,40 +56,31 @@ equal(textile.convert( // the textile
 \t\t\t<td> foo </td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
+</table>", tx );
+});
 
-, "tailing pipes should be stripped from captions");
 
-
-equal(textile.convert( // the textile
-
-"table(myTable). This is a journey into sound. Stereophonic sound.\n\
-| foo |"
-
-), // Should output
-
-"<table class=\"myTable\" summary=\"This is a journey into sound. Stereophonic sound.\">\n\
+test( 'table summary', function ( t ) {
+  let tx = "table(myTable). This is a journey into sound. Stereophonic sound.\n\
+| foo |";
+  t.is( textile.convert( tx ),
+    "<table class=\"myTable\" summary=\"This is a journey into sound. Stereophonic sound.\">\n\
 \t<tr>\n\
 \t\t<td> foo </td>\n\
 \t</tr>\n\
-</table>"
-
-, "table summary");
-
+</table>", tx );
+});
 
 
-equal(textile.convert( // the textile
-
-"|^.\n\
+test( 'tbody/thead/tfoot', function ( t ) {
+  let tx = "|^.\n\
 |in head|\n\
 |~.\n\
 |in foot|\n\
 |-.\n\
-|in body|"
-
-), // Should output
-
-"<table>\n\
+|in body|";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<thead>\n\
 \t\t<tr>\n\
 \t\t\t<td>in head</td>\n\
@@ -117,19 +96,15 @@ equal(textile.convert( // the textile
 \t\t\t<td>in body</td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
+</table>", tx );
+});
 
-, "tbody/thead/tfoot");
 
-
-equal(textile.convert( // the textile
-
-"|:. 100|\n\
-|cell|"
-
-), // Should output
-
-"<table>\n\
+test( 'colgroup', function ( t ) {
+  let tx = "|:. 100|\n\
+|cell|";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<colgroup width=\"100\">\n\
 \t</colgroup>\n\
 \t<tbody>\n\
@@ -137,19 +112,15 @@ equal(textile.convert( // the textile
 \t\t\t<td>cell</td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
+</table>", tx );
+});
 
-, "colgroup");
 
-
-equal(textile.convert( // the textile
-
-"|:\\3. 100|\n\
-|cell|"
-
-), // Should output
-
-"<table>\n\
+test( 'colgroup span size', function ( t ) {
+  let tx = "|:\\3. 100|\n\
+|cell|";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<colgroup span=\"3\" width=\"100\">\n\
 \t</colgroup>\n\
 \t<tbody>\n\
@@ -157,19 +128,15 @@ equal(textile.convert( // the textile
 \t\t\t<td>cell</td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
+</table>", tx );
+});
 
-, "colgroup span size");
 
-
-equal(textile.convert( // the textile
-
-"|:. |\\2. |\\3. 50|\n\
-|cell|cell|"
-
-), // Should output
-
-"<table>\n\
+test( 'can target individual cols', function ( t ) {
+  let tx = "|:. |\\2. |\\3. 50|\n\
+|cell|cell|";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<colgroup>\n\
 \t\t<col span=\"2\" />\n\
 \t\t<col span=\"3\" width=\"50\" />\n\
@@ -180,19 +147,15 @@ equal(textile.convert( // the textile
 \t\t\t<td>cell</td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
+</table>", tx );
+});
 
-, "can target individual cols");
 
-
-equal(textile.convert( // the textile
-
-"|:\\5(grpclass#grpid). 200 | 100 |||80|\n\
-|cell|cell|"
-
-), // Should output
-
-"<table>\n\
+test( 'can style colgroup', function ( t ) {
+  let tx = "|:\\5(grpclass#grpid). 200 | 100 |||80|\n\
+|cell|cell|";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<colgroup span=\"5\" class=\"grpclass\" id=\"grpid\" width=\"200\">\n\
 \t\t<col width=\"100\" />\n\
 \t\t<col />\n\
@@ -205,23 +168,18 @@ equal(textile.convert( // the textile
 \t\t\t<td>cell</td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
-
-, "can style colgroup");
-
+</table>", tx );
+});
 
 
-equal(textile.convert( // the textile
-
-"|^.\n\
+test( 'extened table syntax:10', function ( t ) {
+  let tx = "|^.\n\
 |_. First Header |_. Second Header |\n\
 |-.\n\
 | Content Cell | Content Cell |\n\
-| Content Cell | Content Cell |"
-
-), // Should output
-
-"<table>\n\
+| Content Cell | Content Cell |";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<thead>\n\
 \t\t<tr>\n\
 \t\t\t<th>First Header </th>\n\
@@ -238,23 +196,19 @@ equal(textile.convert( // the textile
 \t\t\t<td> Content Cell </td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
+</table>", tx );
+});
 
-, "");
 
-
-equal(textile.convert( // the textile
-
-"|~.\n\
+test( 'extened table syntax:11', function ( t ) {
+  let tx = "|~.\n\
 |\\2=. A footer, centered & across two columns |\n\
 |-.\n\
 | Content Cell | Content Cell |\n\
 | Content Cell | Content Cell |\n\
-"
-
-), // Should output
-
-"<table>\n\
+";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<tfoot>\n\
 \t\t<tr>\n\
 \t\t\t<td style=\"text-align:center\" colspan=\"2\">A footer, centered &amp; across two columns </td>\n\
@@ -270,56 +224,43 @@ equal(textile.convert( // the textile
 \t\t\t<td> Content Cell </td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
-
-, "");
-
+</table>", tx );
+});
 
 
-equal(textile.convert( // the textile
-
-"|a|{color:red}. styled|cell|\n\
-"
-
-), // Should output
-
-"<table>\n\
+test( 'styleable cells', function ( t ) {
+  let tx = "|a|{color:red}. styled|cell|\n\
+";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<tr>\n\
 \t\t<td>a</td>\n\
 \t\t<td style=\"color:red\">styled</td>\n\
 \t\t<td>cell</td>\n\
 \t</tr>\n\
-</table>"
+</table>", tx );
+});
 
-, "styleable cells");
 
-
-equal(textile.convert( // the textile
-
-"(rowclass). |a|classy|row|"
-
-), // Should output
-
-"<table>\n\
+test( 'row class', function ( t ) {
+  let tx = "(rowclass). |a|classy|row|";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<tr class=\"rowclass\">\n\
 \t\t<td>a</td>\n\
 \t\t<td>classy</td>\n\
 \t\t<td>row</td>\n\
 \t</tr>\n\
-</table>"
+</table>", tx );
+});
 
-, "row class");
 
-
-equal(textile.convert( // the textile
-
-"table(tableclass).\n\
+test( 'table class', function ( t ) {
+  let tx = "table(tableclass).\n\
 |a|classy|table|\n\
-|a|classy|table|"
-
-), // Should output
-
-"<table class=\"tableclass\">\n\
+|a|classy|table|";
+  t.is( textile.convert( tx ),
+    "<table class=\"tableclass\">\n\
 \t<tr>\n\
 \t\t<td>a</td>\n\
 \t\t<td>classy</td>\n\
@@ -330,19 +271,15 @@ equal(textile.convert( // the textile
 \t\t<td>classy</td>\n\
 \t\t<td>table</td>\n\
 \t</tr>\n\
-</table>"
+</table>", tx );
+});
 
-, "table class");
 
-
-equal(textile.convert( // the textile
-
-"|\\2. spans two cols |\n\
-| col 1 | col 2 |"
-
-), // Should output
-
-"<table>\n\
+test( 'column span', function ( t ) {
+  let tx = "|\\2. spans two cols |\n\
+| col 1 | col 2 |";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<tr>\n\
 \t\t<td colspan=\"2\">spans two cols </td>\n\
 \t</tr>\n\
@@ -350,20 +287,16 @@ equal(textile.convert( // the textile
 \t\t<td> col 1 </td>\n\
 \t\t<td> col 2 </td>\n\
 \t</tr>\n\
-</table>"
+</table>", tx );
+});
 
-, "column span");
 
-
-equal(textile.convert( // the textile
-
-"|/3. spans 3 rows | row a |\n\
+test( 'row span', function ( t ) {
+  let tx = "|/3. spans 3 rows | row a |\n\
 | row b |\n\
-| row c |"
-
-), // Should output
-
-"<table>\n\
+| row c |";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<tr>\n\
 \t\t<td rowspan=\"3\">spans 3 rows </td>\n\
 \t\t<td> row a </td>\n\
@@ -374,19 +307,16 @@ equal(textile.convert( // the textile
 \t<tr>\n\
 \t\t<td> row c </td>\n\
 \t</tr>\n\
-</table>"
+</table>", tx );
+});
 
-, "row span");
 
-equal(textile.convert( // the textile
-
-"|^. top alignment|\n\
+test( 'cell text v-alignment', function ( t ) {
+  let tx = "|^. top alignment|\n\
 |-. middle alignment|\n\
-|~. bottom alignment|"
-
-), // Should output
-
-"<table>\n\
+|~. bottom alignment|";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<tr>\n\
 \t\t<td style=\"vertical-align:top\">top alignment</td>\n\
 \t</tr>\n\
@@ -396,21 +326,17 @@ equal(textile.convert( // the textile
 \t<tr>\n\
 \t\t<td style=\"vertical-align:bottom\">bottom alignment</td>\n\
 \t</tr>\n\
-</table>"
+</table>", tx );
+});
 
-, "cell text v-alignment");
 
-
-equal(textile.convert( // the textile
-
-"|:\\1. |400|\n\
+test( 'cell text h-alignment', function ( t ) {
+  let tx = "|:\\1. |400|\n\
 |=. center alignment |\n\
 | no alignment |\n\
-|>. right alignment |"
-
-), // Should output
-
-"<table>\n\
+|>. right alignment |";
+  t.is( textile.convert( tx ),
+    "<table>\n\
 \t<colgroup span=\"1\">\n\
 \t\t<col width=\"400\" />\n\
 \t</colgroup>\n\
@@ -425,15 +351,12 @@ equal(textile.convert( // the textile
 \t\t\t<td style=\"text-align:right\">right alignment </td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
+</table>", tx );
+});
 
-, "cell text h-alignment");
 
-
-equal(textile.convert( // the textile
-
-"p=. Full table with summary, caption, colgroups, thead, tfoot, 2x tbody\n\
-\n\
+test( 'a complex table example', function ( t ) {
+  let tx = "p=. Full table with summary, caption, colgroups, thead, tfoot, 2x tbody\n\n\
 table(#dvds){border-collapse:collapse}. Great films on DVD employing Textile summary, caption, thead, tfoot, two tbody elements and colgroups\n\
 |={font-size:140%;margin-bottom:15px}. DVDs with two Textiled tbody elements\n\
 |:\\3. 100 |{background:#ddd}|250||50|300|\n\
@@ -448,11 +371,9 @@ table(#dvds){border-collapse:collapse}. Great films on DVD employing Textile sum
 | _District 9_ | Sharlto Copley, Jason Cope | Neill Blomkamp | Neill Blomkamp, Terri Tatchell | Social commentary layered on thick, but boy is it done well |\n\
 |-(medlist){background:#e7e895;}.\n\
 | _Arlington Road_ | Tim Robbins, Jeff Bridges | Mark Pellington | Ehren Kruger | Awesome study in neighbourly relations |\n\
-| _Phone Booth_ | Colin Farrell, Kiefer Sutherland, Forest Whitaker | Joel Schumacher | Larry Cohen | Edge-of-the-seat stuff in this short but brilliantly executed thriller |"
-
-), // Should output
-
-"<p style=\"text-align:center\">Full table with summary, caption, colgroups, thead, tfoot, 2x tbody</p>\n\
+| _Phone Booth_ | Colin Farrell, Kiefer Sutherland, Forest Whitaker | Joel Schumacher | Larry Cohen | Edge-of-the-seat stuff in this short but brilliantly executed thriller |";
+  t.is( textile.convert( tx ),
+    "<p style=\"text-align:center\">Full table with summary, caption, colgroups, thead, tfoot, 2x tbody</p>\n\
 <table style=\"border-collapse:collapse\" id=\"dvds\" summary=\"Great films on DVD employing Textile summary, caption, thead, tfoot, two tbody elements and colgroups\">\n\
 \t<caption style=\"font-size:140%;margin-bottom:15px\">DVDs with two Textiled tbody elements</caption>\n\
 \t<colgroup span=\"3\" width=\"100\">\n\
@@ -522,15 +443,12 @@ table(#dvds){border-collapse:collapse}. Great films on DVD employing Textile sum
 \t\t\t<td> Edge-of-the-seat stuff in this short but brilliantly executed thriller </td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
-
-, "a complex table example");
-
+</table>", tx );
+});
 
 
-equal(textile.convert( // the textile
-
-"table(tabl).\n\
+test( 'attr can be passed to all the containers', function ( t ) {
+  let tx = "table(tabl).\n\
 |=(cap#id1). caption\n\
 |:(colgr#id2). |\n\
 |^(head#id3).\n\
@@ -538,11 +456,9 @@ equal(textile.convert( // the textile
 |-(body#id4).\n\
 | a | b |\n\
 |~(foot#id5).\n\
-| c | d |"
-
-), // Should output
-
-"<table class=\"tabl\">\n\
+| c | d |";
+  t.is( textile.convert( tx ),
+    "<table class=\"tabl\">\n\
 \t<caption class=\"cap\" id=\"id1\">caption</caption>\n\
 \t<colgroup class=\"colgr\" id=\"id2\">\n\
 \t</colgroup>\n\
@@ -564,21 +480,16 @@ equal(textile.convert( // the textile
 \t\t\t<td> d </td>\n\
 \t\t</tr>\n\
 \t</tfoot>\n\
-</table>"
-
-, "attr can be passed to all the containers");
-
+</table>", tx );
+});
 
 
-equal(textile.convert( // the textile
-
-"table(tabl).\n\
+test( 'classes on cols', function ( t ) {
+  let tx = "table(tabl).\n\
 |:(colgr#id2). |\\2(class#id) 20 |\n\
-| a | b |"
-
-), // Should output
-
-"<table class=\"tabl\">\n\
+| a | b |";
+  t.is( textile.convert( tx ),
+    "<table class=\"tabl\">\n\
 \t<colgroup class=\"colgr\" id=\"id2\">\n\
 \t\t<col span=\"2\" class=\"class\" id=\"id\" width=\"20\" />\n\
 \t</colgroup>\n\
@@ -588,10 +499,6 @@ equal(textile.convert( // the textile
 \t\t\t<td> b </td>\n\
 \t\t</tr>\n\
 \t</tbody>\n\
-</table>"
-
-, "classes on cols");
-
-
-
+</table>", tx );
 });
+
