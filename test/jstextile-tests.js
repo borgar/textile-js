@@ -626,6 +626,14 @@ ok( ( t2 - t1 < 10 ), 'image parsing speed bug' );
 
 
 
+var t1 = Date.now();
+textile.convert("!@((. tset Sûpp0rt ticket onññly... !@((. tset Sûpp0rt ticket onññly... !@((.");
+var t2 = Date.now();
+var ms = t2 - t1;
+ok( ( t2 - t1 < 10 ), 'image parsing speed bug 2 (issue #40)' );
+
+
+
 
 
 /* parse inline textile in footnotes */
