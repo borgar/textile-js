@@ -371,9 +371,17 @@ test( 'strict list matching (2)', function ( t ) {
 
 
 test( 'image parsing speed bug', function ( t ) {
-  var t1 = Date.now();
+  const t1 = Date.now();
   textile.convert( "!a()aaaaaaaaaaaaaaaaaaaaaaaaaa" );
-  var t2 = Date.now();
+  const t2 = Date.now();
+  t.true( ( t2 - t1 < 10 ) );
+});
+
+
+test( 'image parsing speed bug 2 (issue #40)', function ( t ) {
+  const t1 = Date.now();
+  textile.convert( "!@((. tset Sûpp0rt ticket onññly... !@((. tset Sûpp0rt ticket onññly... !@((." );
+  const t2 = Date.now();
   t.true( ( t2 - t1 < 10 ) );
 });
 
