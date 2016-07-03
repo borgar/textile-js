@@ -7,7 +7,9 @@
     "build": "webpack && WEBPACK_ENV=min webpack",
     "dev": "webpack --progress --watch",
     "test": "ava --tap | tnyan",
-    "coverage": "nyc report --reporter=html --reporter=text ava"
+    "coverage": "nyc report --reporter=html --reporter=text ava",
+    "pub": "node scripts/publish.js",
+    "dingus": "node scripts/updatedingus.js"
   },
   "main": "./dist/textile.js",
   "bin": "./bin/textile",
