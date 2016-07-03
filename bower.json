@@ -6,6 +6,8 @@
     "author": "Borgar Þorsteinsson",
     "ignore": [
         "bin",
+        "coverage",
+        ".nyc_output",
         "test",
         "Makefile",
         "index.js",
