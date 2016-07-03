@@ -1,6 +1,8 @@
 _*
 node_modules
-logs
+coverage
+coverage
+.nyc_output
 *.log
 npm-debug.log*
 .npm
