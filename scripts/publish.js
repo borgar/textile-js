@@ -10,7 +10,7 @@ function fail ( err ) {
 function exec ( cmd, callback ) {
   require( 'child_process' ).exec( cmd, function ( err, stdout, stderr ) {
     if ( err ) { fail( err ); }
-    callback( stdout, stderr );
+    callback && callback( stdout, stderr );
   });
 }
 
@@ -18,7 +18,6 @@ const packg = getJSON( 'package.json' );
 const bower = getJSON( 'bower.json' );
 const version = packg.version;
 const http = require( 'http' );
-
 
 // ensure bower and npm versions are the same
 if ( bower.version !== version ) {
@@ -28,7 +27,6 @@ if ( bower.version !== version ) {
 // is tagging needed?
 const tagname = `v${ version }`;
 exec( `git tag --list ${ tagname }`, o => {
-
   if ( o.split( '\n' ).filter( Boolean )[ 0 ] ) {
     // already tagged, we're done here
     updateNPM();
@@ -37,7 +35,7 @@ exec( `git tag --list ${ tagname }`, o => {
     const tag = `git tag -a ${ tagname } -m 'Version ${ tagname }'`;
     exec( tag, o => {
       // push new tag to github
-      exec( `git push origin ${ tagname }`, updateNPM ;
+      exec( `git push origin ${ tagname }`, updateNPM );
     });
   }
 });

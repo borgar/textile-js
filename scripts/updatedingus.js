@@ -4,7 +4,7 @@ const updateMessage = "Updating textile lib to latest version.";
 function exec ( cmd, callback ) {
   require( 'child_process' ).exec( cmd, function ( err, stdout, stderr ) {
     if ( err ) { throw err; }
-    callback( stdout, stderr );
+    callback && callback( stdout, stderr );
   });
 }
 
