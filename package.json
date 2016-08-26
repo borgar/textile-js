@@ -11,7 +11,7 @@
     "pub": "node scripts/publish.js",
     "dingus": "node scripts/updatedingus.js"
   },
-  "main": "./dist/textile.js",
+  "main": "./lib/textile.js",
   "bin": "./bin/textile",
   "preferGlobal": false,
   "repository": "git://github.com/borgar/textile-js.git",
