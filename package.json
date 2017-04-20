@@ -2,7 +2,7 @@
   "name": "textile-js",
   "description": "A full-featured JavaScript Textile parser",
   "author": "Borgar Þorsteinsson <borgar@borgar.net>",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "scripts": {
     "build": "webpack && WEBPACK_ENV=min webpack",
     "dev": "webpack --progress --watch",
