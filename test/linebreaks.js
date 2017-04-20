@@ -1,6 +1,7 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // jstextile linebreaks
-import test from 'ava';
-import textile from '../src';
 
 test( 'paragraphs', function ( t ) {
   let tx = "A single paragraph.\r\n\r\n\
@@ -8,6 +9,7 @@ Followed by another.";
   t.is( textile.convert( tx ),
     "<p>A single paragraph.</p>\n\
 <p>Followed by another.</p>", tx );
+  t.end();
 });
 
 
@@ -18,6 +20,7 @@ This is line two";
   t.is( textile.convert( tx ),
     "<p>This is line one</p>\n\
 <p>This is line two</p>", tx );
+  t.end();
 });
 
 
@@ -28,6 +31,7 @@ This is line two";
   t.is( textile.convert( tx ),
     "<p>This is line one</p>\n\
 <p>This is line two</p>", tx );
+  t.end();
 });
 
 
@@ -39,6 +43,7 @@ When the elephant comes to take a p. you...";
 <p>I saw a ship. It ate my elephant.</p>\n\
 <p>When the elephant comes to take a p. you&#8230;</p>\n\
 </blockquote>", tx );
+  t.end();
 });
 
 
@@ -56,6 +61,7 @@ Some more text.";
 Some code\r\n\
 </pre></div>\n\
 <p>Some more text.</p>", tx );
+  t.end();
 });
 
 
@@ -65,6 +71,7 @@ When the elephant comes to take a p. you...";
   t.is( textile.convert( tx ),
     "I saw a ship. It ate my elephant.\r\n\r\n\
 When the elephant comes to take a p. you...", tx );
+  t.end();
 });
 
 
@@ -78,6 +85,7 @@ test( 'html tags', function ( t ) {
 <pre>\r\n\
   I am &lt;b&gt;very&lt;/b&gt; serious.\r\n\
 </pre>", tx );
+  t.end();
 });
 
 
@@ -87,6 +95,7 @@ And none replied.";
   t.is( textile.convert( tx ),
     "<p>I spoke.<br />\n\
 And none replied.</p>", tx );
+  t.end();
 });
 
 
@@ -100,6 +109,7 @@ Any old text";
 <p>A block quotation.</p>\n\
 </blockquote>\n\
 <p>Any old text</p>", tx );
+  t.end();
 });
 
 
@@ -115,6 +125,7 @@ test( 'code blocks', function ( t ) {
   a.gsub!( /&lt;/, '' )\r\n\
 </code>\r\n\
 </pre>", tx );
+  t.end();
 });
 
 
@@ -128,6 +139,7 @@ test( 'numbered list', function ( t ) {
 \t<li>A second item</li>\n\
 \t<li>A third</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -153,6 +165,7 @@ test( 'nested numbered lists', function ( t ) {
 \t\t<li>Protein</li>\n\
 \t</ol></li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -166,6 +179,7 @@ test( 'bulleted list', function ( t ) {
 \t<li>A second item</li>\n\
 \t<li>A third</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -191,6 +205,7 @@ test( 'nested bulleted lists', function ( t ) {
 \t\t<li>Protein</li>\n\
 \t</ul></li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -202,6 +217,7 @@ machine and paid it to sing to them.";
     "<p><img align=\"right\" src=\"obake.gif\" alt=\"\" /></p>\n\
 <p>And others sat all round the small<br />\n\
 machine and paid it to sing to them.</p>", tx );
+  t.end();
 });
 
 
@@ -233,6 +249,7 @@ test( 'tables', function ( t ) {
 \t\t<td> f </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -244,6 +261,7 @@ line";
     "<p>line<br />\n\
 <!-- line --><br />\n\
 line</p>", tx );
+  t.end();
 });
 
 
@@ -255,6 +273,7 @@ line";
     "<p>line</p>\n\
 <!-- line -->\n\
 <p>line</p>", tx );
+  t.end();
 });
 
 
@@ -263,6 +282,7 @@ test( 'non list #3', function ( t ) {
 ";
   t.is( textile.convert( tx ),
     "<p>*</p>", tx );
+  t.end();
 });
 
 
@@ -271,6 +291,7 @@ test( 'non list #4', function ( t ) {
 ";
   t.is( textile.convert( tx ),
     "<p>#</p>", tx );
+  t.end();
 });
 
 
@@ -280,6 +301,7 @@ test";
   t.is( textile.convert( tx ),
     "<p>*<br />\n\
 test</p>", tx );
+  t.end();
 });
 
 
@@ -288,6 +310,7 @@ test( 'empty list #1', function ( t ) {
 ";
   t.is( textile.convert( tx ),
     "<p>* </p>", tx );
+  t.end();
 });
 
 
@@ -296,6 +319,7 @@ test( 'empty list #2', function ( t ) {
 ";
   t.is( textile.convert( tx ),
     "<p># </p>", tx );
+  t.end();
 });
 
 
@@ -305,6 +329,7 @@ test";
   t.is( textile.convert( tx ),
     "<p>*</p>\n\
 <p>test</p>", tx );
+  t.end();
 });
 
 
@@ -314,6 +339,7 @@ test";
   t.is( textile.convert( tx ),
     "<p>#</p>\n\
 <p>test</p>", tx );
+  t.end();
 });
 
 
@@ -329,6 +355,7 @@ test( 'strict list matching (1)', function ( t ) {
 \t<li>item*</li>\n\
 </ul>\n\
 <p><strong>item</strong></p>", tx );
+  t.end();
 });
 
 
@@ -344,6 +371,7 @@ test( 'strict list matching (2)', function ( t ) {
 \t<li>item</li>\n\
 </ul>\n\
 <p>*item</p>", tx );
+  t.end();
 });
 
 
@@ -358,6 +386,7 @@ last line ending in period+space. \r\n\
 <p>pabcde</p>\n\
 <p>bqabcdef</p>\n\
 <p>last line ending in period+space. </p>", tx );
+  t.end();
 });
 
 
@@ -367,6 +396,7 @@ text";
   t.is( textile.convert( tx ),
     "<h1>Header</h1>\n\
 <p>text</p>", tx );
+  t.end();
 });
 
 
@@ -376,6 +406,7 @@ text";
   t.is( textile.convert( tx ),
     "<h1>Header</h1>\n\
 <p>text</p>", tx );
+  t.end();
 });
 
 
@@ -385,6 +416,7 @@ h1. Header";
   t.is( textile.convert( tx ),
     "<p>text</p>\n\
 <h1>Header</h1>", tx );
+  t.end();
 });
 
 
@@ -394,6 +426,7 @@ h1. Header";
   t.is( textile.convert( tx ),
     "<p>text</p>\n\
 <h1>Header</h1>", tx );
+  t.end();
 });
 
 
@@ -408,6 +441,7 @@ test( 'list line break bug 1', function ( t ) {
 \t<li>2</li>\n\
 \t<li>3</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -422,6 +456,7 @@ test( 'list line break bug 2', function ( t ) {
 \t<li>2</li>\n\
 \t<li>3</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -439,6 +474,7 @@ just like other lists</dd>\n\
 term</dt>\n\
 \t<dd>hey, slick!</dd>\n\
 </dl>", tx );
+  t.end();
 });
 
 
@@ -455,6 +491,7 @@ test( 'double terms', function ( t ) {
 \t<dt>cloth</dt>\n\
 \t<dd>woven threads</dd>\n\
 </dl>", tx );
+  t.end();
 });
 
 
@@ -466,6 +503,7 @@ test( 'not a definition list', function ( t ) {
     "<p>- textile<br />\n\
 - fabric<br />\n\
 - cloth</p>", tx );
+  t.end();
 });
 
 
@@ -486,5 +524,6 @@ ok =:\r\n\
 \t<dt>regular term</dt>\n\
 \t<dd>no</dd>\n\
 </dl>", tx );
+  t.end();
 });
 

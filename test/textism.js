@@ -1,47 +1,60 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // textism.yml
-import test from 'ava';
-import textile from '../src';
 
 test( 'header one', function ( t ) {
   let tx = "h1. Header 1";
   t.is( textile.convert( tx ),
     "<h1>Header 1</h1>", tx );
+  t.end();
 });
+
 
 
 test( 'header two', function ( t ) {
   let tx = "h2. Header 2";
   t.is( textile.convert( tx ),
     "<h2>Header 2</h2>", tx );
+  t.end();
 });
+
 
 
 test( 'header three', function ( t ) {
   let tx = "h3. Header 3";
   t.is( textile.convert( tx ),
     "<h3>Header 3</h3>", tx );
+  t.end();
 });
+
 
 
 test( 'header four', function ( t ) {
   let tx = "h4. Header 4";
   t.is( textile.convert( tx ),
     "<h4>Header 4</h4>", tx );
+  t.end();
 });
+
 
 
 test( 'header five', function ( t ) {
   let tx = "h5. Header 5";
   t.is( textile.convert( tx ),
     "<h5>Header 5</h5>", tx );
+  t.end();
 });
+
 
 
 test( 'header six', function ( t ) {
   let tx = "h6. Header 6";
   t.is( textile.convert( tx ),
     "<h6>Header 6</h6>", tx );
+  t.end();
 });
+
 
 
 test( 'blockquote', function ( t ) {
@@ -55,7 +68,9 @@ Any old text.\n\
 <p>A block quotation.</p>\n\
 </blockquote>\n\
 <p>Any old text.</p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:8', function ( t ) {
@@ -70,7 +85,9 @@ test( 'textism:8', function ( t ) {
 \t<li>A third item</li>\n\
 \t<li>A fourth item</li>\n\
 </ol>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:9', function ( t ) {
@@ -86,175 +103,225 @@ test( 'textism:9', function ( t ) {
 \t<li>A third item</li>\n\
 \t<li>A fourth item</li>\n\
 </ul>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:10', function ( t ) {
   let tx = "_a phrase_";
   t.is( textile.convert( tx ),
     "<p><em>a phrase</em></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:11', function ( t ) {
   let tx = "__a phrase__";
   t.is( textile.convert( tx ),
     "<p><i>a phrase</i></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:12', function ( t ) {
   let tx = "*a phrase*";
   t.is( textile.convert( tx ),
     "<p><strong>a phrase</strong></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:13', function ( t ) {
   let tx = "**a phrase**";
   t.is( textile.convert( tx ),
     "<p><b>a phrase</b></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:14', function ( t ) {
   let tx = "Nabokov's ??Pnin??";
   t.is( textile.convert( tx ),
     "<p>Nabokov&#8217;s <cite>Pnin</cite></p>", tx );
+  t.end();
 });
+
 
 
 test( 'del part of word', function ( t ) {
   let tx = "A very [-extra-]ordinary day.";
   t.is( textile.convert( tx ),
     "<p>A very <del>extra</del>ordinary day.</p>", tx );
+  t.end();
 });
+
 
 
 test( 'del part of word that contains a hyphen', function ( t ) {
   let tx = "An [-extra-extra-]ordinary day.";
   t.is( textile.convert( tx ),
     "<p>An <del>extra-extra</del>ordinary day.</p>", tx );
+  t.end();
 });
+
 
 
 test( 'del a phrase', function ( t ) {
   let tx = "Delete -a phrase- this way.";
   t.is( textile.convert( tx ),
     "<p>Delete <del>a phrase</del> this way.</p>", tx );
+  t.end();
 });
+
 
 
 test( 'del a phrase that contains hyphens', function ( t ) {
   let tx = "Delete -a no-nonsense phrase- this way.";
   t.is( textile.convert( tx ),
     "<p>Delete <del>a no-nonsense phrase</del> this way.</p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:19', function ( t ) {
   let tx = "+a phrase+";
   t.is( textile.convert( tx ),
     "<p><ins>a phrase</ins></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:20', function ( t ) {
   let tx = "^a phrase^";
   t.is( textile.convert( tx ),
     "<p><sup>a phrase</sup></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:21', function ( t ) {
   let tx = "~a phrase~";
   t.is( textile.convert( tx ),
     "<p><sub>a phrase</sub></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:22', function ( t ) {
   let tx = "%(myclass)SPAN%";
   t.is( textile.convert( tx ),
     "<p><span class=\"myclass\"><span class=\"caps\">SPAN</span></span></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:23', function ( t ) {
   let tx = "%{color:red}red%";
   t.is( textile.convert( tx ),
     "<p><span style=\"color:red\">red</span></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:24', function ( t ) {
   let tx = "%[fr]rouge%";
   t.is( textile.convert( tx ),
     "<p><span lang=\"fr\">rouge</span></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:25', function ( t ) {
   let tx = "_(big)red_";
   t.is( textile.convert( tx ),
     "<p><em class=\"big\">red</em></p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:26', function ( t ) {
   let tx = "p=. A centered paragraph.";
   t.is( textile.convert( tx ),
     "<p style=\"text-align:center\">A centered paragraph.</p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:27', function ( t ) {
   let tx = "p(bob). A paragraph";
   t.is( textile.convert( tx ),
     "<p class=\"bob\">A paragraph</p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:28', function ( t ) {
   let tx = "p{color:#ddd}. A paragraph";
   t.is( textile.convert( tx ),
     "<p style=\"color:#ddd\">A paragraph</p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:29', function ( t ) {
   let tx = "p[fr]. A paragraph";
   t.is( textile.convert( tx ),
     "<p lang=\"fr\">A paragraph</p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:30', function ( t ) {
   let tx = "h2()>. right-aligned header2, indented 1em both side";
   t.is( textile.convert( tx ),
     "<h2 style=\"padding-left:1em;padding-right:1em;text-align:right\">right-aligned header2, indented 1em both side</h2>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:31', function ( t ) {
   let tx = "h3=. centered header";
   t.is( textile.convert( tx ),
     "<h3 style=\"text-align:center\">centered header</h3>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:32', function ( t ) {
   let tx = "!>/image.gif! right-aligned image";
   t.is( textile.convert( tx ),
     "<p><img align=\"right\" src=\"/image.gif\" alt=\"\" /> right-aligned image</p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:33', function ( t ) {
   let tx = "p[no]{color:red}. A Norse of a different colour.";
   t.is( textile.convert( tx ),
     "<p style=\"color:red\" lang=\"no\">A Norse of a different colour.</p>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:34', function ( t ) {
@@ -277,7 +344,9 @@ test( 'textism:34', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:35', function ( t ) {
@@ -299,7 +368,9 @@ test( 'textism:35', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:36', function ( t ) {
@@ -313,7 +384,9 @@ test( 'textism:36', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'textism:37', function ( t ) {
@@ -336,7 +409,9 @@ test( 'textism:37', function ( t ) {
 \t\t<td style=\"text-align:right\">Right-aligned cell</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'basics', function ( t ) {
@@ -386,5 +461,7 @@ Multi-level list:\n\n\
 \t</ol></li>\n\
 \t<li>three</li>\n\
 </ol>", tx );
+  t.end();
 });
+
 

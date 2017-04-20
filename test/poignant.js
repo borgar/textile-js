@@ -1,6 +1,7 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // poignant.yml
-import test from 'ava';
-import textile from '../src';
 
 test( 'poignant:1', function ( t ) {
   let tx = "h3. False\n\n\
@@ -52,5 +53,7 @@ Now that you've met @false@, I'm sure you can see what's on next.";
   print \"Hardly. It's down.\" unless plastic_cup\n\
 </pre>\n\
 <p>Now that you&#8217;ve met <code>false</code>, I&#8217;m sure you can see what&#8217;s on next.</p>", tx );
+  t.end();
 });
+
 

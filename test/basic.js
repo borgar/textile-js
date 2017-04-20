@@ -1,6 +1,7 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // basic.yml
-import test from 'ava';
-import textile from '../src';
 
 test( 'paragraphs', function ( t ) {
   let tx = "A single paragraph.\n\n\
@@ -8,6 +9,7 @@ Followed by another.";
   t.is( textile.convert( tx ),
     "<p>A single paragraph.</p>\n\
 <p>Followed by another.</p>", tx );
+  t.end();
 });
 
 
@@ -18,6 +20,7 @@ This is line two";
   t.is( textile.convert( tx ),
     "<p>This is line one</p>\n\
 <p>This is line two</p>", tx );
+  t.end();
 });
 
 
@@ -28,6 +31,7 @@ This is line two";
   t.is( textile.convert( tx ),
     "<p>This is line one</p>\n\
 <p>This is line two</p>", tx );
+  t.end();
 });
 
 
@@ -35,6 +39,7 @@ test( 'block containing block start', function ( t ) {
   let tx = "I saw a ship. It ate my elephant.";
   t.is( textile.convert( tx ),
     "<p>I saw a ship. It ate my elephant.</p>", tx );
+  t.end();
 });
 
 
@@ -44,6 +49,7 @@ When the elephant comes to take a p. you...";
   t.is( textile.convert( tx ),
     "<p>I saw a ship. It ate my elephant.</p>\n\
 <p>When the elephant comes to take a p. you&#8230;</p>", tx );
+  t.end();
 });
 
 
@@ -53,6 +59,7 @@ test( 'blockquote containing block start', function ( t ) {
     "<blockquote>\n\
 <p>I saw a ship. It ate my elephant.</p>\n\
 </blockquote>", tx );
+  t.end();
 });
 
 
@@ -64,6 +71,7 @@ When the elephant comes to take a p. you...";
 <p>I saw a ship. It ate my elephant.</p>\n\
 <p>When the elephant comes to take a p. you&#8230;</p>\n\
 </blockquote>", tx );
+  t.end();
 });
 
 
@@ -81,6 +89,7 @@ Some more text.";
 Some code\n\
 </pre></div>\n\
 <p>Some more text.</p>", tx );
+  t.end();
 });
 
 
@@ -88,6 +97,7 @@ test( 'notextile block containing block start', function ( t ) {
   let tx = "notextile. I saw a ship. It ate my elephant.";
   t.is( textile.convert( tx ),
     "I saw a ship. It ate my elephant.", tx );
+  t.end();
 });
 
 
@@ -97,6 +107,7 @@ When the elephant comes to take a p. you...";
   t.is( textile.convert( tx ),
     "I saw a ship. It ate my elephant.\n\n\
 When the elephant comes to take a p. you...", tx );
+  t.end();
 });
 
 
@@ -104,6 +115,7 @@ test( 'pre block containing block start', function ( t ) {
   let tx = "pre. I saw a ship. It ate my elephant.";
   t.is( textile.convert( tx ),
     "<pre>I saw a ship. It ate my elephant.</pre>", tx );
+  t.end();
 });
 
 
@@ -113,6 +125,7 @@ When the elephant comes to take a p. you...";
   t.is( textile.convert( tx ),
     "<pre>I saw a ship. It ate my elephant.\n\n\
 When the elephant comes to take a p. you...</pre>", tx );
+  t.end();
 });
 
 
@@ -126,6 +139,7 @@ test( 'html tags', function ( t ) {
 <pre>\n\
   I am &lt;b&gt;very&lt;/b&gt; serious.\n\
 </pre>", tx );
+  t.end();
 });
 
 
@@ -135,6 +149,7 @@ And none replied.";
   t.is( textile.convert( tx ),
     "<p>I spoke.<br />\n\
 And none replied.</p>", tx );
+  t.end();
 });
 
 
@@ -142,6 +157,7 @@ test( 'curly quotes', function ( t ) {
   let tx = "\"Observe!\"";
   t.is( textile.convert( tx ),
     "<p>&#8220;Observe!&#8221;</p>", tx );
+  t.end();
 });
 
 
@@ -151,6 +167,7 @@ test( 'quotes contained in multi-paragraph quotes', function ( t ) {
   t.is( textile.convert( tx ),
     "<p>&#8220;I first learned about this thing called &#8220;Redcloth&#8221; several years ago.</p>\n\
 <p>&#8220;It&#8217;s wonderful.&#8221;</p>", tx );
+  t.end();
 });
 
 
@@ -158,6 +175,7 @@ test( 'double hyphens', function ( t ) {
   let tx = "Observe--very nice!";
   t.is( textile.convert( tx ),
     "<p>Observe&#8212;very nice!</p>", tx );
+  t.end();
 });
 
 
@@ -165,6 +183,7 @@ test( 'double hyphens with spaces', function ( t ) {
   let tx = "Observe -- very nice!";
   t.is( textile.convert( tx ),
     "<p>Observe &#8212; very nice!</p>", tx );
+  t.end();
 });
 
 
@@ -172,6 +191,7 @@ test( 'parenthetical phrase set off with em dashes', function ( t ) {
   let tx = "An emdash indicates a parenthetical thought--like this one--which is set apart from the rest of a sentence.";
   t.is( textile.convert( tx ),
     "<p>An emdash indicates a parenthetical thought&#8212;like this one&#8212;which is set apart from the rest of a sentence.</p>", tx );
+  t.end();
 });
 
 
@@ -179,6 +199,7 @@ test( 'parenthetical phrase set off with em dashes surrounded by spaces', functi
   let tx = "An emdash indicates a parenthetical thought -- like this one -- which is set apart from the rest of a sentence.";
   t.is( textile.convert( tx ),
     "<p>An emdash indicates a parenthetical thought &#8212; like this one &#8212; which is set apart from the rest of a sentence.</p>", tx );
+  t.end();
 });
 
 
@@ -186,6 +207,7 @@ test( 'single hyphens with spaces', function ( t ) {
   let tx = "Observe - tiny and brief.";
   t.is( textile.convert( tx ),
     "<p>Observe &#8211; tiny and brief.</p>", tx );
+  t.end();
 });
 
 
@@ -193,6 +215,7 @@ test( 'midword hyphens ', function ( t ) {
   let tx = "Observe the nicely-done hyphen.";
   t.is( textile.convert( tx ),
     "<p>Observe the nicely-done hyphen.</p>", tx );
+  t.end();
 });
 
 
@@ -200,6 +223,7 @@ test( 'ellipses', function ( t ) {
   let tx = "Observe...";
   t.is( textile.convert( tx ),
     "<p>Observe&#8230;</p>", tx );
+  t.end();
 });
 
 
@@ -207,6 +231,7 @@ test( 'dimension sign', function ( t ) {
   let tx = "Observe: 2x3.";
   t.is( textile.convert( tx ),
     "<p>Observe: 2&#215;3.</p>", tx );
+  t.end();
 });
 
 
@@ -214,6 +239,7 @@ test( 'dimension sign with space after', function ( t ) {
   let tx = "The room is 2x3 inches big.";
   t.is( textile.convert( tx ),
     "<p>The room is 2&#215;3 inches big.</p>", tx );
+  t.end();
 });
 
 
@@ -221,6 +247,7 @@ test( 'dimension sign with spaces', function ( t ) {
   let tx = "Observe: 2 x 4.";
   t.is( textile.convert( tx ),
     "<p>Observe: 2 &#215; 4.</p>", tx );
+  t.end();
 });
 
 
@@ -228,6 +255,7 @@ test( 'dimension signs chained', function ( t ) {
   let tx = "Observe: 2x3x4.";
   t.is( textile.convert( tx ),
     "<p>Observe: 2&#215;3&#215;4.</p>", tx );
+  t.end();
 });
 
 
@@ -235,6 +263,7 @@ test( 'dimension signs with double primes', function ( t ) {
   let tx = "My mouse: 2.5\" x 4\".";
   t.is( textile.convert( tx ),
     "<p>My mouse: 2.5&#8243; &#215; 4&#8243;.</p>", tx );
+  t.end();
 });
 
 
@@ -242,6 +271,7 @@ test( 'dimension signs with single primes', function ( t ) {
   let tx = "My office: 5' x 4.5'.";
   t.is( textile.convert( tx ),
     "<p>My office: 5&#8242; &#215; 4.5&#8242;.</p>", tx );
+  t.end();
 });
 
 
@@ -249,6 +279,7 @@ test( 'trademark and copyright', function ( t ) {
   let tx = "one(TM), two(R), three(C).";
   t.is( textile.convert( tx ),
     "<p>one&#8482;, two&#174;, three&#169;.</p>", tx );
+  t.end();
 });
 
 
@@ -256,6 +287,7 @@ test( 'headers', function ( t ) {
   let tx = "h3. Header 3";
   t.is( textile.convert( tx ),
     "<h3>Header 3</h3>", tx );
+  t.end();
 });
 
 
@@ -269,6 +301,7 @@ Any old text";
 <p>A block quotation.</p>\n\
 </blockquote>\n\
 <p>Any old text</p>", tx );
+  t.end();
 });
 
 
@@ -276,6 +309,7 @@ test( 'footnote reference', function ( t ) {
   let tx = "This is covered elsewhere[1].";
   t.is( textile.convert( tx ),
     "<p>This is covered elsewhere<sup class=\"footnote\" id=\"fnr1\"><a href=\"#fn1\">1</a></sup>.</p>", tx );
+  t.end();
 });
 
 
@@ -283,6 +317,7 @@ test( 'footnote', function ( t ) {
   let tx = "fn1. Down here, in fact.";
   t.is( textile.convert( tx ),
     "<p class=\"footnote\" id=\"fn1\"><a href=\"#fnr1\"><sup>1</sup></a> Down here, in fact.</p>", tx );
+  t.end();
 });
 
 
@@ -290,6 +325,7 @@ test( 'em', function ( t ) {
   let tx = "I _believe_ every word.";
   t.is( textile.convert( tx ),
     "<p>I <em>believe</em> every word.</p>", tx );
+  t.end();
 });
 
 
@@ -297,6 +333,7 @@ test( 'strong', function ( t ) {
   let tx = "And then? She *fell*!";
   t.is( textile.convert( tx ),
     "<p>And then? She <strong>fell</strong>!</p>", tx );
+  t.end();
 });
 
 
@@ -304,6 +341,7 @@ test( 'strong phrase beginning with a number', function ( t ) {
   let tx = "*10 times as many*";
   t.is( textile.convert( tx ),
     "<p><strong>10 times as many</strong></p>", tx );
+  t.end();
 });
 
 
@@ -313,6 +351,7 @@ I **really** __know__.";
   t.is( textile.convert( tx ),
     "<p>I <i>know</i>.<br />\n\
 I <b>really</b> <i>know</i>.</p>", tx );
+  t.end();
 });
 
 
@@ -320,6 +359,7 @@ test( 'citation', function ( t ) {
   let tx = "??Cat's Cradle?? by Vonnegut";
   t.is( textile.convert( tx ),
     "<p><cite>Cat&#8217;s Cradle</cite> by Vonnegut</p>", tx );
+  t.end();
 });
 
 
@@ -327,6 +367,7 @@ test( 'code phrases', function ( t ) {
   let tx = "Convert with @r.to_html@";
   t.is( textile.convert( tx ),
     "<p>Convert with <code>r.to_html</code></p>", tx );
+  t.end();
 });
 
 
@@ -334,6 +375,7 @@ test( 'code phrases not created with multiple email addresses', function ( t ) {
   let tx = "Please email why@domain.com or jason@domain.com.";
   t.is( textile.convert( tx ),
     "<p>Please email why@domain.com or jason@domain.com.</p>", tx );
+  t.end();
 });
 
 
@@ -341,6 +383,7 @@ test( 'del', function ( t ) {
   let tx = "I'm -sure- not sure.";
   t.is( textile.convert( tx ),
     "<p>I&#8217;m <del>sure</del> not sure.</p>", tx );
+  t.end();
 });
 
 
@@ -348,6 +391,7 @@ test( 'del beginning a phrase', function ( t ) {
   let tx = "-delete-";
   t.is( textile.convert( tx ),
     "<p><del>delete</del></p>", tx );
+  t.end();
 });
 
 
@@ -355,6 +399,7 @@ test( 'ins', function ( t ) {
   let tx = "You are a +pleasant+ child.";
   t.is( textile.convert( tx ),
     "<p>You are a <ins>pleasant</ins> child.</p>", tx );
+  t.end();
 });
 
 
@@ -362,6 +407,7 @@ test( 'superscript', function ( t ) {
   let tx = "a ^2^ + b ^2^ = c ^2^";
   t.is( textile.convert( tx ),
     "<p>a <sup>2</sup> + b <sup>2</sup> = c <sup>2</sup></p>", tx );
+  t.end();
 });
 
 
@@ -369,6 +415,7 @@ test( 'parenthetical superscript phrase', function ( t ) {
   let tx = "^(image courtesy NASA)^";
   t.is( textile.convert( tx ),
     "<p><sup>(image courtesy <span class=\"caps\">NASA</span>)</sup></p>", tx );
+  t.end();
 });
 
 
@@ -376,6 +423,7 @@ test( 'subscript', function ( t ) {
   let tx = "log ~2~ x";
   t.is( textile.convert( tx ),
     "<p>log <sub>2</sub> x</p>", tx );
+  t.end();
 });
 
 
@@ -383,6 +431,7 @@ test( 'parenthetical subscript phrase', function ( t ) {
   let tx = "~(image courtesy NASA)~";
   t.is( textile.convert( tx ),
     "<p><sub>(image courtesy <span class=\"caps\">NASA</span>)</sub></p>", tx );
+  t.end();
 });
 
 
@@ -390,6 +439,7 @@ test( 'tight superscript and subscript', function ( t ) {
   let tx = "f(x, n) = log[~4~]x[^n^]";
   t.is( textile.convert( tx ),
     "<p>f(x, n) = log<sub>4</sub>x<sup>n</sup></p>", tx );
+  t.end();
 });
 
 
@@ -397,6 +447,7 @@ test( 'span', function ( t ) {
   let tx = "I'm %unaware% of most soft drinks.";
   t.is( textile.convert( tx ),
     "<p>I&#8217;m <span>unaware</span> of most soft drinks.</p>", tx );
+  t.end();
 });
 
 
@@ -406,6 +457,7 @@ of most %{font-size:0.5em;}soft drinks%.";
   t.is( textile.convert( tx ),
     "<p>I&#8217;m <span style=\"color:red\">unaware</span><br />\n\
 of most <span style=\"font-size:0.5em\">soft drinks</span>.</p>", tx );
+  t.end();
 });
 
 
@@ -415,6 +467,7 @@ test( 'percent sign', function ( t ) {
   t.is( textile.convert( tx ),
     "<p>http://blah.com/one%20two%20three<br />\n\
 (min)5%-95%(max)</p>", tx );
+  t.end();
 });
 
 
@@ -422,6 +475,7 @@ test( 'css class', function ( t ) {
   let tx = "p(example1). An example";
   t.is( textile.convert( tx ),
     "<p class=\"example1\">An example</p>", tx );
+  t.end();
 });
 
 
@@ -429,6 +483,7 @@ test( 'css id', function ( t ) {
   let tx = "p(#big-red). Red here";
   t.is( textile.convert( tx ),
     "<p id=\"big-red\">Red here</p>", tx );
+  t.end();
 });
 
 
@@ -436,6 +491,7 @@ test( 'css id with initial uppercase', function ( t ) {
   let tx = "p(#Foo). bar";
   t.is( textile.convert( tx ),
     "<p id=\"Foo\">bar</p>", tx );
+  t.end();
 });
 
 
@@ -443,6 +499,7 @@ test( 'css class uppercase', function ( t ) {
   let tx = "p(fooBar). baz";
   t.is( textile.convert( tx ),
     "<p class=\"fooBar\">baz</p>", tx );
+  t.end();
 });
 
 
@@ -450,6 +507,7 @@ test( 'class and id combined', function ( t ) {
   let tx = "p(example1#big-red2). Red here";
   t.is( textile.convert( tx ),
     "<p class=\"example1\" id=\"big-red2\">Red here</p>", tx );
+  t.end();
 });
 
 
@@ -457,6 +515,7 @@ test( 'css style', function ( t ) {
   let tx = "p{color:blue;margin:30px;font-size:120%;font-family:'Comic Sans'}. Spacey blue";
   t.is( textile.convert( tx ),
     "<p style=\"color:blue;margin:30px;font-size:120%;font-family:&#39;Comic Sans&#39;\">Spacey blue</p>", tx );
+  t.end();
 });
 
 
@@ -464,6 +523,7 @@ test( 'language designations', function ( t ) {
   let tx = "p[fr]. rouge";
   t.is( textile.convert( tx ),
     "<p lang=\"fr\">rouge</p>", tx );
+  t.end();
 });
 
 
@@ -477,6 +537,7 @@ corn stalk from my\n\
 when I <em class=\"big\">sprouted</em> that<br />\n\
 corn stalk from my<br />\n\
 <span lang=\"es\">cabeza</span>.</p>", tx );
+  t.end();
 });
 
 
@@ -490,6 +551,7 @@ corn stalk from my\n\
 when I <em>first (big)sprouted</em> that<br />\n\
 corn stalk from my<br />\n\
 <span>grande [es]cabeza</span>.</p>", tx );
+  t.end();
 });
 
 
@@ -497,6 +559,7 @@ test( 'align justified', function ( t ) {
   let tx = "p<>. justified";
   t.is( textile.convert( tx ),
     "<p style=\"text-align:justify\">justified</p>", tx );
+  t.end();
 });
 
 
@@ -504,6 +567,7 @@ test( 'indentation', function ( t ) {
   let tx = "p))). right ident 3em";
   t.is( textile.convert( tx ),
     "<p style=\"padding-right:3em\">right ident 3em</p>", tx );
+  t.end();
 });
 
 
@@ -511,6 +575,7 @@ test( 'indentation and alignment', function ( t ) {
   let tx = "h2()>. Bingo.";
   t.is( textile.convert( tx ),
     "<h2 style=\"padding-left:1em;padding-right:1em;text-align:right\">Bingo.</h2>", tx );
+  t.end();
 });
 
 
@@ -518,6 +583,7 @@ test( 'many modifiers combined', function ( t ) {
   let tx = "h3()>[no]{color:red}. Bingo";
   t.is( textile.convert( tx ),
     "<h3 style=\"padding-left:1em;padding-right:1em;text-align:right;color:red\" lang=\"no\">Bingo</h3>", tx );
+  t.end();
 });
 
 
@@ -533,6 +599,7 @@ test( 'code blocks', function ( t ) {
   a.gsub!( /&lt;/, '' )\n\
 </code>\n\
 </pre>", tx );
+  t.end();
 });
 
 
@@ -550,6 +617,7 @@ The main text of the page goes here and will stay to the left of the sidebar.";
 <a href=\"http://ruby-lang.org/\">Ruby</a></p>\n\
 </div>\n\
 <p>The main text of the page goes here and will stay to the left of the sidebar.</p>", tx );
+  t.end();
 });
 
 
@@ -563,6 +631,7 @@ test( 'numbered list', function ( t ) {
 \t<li>A second item</li>\n\
 \t<li>A third</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -588,6 +657,7 @@ test( 'nested numbered lists', function ( t ) {
 \t\t<li>Protein</li>\n\
 \t</ol></li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -601,6 +671,7 @@ test( 'bulleted list', function ( t ) {
 \t<li>A second item</li>\n\
 \t<li>A third</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -626,6 +697,7 @@ test( 'nested bulleted lists', function ( t ) {
 \t\t<li>Protein</li>\n\
 \t</ul></li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -633,6 +705,7 @@ test( 'links', function ( t ) {
   let tx = "I searched \"Google\":http://google.com.";
   t.is( textile.convert( tx ),
     "<p>I searched <a href=\"http://google.com\">Google</a>.</p>", tx );
+  t.end();
 });
 
 
@@ -645,6 +718,7 @@ and \"it's\":hobix \"all\":hobix I ever\n\
     "<p>I am crazy about <a href=\"http://hobix.com\">Hobix</a><br />\n\
 and <a href=\"http://hobix.com\">it&#8217;s</a> <a href=\"http://hobix.com\">all</a> I ever<br />\n\
 <a href=\"http://hobix.com\">link to</a>!</p>", tx );
+  t.end();
 });
 
 
@@ -652,6 +726,7 @@ test( 'image', function ( t ) {
   let tx = "!http://hobix.com/sample.jpg!";
   t.is( textile.convert( tx ),
     "<p><img src=\"http://hobix.com/sample.jpg\" alt=\"\" /></p>", tx );
+  t.end();
 });
 
 
@@ -659,6 +734,7 @@ test( 'image title', function ( t ) {
   let tx = "!openwindow1.gif(Bunny.)!";
   t.is( textile.convert( tx ),
     "<p><img src=\"openwindow1.gif\" title=\"Bunny.\" alt=\"Bunny.\" /></p>", tx );
+  t.end();
 });
 
 
@@ -666,6 +742,7 @@ test( 'image links', function ( t ) {
   let tx = "!openwindow1.gif!:http://hobix.com/";
   t.is( textile.convert( tx ),
     "<p><a href=\"http://hobix.com/\"><img src=\"openwindow1.gif\" alt=\"\" /></a></p>", tx );
+  t.end();
 });
 
 
@@ -677,6 +754,7 @@ machine and paid it to sing to them.";
     "<p><img align=\"right\" src=\"obake.gif\" alt=\"\" /></p>\n\
 <p>And others sat all round the small<br />\n\
 machine and paid it to sing to them.</p>", tx );
+  t.end();
 });
 
 
@@ -684,6 +762,7 @@ test( 'acronym definitions', function ( t ) {
   let tx = "We use CSS(Cascading Style Sheets).";
   t.is( textile.convert( tx ),
     "<p>We use <acronym title=\"Cascading Style Sheets\"><span class=\"caps\">CSS</span></acronym>.</p>", tx );
+  t.end();
 });
 
 
@@ -691,6 +770,7 @@ test( 'two-letter acronyms', function ( t ) {
   let tx = "It employs AI(artificial intelligence) processing.";
   t.is( textile.convert( tx ),
     "<p>It employs <acronym title=\"artificial intelligence\"><span class=\"caps\">AI</span></acronym> processing.</p>", tx );
+  t.end();
 });
 
 
@@ -722,6 +802,7 @@ test( 'tables', function ( t ) {
 \t\t<td> f </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -753,6 +834,7 @@ test( 'table headers', function ( t ) {
 \t\t<td> f </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -788,6 +870,7 @@ test( 'table cell attributes', function ( t ) {
 \t\t<td style=\"vertical-align:bottom\">bottom </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -804,6 +887,7 @@ test( 'table colspan', function ( t ) {
 \t\t<td> col 2 </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -824,6 +908,7 @@ test( 'table rowspan', function ( t ) {
 \t\t<td> c </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -835,6 +920,7 @@ test( 'block attributes applied to table cells', function ( t ) {
 \t\t<td style=\"background:#ddd\">Grey cell</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -857,6 +943,7 @@ test( 'block attributes applied to a table', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -878,6 +965,7 @@ test( 'block attributes applied to a table row', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -889,6 +977,7 @@ pre. A pre block ends it.";
     "<div>Just a test.</div>\n\
 <div>Second div.</div>\n\
 <pre>A pre block ends it.</pre>", tx );
+  t.end();
 });
 
 
@@ -902,6 +991,7 @@ bq. A blockquote ends it.";
 <blockquote>\n\
 <p>A blockquote ends it.</p>\n\
 </blockquote>", tx );
+  t.end();
 });
 
 
@@ -913,6 +1003,7 @@ bc. A blockcode ends it.";
     "<div>Just a test.</div>\n\
 <div>Second div.</div>\n\
 <pre><code>A blockcode ends it.</code></pre>", tx );
+  t.end();
 });
 
 
@@ -924,6 +1015,7 @@ notextile. A notextile block ends it.";
     "<div>Just a test.</div>\n\
 <div>Second div.</div>\n\
 A notextile block ends it.", tx );
+  t.end();
 });
 
 
@@ -931,6 +1023,7 @@ test( 'simple parentheses', function ( t ) {
   let tx = "before (in parens) after";
   t.is( textile.convert( tx ),
     "<p>before (in parens) after</p>", tx );
+  t.end();
 });
 
 
@@ -938,6 +1031,7 @@ test( 'parentheses in underscores', function ( t ) {
   let tx = "before _(in parens)_ after";
   t.is( textile.convert( tx ),
     "<p>before <em>(in parens)</em> after</p>", tx );
+  t.end();
 });
 
 
@@ -945,6 +1039,7 @@ test( 'parentheses in asterisks', function ( t ) {
   let tx = "before *(in parens)* after";
   t.is( textile.convert( tx ),
     "<p>before <strong>(in parens)</strong> after</p>", tx );
+  t.end();
 });
 
 
@@ -952,6 +1047,7 @@ test( 'parentheses in underscores in quotes', function ( t ) {
   let tx = "\"before _(in parens)_ after\"";
   t.is( textile.convert( tx ),
     "<p>&#8220;before <em>(in parens)</em> after&#8221;</p>", tx );
+  t.end();
 });
 
 
@@ -959,6 +1055,7 @@ test( 'underscores in parentheses', function ( t ) {
   let tx = "one _two three_ (four _five six_) seven";
   t.is( textile.convert( tx ),
     "<p>one <em>two three</em> (four <em>five six</em>) seven</p>", tx );
+  t.end();
 });
 
 
@@ -966,6 +1063,7 @@ test( 'underscores in parentheses in quotes', function ( t ) {
   let tx = "\"one _two three_ (four _five six_) seven\"";
   t.is( textile.convert( tx ),
     "<p>&#8220;one <em>two three</em> (four <em>five six</em>) seven&#8221;</p>", tx );
+  t.end();
 });
 
 
@@ -973,6 +1071,7 @@ test( 'underscores in parentheses 2', function ( t ) {
   let tx = "one (two _three four_) five";
   t.is( textile.convert( tx ),
     "<p>one (two <em>three four</em>) five</p>", tx );
+  t.end();
 });
 
 
@@ -980,6 +1079,7 @@ test( 'underscores in parentheses in quotes 2', function ( t ) {
   let tx = "\"one (two _three four_) five\"";
   t.is( textile.convert( tx ),
     "<p>&#8220;one (two <em>three four</em>) five&#8221;</p>", tx );
+  t.end();
 });
 
 
@@ -987,6 +1087,7 @@ test( 'caps in parentheses', function ( t ) {
   let tx = "IBM or (HAL)";
   t.is( textile.convert( tx ),
     "<p><span class=\"caps\">IBM</span> or (<span class=\"caps\">HAL</span>)</p>", tx );
+  t.end();
 });
 
 
@@ -998,6 +1099,7 @@ Blah blah (normal text **bold**) blah.";
     "<p>__Amanita__s are mushrooms.<br />\n\
 Lungworts (<i>Lobaria</i>) are lichens.<br />\n\
 Blah blah (normal text <b>bold</b>) blah.</p>", tx );
+  t.end();
 });
 
 
@@ -1007,6 +1109,7 @@ test( 'square brackets are preserved', function ( t ) {
   t.is( textile.convert( tx ),
     "<p>citation [&#8220;(Berk.) Hilton&#8221;], see<br />\n\
 [Papers &#8220;blah blah.&#8221;]</p>", tx );
+  t.end();
 });
 
 
@@ -1018,6 +1121,7 @@ Some more text.";
     "<p>Just some *** text</p>\n\
 <hr />\n\
 <p>Some more text.</p>", tx );
+  t.end();
 });
 
 
@@ -1029,6 +1133,7 @@ Some more text.";
     "<p>Just some **** text</p>\n\
 <hr />\n\
 <p>Some more text.</p>", tx );
+  t.end();
 });
 
 
@@ -1040,6 +1145,7 @@ Some more text.";
     "<p>Just some --- text</p>\n\
 <hr />\n\
 <p>Some more text.</p>", tx );
+  t.end();
 });
 
 
@@ -1051,6 +1157,7 @@ Some more text.";
     "<p>Just some ___ text</p>\n\
 <hr />\n\
 <p>Some more text.</p>", tx );
+  t.end();
 });
 
 
@@ -1058,6 +1165,7 @@ test( 'lang attribute cannot contain square brackets', function ( t ) {
   let tx = "some @[[code]]@";
   t.is( textile.convert( tx ),
     "<p>some <code>[[code]]</code></p>", tx );
+  t.end();
 });
 
 
@@ -1073,6 +1181,7 @@ is displayed in a fixed-width\n\
      font. It preserves\n\
   s p a c e s, line breaks\n\
      and ascii bunnies.</pre>", tx );
+  t.end();
 });
 
 
@@ -1082,6 +1191,7 @@ test( 'code blocks preserve leading whitespace', function ( t ) {
   t.is( textile.convert( tx ),
     "<pre><code>  false\n\
 } else {</code></pre>", tx );
+  t.end();
 });
 
 
@@ -1089,6 +1199,7 @@ test( 'citation ending with question mark', function ( t ) {
   let tx = "??What the Story Morning Glory???";
   t.is( textile.convert( tx ),
     "<p><cite>What the Story Morning Glory?</cite></p>", tx );
+  t.end();
 });
 
 
@@ -1096,6 +1207,7 @@ test( 'citation including question mark', function ( t ) {
   let tx = "??What's the Matter with Kansas? How Conservatives Won the Heart of America?? is a great book!";
   t.is( textile.convert( tx ),
     "<p><cite>What&#8217;s the Matter with Kansas? How Conservatives Won the Heart of America</cite> is a great book!</p>", tx );
+  t.end();
 });
 
 
@@ -1105,6 +1217,7 @@ _and_this_too_ it should keep the emphasis but does not with redcloth.";
   t.is( textile.convert( tx ),
     "<p><em>trythis</em> it will keep the empahsis.<br />\n\
 <em>and_this_too</em> it should keep the emphasis but does not with redcloth.</p>", tx );
+  t.end();
 });
 
 
@@ -1112,6 +1225,7 @@ test( 'code captures spaces when made explicit with square brackets', function (
   let tx = "Start a paragraph with [@p. @] (that's p, a period, and a space).";
   t.is( textile.convert( tx ),
     "<p>Start a paragraph with <code>p. </code> (that&#8217;s p, a period, and a space).</p>", tx );
+  t.end();
 });
 
 
@@ -1119,6 +1233,7 @@ test( 'unrecognized block starting with t not eaten', function ( t ) {
   let tx = "tel. 0 700 123 123";
   t.is( textile.convert( tx ),
     "<p>tel. 0 700 123 123</p>", tx );
+  t.end();
 });
 
 
@@ -1126,6 +1241,7 @@ test( 'bolded number at start of phrase', function ( t ) {
   let tx = "*22 watermelons* is my limit";
   t.is( textile.convert( tx ),
     "<p><strong>22 watermelons</strong> is my limit</p>", tx );
+  t.end();
 });
 
 
@@ -1133,5 +1249,6 @@ test( 'bolded paragraph', function ( t ) {
   let tx = "*- I would expect it to be a bolded paragraph.*";
   t.is( textile.convert( tx ),
     "<p><strong>- I would expect it to be a bolded paragraph.</strong></p>", tx );
+  t.end();
 });
 

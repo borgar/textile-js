@@ -1,6 +1,7 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // definitions.yml
-import test from 'ava';
-import textile from '../src';
 
 test( 'redcloth definition list', function ( t ) {
   let tx = "here is a RedCloth definition list:\n\n\
@@ -17,6 +18,7 @@ test( 'redcloth definition list', function ( t ) {
 \t<dt>maybe</dt>\n\
 \t<dd>yes</dd>\n\
 </dl>", tx );
+  t.end();
 });
 
 
@@ -34,6 +36,7 @@ just like other lists</dd>\n\
 term</dt>\n\
 \t<dd>hey, slick!</dd>\n\
 </dl>", tx );
+  t.end();
 });
 
 
@@ -50,6 +53,7 @@ test( 'double terms', function ( t ) {
 \t<dt>cloth</dt>\n\
 \t<dd>woven threads</dd>\n\
 </dl>", tx );
+  t.end();
 });
 
 
@@ -61,6 +65,7 @@ test( 'not a definition list', function ( t ) {
     "<p>- textile<br />\n\
 - fabric<br />\n\
 - cloth</p>", tx );
+  t.end();
 });
 
 
@@ -81,5 +86,6 @@ ok =:\n\
 \t<dt>regular term</dt>\n\
 \t<dd>no</dd>\n\
 </dl>", tx );
+  t.end();
 });
 

@@ -1,6 +1,7 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // threshold.yml
-import test from 'ava';
-import textile from '../src';
 
 test( 'paragraph', function ( t ) {
   let tx = "A paragraph.\n\n\
@@ -8,6 +9,7 @@ Another paragraph.";
   t.is( textile.convert( tx ),
     "<p>A paragraph.</p>\n\
 <p>Another paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -17,6 +19,7 @@ a line break.";
   t.is( textile.convert( tx ),
     "<p>A paragraph with<br />\n\
 a line break.</p>", tx );
+  t.end();
 });
 
 
@@ -24,6 +27,7 @@ test( 'xhtml tags', function ( t ) {
   let tx = "Here's some <b>bold</b> text.";
   t.is( textile.convert( tx ),
     "<p>Here&#8217;s some <b>bold</b> text.</p>", tx );
+  t.end();
 });
 
 
@@ -31,6 +35,7 @@ test( 'no paragraph tags', function ( t ) {
   let tx = " No paragraph tags here.";
   t.is( textile.convert( tx ),
     "No paragraph tags here.", tx );
+  t.end();
 });
 
 
@@ -38,6 +43,7 @@ test( 'smart quotes', function ( t ) {
   let tx = "\"Proceed!\" said he to the host.";
   t.is( textile.convert( tx ),
     "<p>&#8220;Proceed!&#8221; said he to the host.</p>", tx );
+  t.end();
 });
 
 
@@ -45,6 +51,7 @@ test( 'smart quotes 2', function ( t ) {
   let tx = "'Proceed!' said he to the host.";
   t.is( textile.convert( tx ),
     "<p>&#8216;Proceed!&#8217; said he to the host.</p>", tx );
+  t.end();
 });
 
 
@@ -52,6 +59,7 @@ test( 'nested quotation marks', function ( t ) {
   let tx = "\"'I swear, captain,' replied I.\"";
   t.is( textile.convert( tx ),
     "<p>&#8220;&#8216;I swear, captain,&#8217; replied I.&#8221;</p>", tx );
+  t.end();
 });
 
 
@@ -59,6 +67,7 @@ test( 'nested quotation marks 2', function ( t ) {
   let tx = "'\"I swear, captain,\" replied I.'";
   t.is( textile.convert( tx ),
     "<p>&#8216;&#8220;I swear, captain,&#8221; replied I.&#8217;</p>", tx );
+  t.end();
 });
 
 
@@ -66,6 +75,7 @@ test( 'apostrophe glyphs', function ( t ) {
   let tx = "Greengrocers' apostrophe's.";
   t.is( textile.convert( tx ),
     "<p>Greengrocers&#8217; apostrophe&#8217;s.</p>", tx );
+  t.end();
 });
 
 
@@ -73,6 +83,7 @@ test( 'em-dash glyphs', function ( t ) {
   let tx = "You know the Italian proverb -- Chi ha compagno ha padrone.";
   t.is( textile.convert( tx ),
     "<p>You know the Italian proverb &#8212; Chi ha compagno ha padrone.</p>", tx );
+  t.end();
 });
 
 
@@ -80,6 +91,7 @@ test( 'em-dash glyphs 2', function ( t ) {
   let tx = "You know the Italian proverb--Chi ha compagno ha padrone.";
   t.is( textile.convert( tx ),
     "<p>You know the Italian proverb&#8212;Chi ha compagno ha padrone.</p>", tx );
+  t.end();
 });
 
 
@@ -87,6 +99,7 @@ test( 'en-dash glyphs', function ( t ) {
   let tx = "You know the Italian proverb - Chi ha compagno ha padrone.";
   t.is( textile.convert( tx ),
     "<p>You know the Italian proverb &#8211; Chi ha compagno ha padrone.</p>", tx );
+  t.end();
 });
 
 
@@ -94,6 +107,7 @@ test( 'ellipsis character', function ( t ) {
   let tx = "Meanwhile...";
   t.is( textile.convert( tx ),
     "<p>Meanwhile&#8230;</p>", tx );
+  t.end();
 });
 
 
@@ -101,6 +115,7 @@ test( 'dimension character', function ( t ) {
   let tx = "1 x 2 x 3 = 6";
   t.is( textile.convert( tx ),
     "<p>1 &#215; 2 &#215; 3 = 6</p>", tx );
+  t.end();
 });
 
 
@@ -108,6 +123,7 @@ test( 'dimension character 2', function ( t ) {
   let tx = "1x2x3 = 6";
   t.is( textile.convert( tx ),
     "<p>1&#215;2&#215;3 = 6</p>", tx );
+  t.end();
 });
 
 
@@ -115,6 +131,7 @@ test( 'trademark register copyright', function ( t ) {
   let tx = "Registered(r) Trademark(tm) Copyright (c).";
   t.is( textile.convert( tx ),
     "<p>Registered&#174; Trademark&#8482; Copyright &#169;.</p>", tx );
+  t.end();
 });
 
 
@@ -122,6 +139,7 @@ test( 'acronyms', function ( t ) {
   let tx = "ABC(Always Be Closing)";
   t.is( textile.convert( tx ),
     "<p><acronym title=\"Always Be Closing\"><span class=\"caps\">ABC</span></acronym></p>", tx );
+  t.end();
 });
 
 
@@ -129,6 +147,7 @@ test( 'uppercase', function ( t ) {
   let tx = "IBM or HAL";
   t.is( textile.convert( tx ),
     "<p><span class=\"caps\">IBM</span> or <span class=\"caps\">HAL</span></p>", tx );
+  t.end();
 });
 
 
@@ -136,6 +155,7 @@ test( 'emphasis', function ( t ) {
   let tx = "The _underlying_ cause.";
   t.is( textile.convert( tx ),
     "<p>The <em>underlying</em> cause.</p>", tx );
+  t.end();
 });
 
 
@@ -143,6 +163,7 @@ test( 'strong text', function ( t ) {
   let tx = "The *underlying* cause.";
   t.is( textile.convert( tx ),
     "<p>The <strong>underlying</strong> cause.</p>", tx );
+  t.end();
 });
 
 
@@ -150,6 +171,7 @@ test( 'italic text', function ( t ) {
   let tx = "The __underlying__ cause.";
   t.is( textile.convert( tx ),
     "<p>The <i>underlying</i> cause.</p>", tx );
+  t.end();
 });
 
 
@@ -157,6 +179,7 @@ test( 'bold text', function ( t ) {
   let tx = "The **underlying** cause.";
   t.is( textile.convert( tx ),
     "<p>The <b>underlying</b> cause.</p>", tx );
+  t.end();
 });
 
 
@@ -164,6 +187,7 @@ test( 'citation', function ( t ) {
   let tx = "??The Count of Monte Cristo??, by Dumas.";
   t.is( textile.convert( tx ),
     "<p><cite>The Count of Monte Cristo</cite>, by Dumas.</p>", tx );
+  t.end();
 });
 
 
@@ -171,6 +195,7 @@ test( 'inserted and deleted text', function ( t ) {
   let tx = "Scratch -that-, replace with +this+.";
   t.is( textile.convert( tx ),
     "<p>Scratch <del>that</del>, replace with <ins>this</ins>.</p>", tx );
+  t.end();
 });
 
 
@@ -178,6 +203,7 @@ test( 'subscript', function ( t ) {
   let tx = "log ~2~ n";
   t.is( textile.convert( tx ),
     "<p>log <sub>2</sub> n</p>", tx );
+  t.end();
 });
 
 
@@ -185,6 +211,7 @@ test( 'superscript', function ( t ) {
   let tx = "2 ^x^";
   t.is( textile.convert( tx ),
     "<p>2 <sup>x</sup></p>", tx );
+  t.end();
 });
 
 
@@ -192,6 +219,7 @@ test( 'span tag', function ( t ) {
   let tx = "The %underlying% cause.";
   t.is( textile.convert( tx ),
     "<p>The <span>underlying</span> cause.</p>", tx );
+  t.end();
 });
 
 
@@ -199,6 +227,7 @@ test( 'code', function ( t ) {
   let tx = "About the @<hr />@ tag.";
   t.is( textile.convert( tx ),
     "<p>About the <code>&lt;hr /&gt;</code> tag.</p>", tx );
+  t.end();
 });
 
 
@@ -206,6 +235,7 @@ test( 'links', function ( t ) {
   let tx = "\"link text\":http://example.com/";
   t.is( textile.convert( tx ),
     "<p><a href=\"http://example.com/\">link text</a></p>", tx );
+  t.end();
 });
 
 
@@ -213,6 +243,7 @@ test( 'local links', function ( t ) {
   let tx = "\"link text\":/example";
   t.is( textile.convert( tx ),
     "<p><a href=\"/example\">link text</a></p>", tx );
+  t.end();
 });
 
 
@@ -220,6 +251,7 @@ test( 'link title', function ( t ) {
   let tx = "\"link text(with title)\":http://example.com/";
   t.is( textile.convert( tx ),
     "<p><a href=\"http://example.com/\" title=\"with title\">link text</a></p>", tx );
+  t.end();
 });
 
 
@@ -230,6 +262,7 @@ test( 'link alias', function ( t ) {
   t.is( textile.convert( tx ),
     "<p>Here&#8217;s <a href=\"http://thresholdstate.com/\">a link</a>, and<br />\n\
 <a href=\"http://thresholdstate.com/\">another link</a> to the same site.</p>", tx );
+  t.end();
 });
 
 
@@ -237,6 +270,7 @@ test( 'image', function ( t ) {
   let tx = "!/img.gif!";
   t.is( textile.convert( tx ),
     "<p><img src=\"/img.gif\" alt=\"\" /></p>", tx );
+  t.end();
 });
 
 
@@ -244,6 +278,7 @@ test( 'image 2', function ( t ) {
   let tx = "!http://thresholdstate.com/img.gif!";
   t.is( textile.convert( tx ),
     "<p><img src=\"http://thresholdstate.com/img.gif\" alt=\"\" /></p>", tx );
+  t.end();
 });
 
 
@@ -251,6 +286,7 @@ test( 'image alt', function ( t ) {
   let tx = "!/img.gif(alt text)!";
   t.is( textile.convert( tx ),
     "<p><img src=\"/img.gif\" title=\"alt text\" alt=\"alt text\" /></p>", tx );
+  t.end();
 });
 
 
@@ -258,6 +294,7 @@ test( 'image links', function ( t ) {
   let tx = "!/img.gif!:http://textpattern.com/";
   t.is( textile.convert( tx ),
     "<p><a href=\"http://textpattern.com/\"><img src=\"/img.gif\" alt=\"\" /></a></p>", tx );
+  t.end();
 });
 
 
@@ -265,6 +302,7 @@ test( 'headers', function ( t ) {
   let tx = "h1. Heading 1";
   t.is( textile.convert( tx ),
     "<h1>Heading 1</h1>", tx );
+  t.end();
 });
 
 
@@ -272,6 +310,7 @@ test( 'headers 2', function ( t ) {
   let tx = "h2. Heading 2";
   t.is( textile.convert( tx ),
     "<h2>Heading 2</h2>", tx );
+  t.end();
 });
 
 
@@ -279,6 +318,7 @@ test( 'headers 3', function ( t ) {
   let tx = "h6. Heading 6";
   t.is( textile.convert( tx ),
     "<h6>Heading 6</h6>", tx );
+  t.end();
 });
 
 
@@ -290,6 +330,7 @@ Also a paragraph.";
     "<p>A paragraph.<br />\n\
 Continued.</p>\n\
 <p>Also a paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -303,6 +344,7 @@ Regular paragraph.";
 Continued.</p>\n\
 </blockquote>\n\
 <p>Regular paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -312,6 +354,7 @@ test( 'block quote citation', function ( t ) {
     "<blockquote cite=\"http://thresholdstate.com/\">\n\
 <p>A cited quotation.</p>\n\
 </blockquote>", tx );
+  t.end();
 });
 
 
@@ -321,6 +364,7 @@ fn1. The footnote.";
   t.is( textile.convert( tx ),
     "<p>A footnote reference<sup class=\"footnote\" id=\"fnr1\"><a href=\"#fn1\">1</a></sup>.</p>\n\
 <p class=\"footnote\" id=\"fn1\"><a href=\"#fnr1\"><sup>1</sup></a> The footnote.</p>", tx );
+  t.end();
 });
 
 
@@ -334,6 +378,7 @@ alert(\"Hello World\");\n\
 // a Javascript example\n\
 alert(\"Hello World\");\n\
 &lt;/script&gt;</code></pre>", tx );
+  t.end();
 });
 
 
@@ -343,6 +388,7 @@ text";
   t.is( textile.convert( tx ),
     "<pre>Pre-formatted\n\
 text</pre>", tx );
+  t.end();
 });
 
 
@@ -356,6 +402,7 @@ document.write(\"Hello World!\");\n\
 document.write(\"Hello World!\");\n\
 </script>\n\
 <noscript>Your browser doesn't support Javascript</noscript>", tx );
+  t.end();
 });
 
 
@@ -363,6 +410,7 @@ test( 'class attribute', function ( t ) {
   let tx = "p(myclass). My classy paragraph.";
   t.is( textile.convert( tx ),
     "<p class=\"myclass\">My classy paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -370,6 +418,7 @@ test( 'id attribute', function ( t ) {
   let tx = "p(#myid). My ID paragraph.";
   t.is( textile.convert( tx ),
     "<p id=\"myid\">My ID paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -377,6 +426,7 @@ test( 'style attribute', function ( t ) {
   let tx = "p{color:red}. Red rum.";
   t.is( textile.convert( tx ),
     "<p style=\"color:red\">Red rum.</p>", tx );
+  t.end();
 });
 
 
@@ -384,6 +434,7 @@ test( 'lang attribute', function ( t ) {
   let tx = "p[fr-fr]. En français.";
   t.is( textile.convert( tx ),
     "<p lang=\"fr-fr\">En français.</p>", tx );
+  t.end();
 });
 
 
@@ -391,6 +442,7 @@ test( 'phrase modifiers', function ( t ) {
   let tx = "A *(myclass)classy* phrase.";
   t.is( textile.convert( tx ),
     "<p>A <strong class=\"myclass\">classy</strong> phrase.</p>", tx );
+  t.end();
 });
 
 
@@ -398,6 +450,7 @@ test( 'phrase modifiers 2', function ( t ) {
   let tx = "An _(#myid2)ID_ phrase.";
   t.is( textile.convert( tx ),
     "<p>An <em id=\"myid2\">ID</em> phrase.</p>", tx );
+  t.end();
 });
 
 
@@ -405,6 +458,7 @@ test( 'phrase modifiers 3', function ( t ) {
   let tx = "The %{color:blue}blue% room.";
   t.is( textile.convert( tx ),
     "<p>The <span style=\"color:blue\">blue</span> room.</p>", tx );
+  t.end();
 });
 
 
@@ -412,6 +466,7 @@ test( 'block and phrase attributes combined', function ( t ) {
   let tx = "p(myclass#myid3){color:green}[de-de]. A complex paragraph.";
   t.is( textile.convert( tx ),
     "<p style=\"color:green\" class=\"myclass\" id=\"myid3\" lang=\"de-de\">A complex paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -419,6 +474,7 @@ test( 'block and phrase attributes combined 2', function ( t ) {
   let tx = "A ??(myclass#myid4){color:green}[de-de]complex?? phrase.";
   t.is( textile.convert( tx ),
     "<p>A <cite style=\"color:green\" class=\"myclass\" id=\"myid4\" lang=\"de-de\">complex</cite> phrase.</p>", tx );
+  t.end();
 });
 
 
@@ -432,6 +488,7 @@ p. Back to paragraph text.";
 <p>The quote continued.</p>\n\
 </blockquote>\n\
 <p>Back to paragraph text.</p>", tx );
+  t.end();
 });
 
 
@@ -453,6 +510,7 @@ print \"Hello, World\";\n\
 }\n\
 ?&gt;</code></pre>\n\
 <p>Following paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -464,6 +522,7 @@ p. Not so classy.";
     "<p class=\"myclass\">A classy paragraph.</p>\n\
 <p class=\"myclass\">Another classy paragraph.</p>\n\
 <p>Not so classy.</p>", tx );
+  t.end();
 });
 
 
@@ -475,6 +534,7 @@ Paragraph 2.";
 <p class=\"myclass\">Quote paragraph 1.</p>\n\
 <p class=\"myclass\">Paragraph 2.</p>\n\
 </blockquote>", tx );
+  t.end();
 });
 
 
@@ -484,6 +544,7 @@ Code block 2.";
   t.is( textile.convert( tx ),
     "<pre class=\"myclass\"><code class=\"myclass\">Code block 1.\n\n\
 Code block 2.</code></pre>", tx );
+  t.end();
 });
 
 
@@ -491,6 +552,7 @@ test( 'raw xhtml left in tact', function ( t ) {
   let tx = "<b>bold</b> and <i>italic</i>, the hard way.";
   t.is( textile.convert( tx ),
     "<p><b>bold</b> and <i>italic</i>, the hard way.</p>", tx );
+  t.end();
 });
 
 
@@ -498,6 +560,7 @@ test( 'paragraphs entirely raw xhtml', function ( t ) {
   let tx = "<div class=\"mydiv\">My div</div>";
   t.is( textile.convert( tx ),
     "<div class=\"mydiv\">My div</div>", tx );
+  t.end();
 });
 
 
@@ -505,6 +568,7 @@ test( 'paragraphs with inline xhtml', function ( t ) {
   let tx = "<img src=\"/img.gif\" alt=\"image\" />";
   t.is( textile.convert( tx ),
     "<p><img src=\"/img.gif\" alt=\"image\" /></p>", tx );
+  t.end();
 });
 
 
@@ -512,14 +576,16 @@ test( 'paragraphs with inline xhtml 2', function ( t ) {
   let tx = "<span class=\"myspan\">I'll make my own way.</span>";
   t.is( textile.convert( tx ),
     "<p><span class=\"myspan\">I&#8217;ll make my own way.</span></p>", tx );
+  t.end();
 });
 
 
+// BT: this nesting is invalid HTML, but I'm matching the PHP version here
 test( 'paragraphs partly enclosed in xhtml block tags', function ( t ) {
   let tx = "<div>inside</div> and outside.";
   t.is( textile.convert( tx ),
-    "<div>inside</div>\n\
-<p>and outside.</p>", tx );
+    "<p><div>inside</div> and outside.</p>", tx );
+  t.end();
 });
 
 
@@ -529,8 +595,9 @@ test( 'complex xhtml blocks', function ( t ) {
  </div>";
   t.is( textile.convert( tx ),
     "<div>\n\
-<span>My div</span>\n\
+ <span>My div</span>\n\
 </div>", tx );
+  t.end();
 });
 
 
@@ -542,6 +609,7 @@ test( 'complex xhtml blocks 2', function ( t ) {
     "<div>\n\n\
 <span>My div</span>\n\n\
 </div>", tx );
+  t.end();
 });
 
 
@@ -551,8 +619,9 @@ test( 'complex xhtml blocks with inline formatting', function ( t ) {
  </div>";
   t.is( textile.convert( tx ),
     "<div>\n\
-<span>My <strong>div</strong></span>\n\
+ <span>My <strong>div</strong></span>\n\
 </div>", tx );
+  t.end();
 });
 
 
@@ -564,6 +633,7 @@ A HTML <b>example</b>\n\
     "<pre>\n\
 A HTML &lt;b&gt;example&lt;/b&gt;\n\
 </pre>", tx );
+  t.end();
 });
 
 
@@ -575,6 +645,7 @@ Another HTML <b>example</b>\n\
     "<p><code>\n\
 Another HTML &lt;b&gt;example&lt;/b&gt;\n\
 </code></p>", tx );
+  t.end();
 });
 
 
@@ -583,7 +654,8 @@ test( 'notextile tags', function ( t ) {
 p. Leave me alone\n\
 </notextile>";
   t.is( textile.convert( tx ),
-    "p. Leave me alone", tx );
+    "\np. Leave me alone\n", tx );
+  t.end();
 });
 
 
@@ -591,6 +663,7 @@ test( 'left aligned text', function ( t ) {
   let tx = "p<. Left-aligned paragraph.";
   t.is( textile.convert( tx ),
     "<p style=\"text-align:left\">Left-aligned paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -598,6 +671,7 @@ test( 'right aligned text', function ( t ) {
   let tx = "h3>. Right-aligned heading.";
   t.is( textile.convert( tx ),
     "<h3 style=\"text-align:right\">Right-aligned heading.</h3>", tx );
+  t.end();
 });
 
 
@@ -605,6 +679,7 @@ test( 'justified text', function ( t ) {
   let tx = "p<>. Justified paragraph.";
   t.is( textile.convert( tx ),
     "<p style=\"text-align:justify\">Justified paragraph.</p>", tx );
+  t.end();
 });
 
 
@@ -612,6 +687,7 @@ test( 'centered text', function ( t ) {
   let tx = "h3=. Centered heading.";
   t.is( textile.convert( tx ),
     "<h3 style=\"text-align:center\">Centered heading.</h3>", tx );
+  t.end();
 });
 
 
@@ -619,6 +695,7 @@ test( 'padding', function ( t ) {
   let tx = "p(. Left pad 1em.";
   t.is( textile.convert( tx ),
     "<p style=\"padding-left:1em\">Left pad 1em.</p>", tx );
+  t.end();
 });
 
 
@@ -626,6 +703,7 @@ test( 'padding 2', function ( t ) {
   let tx = "p)). Right pad 2em.";
   t.is( textile.convert( tx ),
     "<p style=\"padding-right:2em\">Right pad 2em.</p>", tx );
+  t.end();
 });
 
 
@@ -633,6 +711,7 @@ test( 'padding 3', function ( t ) {
   let tx = "p(). Left and right pad 1em.";
   t.is( textile.convert( tx ),
     "<p style=\"padding-left:1em;padding-right:1em\">Left and right pad 1em.</p>", tx );
+  t.end();
 });
 
 
@@ -646,6 +725,7 @@ test( 'numeric lists', function ( t ) {
 \t<li>Item two</li>\n\
 \t<li>Item three</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -659,6 +739,7 @@ test( 'bulleted lists', function ( t ) {
 \t<li>Item B</li>\n\
 \t<li>Item C</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -680,6 +761,7 @@ test( 'nested lists', function ( t ) {
 \t</ol></li>\n\
 \t<li>Item two</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -693,6 +775,7 @@ test( 'tables', function ( t ) {
 \t\t<td>table</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -712,6 +795,7 @@ test( 'table heading cells', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -725,6 +809,7 @@ test( 'cell attributes', function ( t ) {
 \t\t<td>cell</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -738,6 +823,7 @@ test( 'row attributes', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -758,6 +844,7 @@ test( 'table attributes', function ( t ) {
 \t\t<td>table</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -769,6 +856,7 @@ test( 'vertical alignment', function ( t ) {
 \t\t<td style=\"vertical-align:top\">top alignment</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -780,6 +868,7 @@ test( 'vertical alignment 2', function ( t ) {
 \t\t<td style=\"vertical-align:middle\">middle alignment</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -791,6 +880,7 @@ test( 'vertical alignment 3', function ( t ) {
 \t\t<td style=\"vertical-align:bottom\">bottom alignment</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -807,6 +897,7 @@ test( 'column span', function ( t ) {
 \t\t<td> col 2 </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -827,6 +918,7 @@ test( 'row span', function ( t ) {
 \t\t<td> row c </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
 
 
@@ -834,6 +926,7 @@ test( 'whitespace required', function ( t ) {
   let tx = "this*won't*work";
   t.is( textile.convert( tx ),
     "<p>this*won&#8217;t*work</p>", tx );
+  t.end();
 });
 
 
@@ -841,6 +934,7 @@ test( 'modifier without whitespace', function ( t ) {
   let tx = "this[*will*]work";
   t.is( textile.convert( tx ),
     "<p>this<strong>will</strong>work</p>", tx );
+  t.end();
 });
 
 
@@ -848,6 +942,7 @@ test( 'modifier without whitespace 2', function ( t ) {
   let tx = "1[^st^], 2[^nd^], 3[^rd^].";
   t.is( textile.convert( tx ),
     "<p>1<sup>st</sup>, 2<sup>nd</sup>, 3<sup>rd</sup>.</p>", tx );
+  t.end();
 });
 
 
@@ -855,6 +950,7 @@ test( 'modifier without whitespace 3', function ( t ) {
   let tx = "2 log[~n~]";
   t.is( textile.convert( tx ),
     "<p>2 log<sub>n</sub></p>", tx );
+  t.end();
 });
 
 
@@ -866,5 +962,6 @@ A [\"footnoted link\":http://thresholdstate.com/][1].";
     "<p>A close<img src=\"/img.gif\" alt=\"\" />image.<br />\n\
 A tight<a href=\"http://thresholdstate.com/\">text</a>link.<br />\n\
 A <a href=\"http://thresholdstate.com/\">footnoted link</a><sup class=\"footnote\" id=\"fnr1\"><a href=\"#fn1\">1</a></sup>.</p>", tx );
+  t.end();
 });
 

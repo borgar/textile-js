@@ -1,5 +1,7 @@
-import test from 'ava';
-import textile from '../src';
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
+// block_comments.yml
 
 test( 'Textile comments', function ( t ) {
   let tx = "###. Here's a comment.\n\n\
@@ -12,6 +14,7 @@ Goodbye.\n\
   t.is( textile.convert( tx ),
     "<h3>Hello</h3>\n\n\
 <p>Goodbye.</p>", tx );
+  t.end();
 });
 
 
@@ -24,6 +27,7 @@ More text to follow.\n\
   t.is( textile.convert( tx ),
     "<p>Some text here.</p>\n\n\
 <p>More text to follow.</p>", tx );
+  t.end();
 });
 
 
@@ -37,5 +41,6 @@ p. More text to follow.\n\
   t.is( textile.convert( tx ),
     "<p>Some text here.</p>\n\n\
 <p>More text to follow.</p>", tx );
+  t.end();
 });
 

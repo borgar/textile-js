@@ -1,6 +1,7 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // table.yml
-import test from 'ava';
-import textile from '../src';
 
 test( 'table:1', function ( t ) {
   let tx = "|a|b|c|\n\
@@ -20,7 +21,9 @@ h3. A header after the table";
 \t</tr>\n\
 </table>\n\
 <h3>A header after the table</h3>", tx );
+  t.end();
 });
+
 
 
 test( 'table:2', function ( t ) {
@@ -39,7 +42,9 @@ test( 'table:2', function ( t ) {
 \t\t<td>3</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table:3', function ( t ) {
@@ -62,7 +67,9 @@ test( 'table:3', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table:4', function ( t ) {
@@ -84,7 +91,9 @@ test( 'table:4', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table:5', function ( t ) {
@@ -98,7 +107,9 @@ test( 'table:5', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table:6', function ( t ) {
@@ -117,7 +128,9 @@ test( 'table:6', function ( t ) {
 \t\t<td>3</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table:7', function ( t ) {
@@ -157,7 +170,9 @@ test( 'table:7', function ( t ) {
 \t\t<td style=\"text-align:left\">left</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table:8', function ( t ) {
@@ -187,7 +202,9 @@ test( 'table:8', function ( t ) {
 \t\t<td style=\"text-align:left\">Left-aligned cell</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'row spanning mid-row', function ( t ) {
@@ -222,7 +239,9 @@ test( 'row spanning mid-row', function ( t ) {
 \t\t<td>3</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table:10', function ( t ) {
@@ -285,7 +304,9 @@ test( 'table:10', function ( t ) {
 \t\t<td>Feature complete</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'combined table header and colspan', function ( t ) {
@@ -306,7 +327,9 @@ test( 'combined table header and colspan', function ( t ) {
 \t\t<td> 4 </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'two adjacent tables', function ( t ) {
@@ -327,7 +350,9 @@ test( 'two adjacent tables', function ( t ) {
 \t\t<td>3</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'with cell attributes', function ( t ) {
@@ -340,7 +365,9 @@ test( 'with cell attributes', function ( t ) {
 \t\t<td class=\"myclass\">class-ok</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'with improper cell attributes', function ( t ) {
@@ -353,7 +380,9 @@ test( 'with improper cell attributes', function ( t ) {
 \t\t<td>(myclass)class-bad</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'with line breaks in the cell', function ( t ) {
@@ -374,7 +403,9 @@ c</td>\n\
 \t\t<td>d</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'with missing cells', function ( t ) {
@@ -395,7 +426,9 @@ test( 'with missing cells', function ( t ) {
 \t\t<td>b</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'with empty cells', function ( t ) {
@@ -417,5 +450,7 @@ test( 'with empty cells', function ( t ) {
 \t\t<td> </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 

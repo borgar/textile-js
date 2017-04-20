@@ -1,6 +1,7 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // lists.yml
-import test from 'ava';
-import textile from '../src';
 
 test( 'code in bullet list', function ( t ) {
   let tx = "* command run: @time ruby run-tests.rb > toto@";
@@ -8,6 +9,7 @@ test( 'code in bullet list', function ( t ) {
     "<ul>\n\
 \t<li>command run: <code>time ruby run-tests.rb &gt; toto</code></li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -23,6 +25,7 @@ test( 'hard break in list', function ( t ) {
 line</li>\n\
 \t<li>third line</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -54,6 +57,7 @@ a break</li>\n\
 \t\t<li>okay</li>\n\
 \t</ul></li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -83,6 +87,7 @@ test( 'list continuation', function ( t ) {
 \t<li>five</li>\n\
 \t<li>six</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -116,6 +121,7 @@ test\n\n\
 \t<li>eight</li>\n\
 \t<li>nine</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -151,6 +157,7 @@ test( 'continue list when prior list contained nested list', function ( t ) {
 \t<li>eight</li>\n\
 \t<li>nine</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -172,6 +179,7 @@ test( 'list start number', function ( t ) {
 \t<li>ten</li>\n\
 \t<li>eleven</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -193,6 +201,7 @@ test( 'continue list after started list', function ( t ) {
 \t<li>thirteen</li>\n\
 \t<li>fourteen</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -217,6 +226,7 @@ h2. See Also\n\n\
 \t<li>See Also notes should be bullets</li>\n\
 \t<li>Like this</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -230,6 +240,7 @@ test( 'ordered list immediately following paragraph', function ( t ) {
 \t<li>One</li>\n\
 \t<li>Two</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -243,6 +254,7 @@ test( 'unordered list immediately following paragraph', function ( t ) {
 \t<li>One</li>\n\
 \t<li>Two</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -258,6 +270,7 @@ A simple example.\n\
 \t<li>One</li>\n\
 \t<li>Two</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -273,6 +286,7 @@ A simple example.\n\
 \t<li>One</li>\n\
 \t<li>Two</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -286,6 +300,7 @@ test( 'unordered with classes', function ( t ) {
 \t<li class=\"class-two\">two</li>\n\
 \t<li class=\"class-three\">three</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -301,6 +316,7 @@ test( 'unordered with alignments', function ( t ) {
 \t<li style=\"text-align:justify\">three</li>\n\
 \t<li style=\"text-align:center\">four</li>\n\
 </ul>", tx );
+  t.end();
 });
 
 
@@ -314,6 +330,7 @@ test( 'with attributes that apply to the whole list', function ( t ) {
 \t<li>two</li>\n\
 \t<li>three</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -327,6 +344,7 @@ test( 'with id on the list', function ( t ) {
 \t<li>two</li>\n\
 \t<li>three</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -340,6 +358,7 @@ test( 'with class on the list', function ( t ) {
 \t<li>two</li>\n\
 \t<li>three</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -353,6 +372,7 @@ test( 'with id on the list item', function ( t ) {
 \t<li id=\"my-item\">two</li>\n\
 \t<li>three</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -367,6 +387,7 @@ test( 'with attributes that apply to the first list item', function ( t ) {
 \t<li>two</li>\n\
 \t<li>three</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -381,6 +402,7 @@ test( 'changed from textism basics', function ( t ) {
 \t<li>two</li>\n\
 \t<li>three</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -395,6 +417,7 @@ test( 'item and list attributes', function ( t ) {
 \t<li class=\"second\">Item 2</li>\n\
 \t<li class=\"third\">Item 3</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -404,6 +427,7 @@ test( 'with one padding-left increment', function ( t ) {
     "<ol style=\"padding-left:1em\">\n\
 \t<li>one</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -413,6 +437,7 @@ test( 'with two padding-left increments', function ( t ) {
     "<ol style=\"padding-left:2em\">\n\
 \t<li>two</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -422,6 +447,7 @@ test( 'with one padding-right increment', function ( t ) {
     "<ol style=\"padding-right:1em\">\n\
 \t<li>one</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -431,6 +457,7 @@ test( 'with padding-left and padding-right increments', function ( t ) {
     "<ol style=\"padding-left:1em;padding-right:1em\">\n\
 \t<li>two</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -440,6 +467,7 @@ test( 'with padding-left and padding-right increments switched', function ( t ) 
     "<ol style=\"padding-right:1em;padding-left:1em\">\n\
 \t<li>two</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -454,6 +482,7 @@ test( 'list control items occuring-mid list should be ignored', function ( t ) {
 \t<li>two</li>\n\
 \t<li>tree</li>\n\
 </ol>", tx );
+  t.end();
 });
 
 
@@ -489,5 +518,6 @@ test( 'complicated case with continues and classes', function ( t ) {
 \t\t<li>Sub item 6</li>\n\
 \t</ol></li>\n\
 </ol>", tx );
+  t.end();
 });
 

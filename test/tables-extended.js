@@ -1,6 +1,7 @@
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 // extened table syntax
-import test from 'ava';
-import textile from '../src';
 
 test( 'headers and cells', function ( t ) {
   let tx = "|_. First Header |_. Second Header |\n\
@@ -16,7 +17,9 @@ test( 'headers and cells', function ( t ) {
 \t\t<td> Content Cell </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'captions', function ( t ) {
@@ -32,7 +35,9 @@ test( 'captions', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'tailing pipes should be stripped from captions', function ( t ) {
@@ -57,7 +62,9 @@ test( 'tailing pipes should be stripped from captions', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table summary', function ( t ) {
@@ -69,7 +76,9 @@ test( 'table summary', function ( t ) {
 \t\t<td> foo </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'tbody/thead/tfoot', function ( t ) {
@@ -97,7 +106,9 @@ test( 'tbody/thead/tfoot', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'colgroup', function ( t ) {
@@ -113,7 +124,9 @@ test( 'colgroup', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'colgroup span size', function ( t ) {
@@ -129,7 +142,9 @@ test( 'colgroup span size', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'can target individual cols', function ( t ) {
@@ -148,7 +163,9 @@ test( 'can target individual cols', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'can style colgroup', function ( t ) {
@@ -169,7 +186,9 @@ test( 'can style colgroup', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'extened table syntax:10', function ( t ) {
@@ -197,7 +216,9 @@ test( 'extened table syntax:10', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'extened table syntax:11', function ( t ) {
@@ -225,7 +246,9 @@ test( 'extened table syntax:11', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'styleable cells', function ( t ) {
@@ -239,7 +262,9 @@ test( 'styleable cells', function ( t ) {
 \t\t<td>cell</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'row class', function ( t ) {
@@ -252,7 +277,9 @@ test( 'row class', function ( t ) {
 \t\t<td>row</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'table class', function ( t ) {
@@ -272,7 +299,9 @@ test( 'table class', function ( t ) {
 \t\t<td>table</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'column span', function ( t ) {
@@ -288,7 +317,9 @@ test( 'column span', function ( t ) {
 \t\t<td> col 2 </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'row span', function ( t ) {
@@ -308,7 +339,9 @@ test( 'row span', function ( t ) {
 \t\t<td> row c </td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'cell text v-alignment', function ( t ) {
@@ -327,7 +360,9 @@ test( 'cell text v-alignment', function ( t ) {
 \t\t<td style=\"vertical-align:bottom\">bottom alignment</td>\n\
 \t</tr>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'cell text h-alignment', function ( t ) {
@@ -352,7 +387,9 @@ test( 'cell text h-alignment', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'a complex table example', function ( t ) {
@@ -444,7 +481,9 @@ table(#dvds){border-collapse:collapse}. Great films on DVD employing Textile sum
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'attr can be passed to all the containers', function ( t ) {
@@ -481,7 +520,9 @@ test( 'attr can be passed to all the containers', function ( t ) {
 \t\t</tr>\n\
 \t</tfoot>\n\
 </table>", tx );
+  t.end();
 });
+
 
 
 test( 'classes on cols', function ( t ) {
@@ -500,5 +541,7 @@ test( 'classes on cols', function ( t ) {
 \t\t</tr>\n\
 \t</tbody>\n\
 </table>", tx );
+  t.end();
 });
+
 

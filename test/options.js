@@ -1,13 +1,15 @@
-import test from 'ava';
-import textile from '../src';
+/* eslint-disable prefer-const, no-multi-str, quotes */
+const test = require( 'tape' );
+const textile = require( '../src' );
 
 test( 'jstextile options', function ( t ) {
-  var paragraph = 'Some paragraph\nwith a linebreak.';
+  const paragraph = 'Some paragraph\nwith a linebreak.';
   // By default, inline linebreaks will be converted to html linebreaks
   t.is( textile.convert( paragraph ),
     '<p>Some paragraph<br />\nwith a linebreak.</p>' );
   t.is( textile.convert( paragraph, { breaks: false }),
     '<p>Some paragraph\nwith a linebreak.</p>' );
+  t.end();
 });
 
 test( 'jstextile options', function ( t ) {
@@ -38,12 +40,13 @@ test( 'jstextile options', function ( t ) {
     '\t\t<td>c</td>\n' +
     '\t</tr>\n' +
     '</table>' );
+  t.end();
 });
 
 test( 'jstextile options', function ( t ) {
-  var paragraph = 'Some paragraph\nwith a linebreak.';
-  var savedOptions = {};
-  for ( var k in textile.defaults ) {
+  const paragraph = 'Some paragraph\nwith a linebreak.';
+  const savedOptions = {};
+  for ( let k in textile.defaults ) {
     savedOptions[k] = textile.defaults[k];
   }
   // setting a global option makes it the subsequent default
@@ -58,4 +61,6 @@ test( 'jstextile options', function ( t ) {
     '<p>Some paragraph\nwith a linebreak.</p>' );
   // reset options --
   textile.setOptions( savedOptions );
+  t.end();
 });
+
