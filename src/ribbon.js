@@ -1,45 +1,62 @@
 module.exports = function ribbon ( feed ) {
   const org = String( feed );
-  let slot = null;
+  let slot;
   let pos = 0;
+  const self = {
 
-  return {
-
-    save: function () {
-      slot = pos;
+    index: () => {
+      return pos;
     },
 
-    load: function () {
+    save: () => {
+      slot = pos;
+      return self;
+    },
+
+    load: () => {
       pos = slot;
       feed = org.slice( pos );
-      this.$ = feed;
+      return self;
     },
 
-    advance: function ( n ) {
+    advance: n => {
       pos += ( typeof n === 'string' ) ? n.length : n;
       feed = org.slice( pos );
-      this.$ = feed;
       return feed;
     },
 
-    lookbehind: function ( nchars ) {
+    skipWS: () => {
+      const ws = /^\s+/.exec( feed );
+      if ( ws ) {
+        pos += ws[0].length;
+        feed = org.slice( pos );
+        return ws[0];
+      }
+      return '';
+    },
+
+    lookbehind: nchars => {
       nchars = nchars == null ? 1 : nchars;
       return org.slice( pos - nchars, pos );
     },
 
-    startsWith: function ( s ) {
+    startsWith: s => {
       return feed.substring( 0, s.length ) === s;
     },
 
-    valueOf: function () {
-      this.$ = feed;
+    slice: ( a, b ) => {
+      return b != null ? feed.slice( a, b ) : feed.slice( a );
+    },
+
+    valueOf: () => {
       return feed;
     },
 
-    toString: function () {
-      this.$ = feed;
+    toString: () => {
       return feed;
     }
 
   };
+
+  return self;
 };

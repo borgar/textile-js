@@ -6,7 +6,7 @@ const ribbon = require( '../ribbon' );
 const re = require( '../re' );
 const fixLinks = require( '../fixlinks' );
 
-const { parseHtml, parseHtmlAttr, singletons, testComment, testOpenTagBlock } = require( '../html' );
+const { parseHtml, tokenize, parseHtmlAttr, singletons, testComment, testOpenTagBlock } = require( '../html' );
 
 const { parsePhrase } = require( './phrase' );
 const { copyAttr, parseAttr } = require( './attr' );
@@ -36,12 +36,31 @@ const allowedBlocktags = {
 };
 
 const reBlock = re.compile( /^([:txblocks:])/ );
-// const reBlockSE = re.compile( /^[:txblocks:]$/ );
 const reBlockNormal = re.compile( /^(.*?)($|\r?\n(?=[:txlisthd:])|\r?\n(?:\s*\n|$)+)/, 's' );
 const reBlockExtended = re.compile( /^(.*?)($|\r?\n(?=[:txlisthd:])|\r?\n+(?=[:txblocks:][:txattr:]\.))/, 's' );
+const reBlockNormalPre = re.compile( /^(.*?)($|\r?\n(?:\s*\n|$)+)/, 's' );
+const reBlockExtendedPre = re.compile( /^(.*?)($|\r?\n+(?=[:txblocks:][:txattr:]\.))/, 's' );
+
 const reRuler = /^(\-\-\-+|\*\*\*+|___+)(\r?\n\s+|$)/;
 const reLinkRef = re.compile( /^\[([^\]]+)\]((?:https?:\/\/|\/)\S+)(?:\s*\n|$)/ );
 const reFootnoteDef = /^fn\d+$/;
+
+
+const hasOwn = Object.prototype.hasOwnProperty;
+function extend ( target, ...args ) {
+  for ( let i = 1; i < args.length; i++ ) {
+    const src = args[i];
+    if ( src != null ) {
+      for ( const nextKey in src ) {
+        if ( hasOwn.call( src, nextKey ) ) {
+          target[nextKey] = src[nextKey];
+        }
+      }
+    }
+  }
+  return target;
+}
+
 
 function paragraph ( s, tag, pba, linebreak, options ) {
   tag = tag || 'p';
@@ -49,7 +68,6 @@ function paragraph ( s, tag, pba, linebreak, options ) {
   s.split( /(?:\r?\n){2,}/ ).forEach( function ( bit, i ) {
     if ( tag === 'p' && /^\s/.test( bit ) ) {
       // no-paragraphs
-      // WTF?: Why does Textile not allow linebreaks in spaced lines
       bit = bit.replace( /\r?\n[\t ]/g, ' ' ).trim();
       out = out.concat( parsePhrase( bit, options ) );
     }
@@ -99,7 +117,10 @@ function parseFlow ( src, options ) {
         // FIXME: this whole copyAttr seems rather strange?
         // slurp rest of block
         const extended = !!m[1];
-        const reBlockGlob = ( extended ? reBlockExtended : reBlockNormal );
+        let reBlockGlob = ( extended ? reBlockExtended : reBlockNormal );
+        if ( blockType === 'bc' || blockType === 'pre' ) {
+          reBlockGlob = ( extended ? reBlockExtendedPre : reBlockNormalPre );
+        }
         m = reBlockGlob.exec( src.advance( m[0] ) );
         src.advance( m[0] );
         // bq | bc | notextile | pre | h# | fn# | p | ###
@@ -113,14 +134,13 @@ function parseFlow ( src, options ) {
           // RedCloth adds all attr to both: this is bad because it produces duplicate IDs
           const par = paragraph( inner, 'p', copyAttr( pba, { 'cite': 1, 'id': 1 }), '\n', options );
           list.add( [ 'blockquote', pba, '\n' ].concat( par ).concat( [ '\n' ] ) );
-          // FIXME: looks like .linebreak can work here
         }
         else if ( blockType === 'bc' ) {
           const subPba = ( pba ) ? copyAttr( pba, { 'id': 1 }) : null;
           list.add( [ 'pre', pba, ( subPba ? [ 'code', subPba, m[1] ] : [ 'code', m[1] ] ) ] );
         }
         else if ( blockType === 'notextile' ) {
-          list.merge( parseHtml( m[1] ) );
+          list.merge( parseHtml( tokenize( m[1] ) ) );
         }
         else if ( blockType === '###' ) {
           // ignore the insides
@@ -160,67 +180,82 @@ function parseFlow ( src, options ) {
     // block HTML
     if ( ( m = testOpenTagBlock( src ) ) ) {
       const tag = m[1];
-      const single = m[3] || tag in singletons;
-      const tail = m[4];
-
-      // Unsurprisingly, all Textile implementations I have tested have trouble parsing simple HTML:
-      //
-      //    "<div>a\n<div>b\n</div>c\n</div>d"
-      //
-      // I simply match them here as there is no way anyone is using nested HTML today, or if they
-      // are, then this will at least output less broken HTML as redundant tags will get quoted.
 
       // Is block tag? ...
       if ( tag in allowedBlocktags ) {
-        src.advance( m[0] );
-
-        let element = [ tag ];
-
-        if ( m[2] ) {
-          element.push( parseHtmlAttr( m[2] ) );
+        if ( m[3] || tag in singletons ) { // single?
+          src.advance( m[0] );
+          if ( /^\s*(\n|$)/.test( src ) ) {
+            const elm = [ tag ];
+            if ( m[2] ) { elm.push( parseHtmlAttr( m[2] ) ); }
+            list.add( elm );
+            src.skipWS();
+            continue;
+          }
         }
-
-        // single tag
-        if ( single ) {
-          // let us add the element and continue our quest...
-          list.add( element );
-          continue;
+        else if ( tag === 'pre' ) {
+          const t = tokenize( src, { 'pre': 1, 'code': 1 }, tag );
+          const p = parseHtml( t, true );
+          src.load().advance( p.sourceLength );
+          if ( /^\s*(\n|$)/.test( src ) ) {
+            list.merge( p );
+            src.skipWS(); // skip tailing whitespace
+            continue;
+          }
         }
-        // block
+        else if ( tag === 'notextile' ) {
+          // merge all child elements
+          const t = tokenize( src, null, tag );
+          let s = 1; // start after open tag
+          while ( /^\s+$/.test( t[s].src ) ) {
+            s++; // skip whitespace
+          }
+          const p = parseHtml( t.slice( s, -1 ), true );
+          const x = t.pop();
+          src.load().advance( x.pos + x.src.length );
+          if ( /^\s*(\n|$)/.test( src ) ) {
+            list.merge( p );
+            src.skipWS(); // skip tailing whitespace
+            continue;
+          }
+        }
         else {
-          // gulp up the rest of this block...
-          const reEndTag = re.compile( `^(.*?)(\\s*)(</${ tag }\\s*>)(\\s*)`, 's' );
-          if ( ( m = reEndTag.exec( src ) ) ) {
-            src.advance( m[0] );
-            if ( tag === 'pre' ) {
-              element.push( tail );
-              element = element.concat( parseHtml( m[1].replace( /(\r?\n)+$/, '' ), { 'code': 1 }) );
-              if ( m[2] ) { element.push( m[2] ); }
-              list.add( element );
-            }
-            else if ( tag === 'notextile' ) {
-              element = parseHtml( m[1].trim() );
-              list.merge( element );
-            }
-            else if ( tag === 'script' || tag === 'noscript' ) {
-              element.push( tail + m[1] );
-              list.add( element );
-            }
-            else {
-              // These strange (and unnecessary) linebreak tests are here to get the
-              // tests working perfectly. In reality, this doesn't matter one bit.
-              if ( /\n/.test( tail ) ) { element.push( '\n' ); }
-              if ( /\n/.test( m[1] ) ) {
-                element = element.concat( parseFlow( m[1], options ) );
+          src.skipWS();
+          const t = tokenize( src, null, tag );
+          const x = t.pop(); // this should be the end tag
+          let s = 1; // start after open tag
+          while ( t[s] && /^[\n\r]+$/.test( t[s].src ) ) {
+            s++; // skip whitespace
+          }
+          if ( x.tag === tag ) {
+            // inner can be empty
+            const inner = ( t.length > 1 ) ? src.slice( t[s].pos, x.pos ) : '';
+            src.advance( x.pos + x.src.length );
+            if ( /^\s*(\n|$)/.test( src ) ) {
+              let elm = [ tag ];
+              if ( m[2] ) { elm.push( parseHtmlAttr( m[2] ) ); }
+              if ( tag === 'script' || tag === 'style' ) {
+                elm.push( inner );
               }
               else {
-                element = element.concat( parsePhrase( m[1].replace( /^ +/, '' ), options ) );
+                const innerHTML = inner.replace( /^\n+/, '' ).replace( /\s*$/, '' );
+                const isBlock = /\n\r?\n/.test( innerHTML ) || tag === 'ol' || tag === 'ul';
+                const innerElm = isBlock
+                      ? parseFlow( innerHTML, options )
+                      : parsePhrase( innerHTML, extend({}, options, { breaks: false }) );
+                if ( isBlock || /^\n/.test( inner ) ) {
+                  elm.push( '\n' );
+                }
+                if ( isBlock || /\s$/.test( inner ) ) {
+                  innerElm.push( '\n' );
+                }
+                elm = elm.concat( innerElm );
               }
-              if ( /\n/.test( m[2] ) ) { element.push( '\n' ); }
 
-              list.add( element );
+              list.add( elm );
+              src.skipWS(); // skip tailing whitespace
+              continue;
             }
-            continue;
           }
         }
       }

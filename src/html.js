@@ -7,24 +7,23 @@ re.pattern.html_attr = '(?:"[^"]+"|\'[^\']+\'|[^>\\s]+)';
 const reAttr = re.compile( /^\s*([^=\s]+)(?:\s*=\s*("[^"]+"|'[^']+'|[^>\s]+))?/ );
 const reComment = re.compile( /^<!--(.+?)-->/, 's' );
 const reEndTag = re.compile( /^<\/([:html_id:])([^>]*)>/ );
-const reTag = re.compile( /^<([:html_id:])((?:\s[^=\s\/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>(\n*)/ );
-const reHtmlTagBlock = re.compile( /^\s*<([:html_id:](?::[a-zA-Z\d]+)*)((?:\s[^=\s\/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>(\n*)/ );
+const reTag = re.compile( /^<([:html_id:])((?:\s[^=\s\/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>/ );
+const reHtmlTagBlock = re.compile( /^\s*<([:html_id:](?::[a-zA-Z\d]+)*)((?:\s[^=\s\/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>/ );
 
-// area, base, basefont, bgsound, br, col, command, embed, frame, hr,
-// img, input, keygen, link, meta, param, source, track or wbr
 const singletons = {
+  area: 1,
+  base: 1,
   br: 1,
+  col: 1,
+  embed: 1,
   hr: 1,
   img: 1,
+  input: 1,
   link: 1,
   meta: 1,
-  wbr: 1,
-  area: 1,
-  param: 1,
-  input: 1,
   option: 1,
-  base: 1,
-  col: 1
+  param: 1,
+  wbr: 1
 };
 
 function allowAll () {
@@ -58,108 +57,159 @@ function parseHtmlAttr ( attrSrc ) {
   return attr;
 }
 
-// This "indesciminately" parses HTML text into a list of JSON-ML element
-// No steps are taken however to prevent things like <table><p><td> - user can still create nonsensical but "well-formed" markup
-function parseHtml ( src, whitelistTags ) {
-  const root = [];
-  let list = root;
-  const _stack = [];
-  const oktag = whitelistTags ? function ( tag ) { return tag in whitelistTags; } : allowAll;
-  let m;
-  let tag;
+const OPEN = 'OPEN';
+const CLOSE = 'CLOSE';
+const SINGLE = 'SINGLE';
+const TEXT = 'TEXT';
+const COMMENT = 'COMMENT';
+const WS = 'WS';
 
-  src = ( typeof src === 'string' ) ? ribbon( src ) : src;
-  // loop
+function tokenize ( src, whitelistTags, lazy ) {
+  const tokens = [];
+  let textMode = false;
+  let oktag = whitelistTags ? ( tag ) => tag in whitelistTags : allowAll;
+  const oktag_ = oktag;
+  const nesting = {};
+  let nestCount = 0;
+  let m;
+
+  src = ribbon( String( src ) );
+
   do {
     // comment
     if ( ( m = testComment( src ) ) && oktag( '!' ) ) {
+      tokens.push({
+        type: COMMENT,
+        data: m[1],
+        pos: src.index(),
+        src: m[0]
+      });
       src.advance( m[0] );
-      list.push( [ '!', m[1] ] );
     }
 
     // end tag
     else if ( ( m = testCloseTag( src ) ) && oktag( m[1] ) ) {
-      tag = m[1];
-      if ( _stack.length ) {
-        for ( let i = _stack.length - 1; i >= 0; i-- ) {
-          const head = _stack[i];
-          if ( head[0] === tag ) {
-            _stack.splice( i );
-            list = _stack[_stack.length - 1] || root;
-            break;
-          }
-        }
-      }
+      const token = {
+        type: CLOSE,
+        tag: m[1],
+        pos: src.index(),
+        src: m[0]
+      };
       src.advance( m[0] );
+      tokens.push( token );
+      nesting[token.tag]--;
+      nestCount--;
+      // console.log( '/' + token.tag, nestCount, nesting );
+      if ( lazy && (
+          !nestCount ||
+          !nesting[token.tag] < 0 ||
+          isNaN( nesting[token.tag] )
+        ) ) {
+        return tokens;
+      }
+      // if parse is in text mode then that ends here
+      if ( textMode ) {
+        textMode = null;
+        oktag = oktag_;
+      }
     }
 
     // open/void tag
     else if ( ( m = testOpenTag( src ) ) && oktag( m[1] ) ) {
-      src.advance( m[0] );
-      tag = m[1];
-      const single = m[3] || m[1] in singletons;
-      const tail = m[4];
-      const element = [ tag ];
-
-      // attributes
+      const token = {
+        type: m[3] || m[1] in singletons ? SINGLE : OPEN,
+        tag: m[1],
+        pos: src.index(),
+        src: m[0]
+      };
       if ( m[2] ) {
-        element.push( parseHtmlAttr( m[2] ) );
+        token.attr = parseHtmlAttr( m[2] );
       }
-
-      // single tag
-      if ( single ) {
-        // let us add the element and continue our quest...
-        list.push( element );
-        if ( tail ) {
-          list.push( tail );
-        }
+      // some elements can move parser into "text" mode
+      if ( m[1] === 'script' || m[1] === 'code' || m[1] === 'style' ) {
+        textMode = token.tag;
+        oktag = tag => tag === textMode;
       }
-      // open tag
-      else {
-        if ( tail ) {
-          element.push( tail );
-        }
-
-        // TODO: some things auto close other things: <td>, <li>, <p>, <table>
-        // if ( tag === 'p' && _stack.length ) {
-        //   var seek = /^(p)$/;
-        //   for (var i=_stack.length-1; i>=0; i--) {
-        //     var head = _stack[i];
-        //     if ( seek.test( head[0] ) /* === tag */ ) {
-        //       //src.advance( m[0] );
-        //       _stack.splice( i );
-        //       list = _stack[i] || root;
-        //     }
-        //   }
-        // }
-
-        // TODO: some elements can move parser into "text" mode
-        // style, xmp, iframe, noembed, noframe, textarea, title, script, noscript, plaintext
-        // if ( /^(script)$/.test( tag ) ) { }
-
-        _stack.push( element );
-        list.push( element );
-        list = element;
+      if ( token.type === OPEN ) {
+        nestCount++;
+        nesting[token.tag] = ( nesting[token.tag] || 0 ) + 1;
+        // console.log( token.tag, nestCount, nesting );
       }
+      tokens.push( token );
+      src.advance( m[0] );
     }
+
     // text content
     else {
       // no match, move by all "uninteresting" chars
       m = /([^<]+|[^\0])/.exec( src );
       if ( m ) {
-        list.push( m[0] );
+        tokens.push({
+          type: TEXT,
+          data: m[0],
+          pos: src.index(),
+          src: m[0]
+        });
       }
       src.advance( m ? m[0].length || 1 : 1 );
     }
   }
   while ( src.valueOf() );
 
+  return tokens;
+}
+
+// This "indesciminately" parses HTML text into a list of JSON-ML element
+// No steps are taken however to prevent things like <table><p><td> - user can still create nonsensical but "well-formed" markup
+function parse ( tokens, lazy ) {
+  const root = [];
+  const stack = [];
+  let curr = root;
+  let token;
+  for ( let i = 0; i < tokens.length; i++ ) {
+    token = tokens[i];
+    if ( token.type === COMMENT ) {
+      curr.push( [ '!', token.data ] );
+    }
+    else if ( token.type === TEXT || token.type === WS ) {
+      curr.push( token.data );
+    }
+    else if ( token.type === SINGLE ) {
+      curr.push( token.attr ? [ token.tag, token.attr ] : [ token.tag ] );
+    }
+    else if ( token.type === OPEN ) {
+      // TODO: some things auto close other things: <td>, <li>, <p>, <table>
+      // https://html.spec.whatwg.org/multipage/syntax.html#syntax-tag-omission
+      const elm = token.attr ? [ token.tag, token.attr ] : [ token.tag ];
+      curr.push( elm );
+      stack.push( elm );
+      curr = elm;
+    }
+    else if ( token.type === CLOSE ) {
+      if ( stack.length ) {
+        for ( let i = stack.length - 1; i >= 0; i-- ) {
+          const head = stack[i];
+          if ( head[0] === token.tag ) {
+            stack.splice( i );
+            curr = stack[stack.length - 1] || root;
+            break;
+          }
+        }
+      }
+      if ( !stack.length && lazy ) {
+        root.sourceLength = token.pos + token.src.length;
+        return root;
+      }
+    }
+  }
+  root.sourceLength = token ? token.pos + token.src.length : 0;
   return root;
 }
 
 module.exports = {
   singletons: singletons,
-  parseHtml: parseHtml,
+  tokenize: tokenize,
+  parseHtml: parse,
   parseHtmlAttr: parseHtmlAttr,
   testCloseTag: testCloseTag,
   testOpenTagBlock: testOpenTagBlock,

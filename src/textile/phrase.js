@@ -32,14 +32,13 @@ const reImage = re.compile( /^!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^\.\/]))?)([^
 const reImageFenced = re.compile( /^\[!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^\.\/]))?)([^!\s]+?) ?(?:\(((?:[^\(\)]|\([^\(\)]+\))+)\))?!(?::([^\s]+?(?=[!-\.:-@\[\\\]-`{-~](?:$|\s)|\s|$)))?\]/ );
 // NB: there is an exception in here to prevent matching "TM)"
 const reCaps = re.compile( /^((?!TM\)|tm\))[[:ucaps:]](?:[[:ucaps:]\d]{1,}(?=\()|[[:ucaps:]\d]{2,}))(?:\((.*?)\))?(?=\W|$)/ );
-const reLink = re.compile( /^"(?!\s)((?:[^\n"]|"(?![\s:])[^\n"]+"(?!:))+)"[:txcite:]/ );
+const reLink = re.compile( /^"(?!\s)((?:[^"]|"(?![\s:])[^\n"]+"(?!:))+)"[:txcite:]/ );
 const reLinkFenced = /^\["([^\n]+?)":((?:\[[a-z0-9]*\]|[^\]])+)\]/;
 const reLinkTitle = /\s*\(((?:\([^\(\)]*\)|[^\(\)])+)\)$/;
 const reFootnote = /^\[(\d+)(!?)\]/;
 
 function parsePhrase ( src, options ) {
   src = ribbon( src );
-
   const list = builder();
   let m;
   let pba;
@@ -54,7 +53,10 @@ function parsePhrase ( src, options ) {
     }
     if ( src.startsWith( '\n' ) ) {
       src.advance( 1 );
-      if ( options.breaks ) {
+      if ( src.startsWith( ' ' ) ) {
+        src.advance( 1 );
+      }
+      else if ( options.breaks ) {
         list.add( [ 'br' ] );
       }
       list.add( '\n' );
@@ -147,12 +149,11 @@ function parsePhrase ( src, options ) {
       const tag = m[1];
       const single = m[3] || m[1] in singletons;
       let element = [ tag ];
-      const tail = m[4];
       if ( m[2] ) {
         element.push( parseHtmlAttr( m[2] ) );
       }
       if ( single ) { // single tag
-        list.add( element ).add( tail );
+        list.add( element ).add( src.skipWS() );
         continue;
       }
       else { // need terminator
@@ -161,7 +162,7 @@ function parsePhrase ( src, options ) {
         if ( ( m = reEndTag.exec( src ) ) ) {
           src.advance( m[0] );
           if ( tag === 'code' ) {
-            element.push( tail, m[1] );
+            element.push( m[1] );
           }
           else if ( tag === 'notextile' ) {
             list.merge( parsePhrase( m[1], options ) );

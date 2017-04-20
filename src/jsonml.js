@@ -73,7 +73,7 @@ function toHTML ( jsonml ) {
   if ( tag === '!' ) {
     return `<!--${ content.join( '' ) }-->`;
   }
-  else if ( tag in singletons ) {
+  else if ( tag in singletons || ( tag.indexOf( ':' ) > -1 && !content.length ) ) {
     return `<${ tag }${ tagAttrs } />`;
   }
   else {
