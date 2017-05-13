@@ -604,3 +604,11 @@ test( 'nested blockquotes (#36)', function ( t ) {
     '<blockquote>a<blockquote>b</blockquote>c</blockquote>' );
   t.end();
 });
+
+
+test( 'list whitespace (#47)', function ( t ) {
+  const tx = "* unsorted list item 1\n#    sorted list item 1\n#    sorted list item 2";
+  t.is( textile.convert( tx ),
+    '<ul>\n\t<li>unsorted list item 1</li>\n\t<li>sorted list item 1</li>\n\t<li>sorted list item 2</li>\n</ul>' );
+  t.end();
+});
