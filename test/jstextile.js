@@ -612,3 +612,11 @@ test( 'list whitespace (#47)', function ( t ) {
     '<ul>\n\t<li>unsorted list item 1</li>\n\t<li>sorted list item 1</li>\n\t<li>sorted list item 2</li>\n</ul>' );
   t.end();
 });
+
+
+test( 'notextile should work inline (#49)', function ( t ) {
+  const tx = "pre <notextile>*.Catalog und *.*</notextile> post";
+  t.is( textile.convert( tx ),
+    '<p>pre *.Catalog und *.* post</p>' );
+  t.end();
+});

@@ -6,7 +6,7 @@ const re = require( '../re' );
 
 const { parseAttr } = require( './attr' );
 const { parseGlyph } = require( './glyph' );
-const { parseHtmlAttr, singletons, testComment, testOpenTag } = require( '../html' );
+const { parseHtml, parseHtmlAttr, tokenize, singletons, testComment, testOpenTag } = require( '../html' );
 
 const { ucaps, txattr, txcite } = require( './re_ext' );
 re.pattern.txattr = txattr;
@@ -165,7 +165,8 @@ function parsePhrase ( src, options ) {
             element.push( m[1] );
           }
           else if ( tag === 'notextile' ) {
-            list.merge( parsePhrase( m[1], options ) );
+            // HTML is still parsed, even though textile is not
+            list.merge( parseHtml( tokenize( m[1] ) ) );
             continue;
           }
           else {
