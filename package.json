@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack && WEBPACK_ENV=min webpack",
     "dev": "webpack --progress --watch",
-    "test": "tape test/*js | tap-nyan",
+    "test": "tape test/*js",
     "coverage": "nyc report --reporter=html --reporter=text tape test/*js",
     "pub": "node scripts/publish.js",
     "dingus": "node scripts/updatedingus.js"
@@ -41,7 +41,6 @@
     "eslint-loader": "^1.3.0",
     "eslint-plugin-promise": "^1.1.0",
     "nyc": "^6.6.1",
-    "tap-nyan": "~1.1.0",
     "tape": "^4.6.3",
     "webpack": "^1.13.0"
   }
