@@ -1,0 +1,63 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [
+				"$eslint-stylish"
+			]
+		},
+		{
+			"type": "npm",
+			"script": "test",
+			"group": "test",
+			"problemMatcher": {
+				"owner": "npm",
+				"fileLocation": ["absolute"],
+				"pattern": [
+					{
+						"regexp": "^# (.*)$",
+						"message": 1
+					},
+					{
+						"regexp": "^not ok\\s+(.*)$",
+					},
+					{
+						"regexp": "^\\s+[-]{3}$",
+					},
+					{
+						"regexp": "^\\s+operator:\\s+(.*$)",
+						"message": 1
+					},
+					{
+						"regexp": "^\\s+(expected:\\s).*$",
+						"message": 1
+					},
+					{
+						"regexp": "^\\s+(.*$)",
+						"message": 1
+					},
+					{
+						"regexp": "^\\s+(actual:\\s).*$",
+						"message": 1
+					},
+					{
+						"regexp": "^\\s+(.*$)",
+						"message": 1,
+					},
+					{
+						"regexp": "^\\s+at:\\s+[^ ]+\\s+[(](.*):(\\d+):(\\d+)[)]$",
+						"file": 1,
+						"line": 2,
+						"column": 3,
+					},
+				]
+			}
+		},
+
+	]
+}
