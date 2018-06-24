@@ -13,6 +13,14 @@ module.exports = function ribbon ( feed ) {
       return self;
     },
 
+    getSlot: () => {
+      return slot || 0;
+    },
+
+    getPos: () => {
+      return pos || 0;
+    },
+
     load: () => {
       pos = slot;
       feed = org.slice( pos );
