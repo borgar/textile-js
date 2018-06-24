@@ -178,7 +178,20 @@ function parseAttr ( input, element, endToken ) {
   return ( remaining === input ) ? undefined : [ input.length - remaining.length, o ];
 }
 
+function addLineNumber ( jsonmlEntryAttr, charPosToLine, charOffset, charPos ) {
+  if ( charPosToLine ) {
+    charOffset = charOffset || 0;
+    if ( !jsonmlEntryAttr ) {
+      jsonmlEntryAttr = {};
+    }
+    jsonmlEntryAttr['data-line'] = charPosToLine[ charOffset + charPos ];
+    // jsonmlEntryAttr['class'] = ( jsonmlEntryAttr['class'] ? jsonmlEntryAttr['class'] + ' ' : '' ) + 'code-line';
+  }
+  return jsonmlEntryAttr;
+}
+
 module.exports = {
   copyAttr: copyAttr,
-  parseAttr: parseAttr
+  parseAttr: parseAttr,
+  addLineNumber: addLineNumber
 };

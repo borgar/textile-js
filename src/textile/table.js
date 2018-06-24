@@ -4,7 +4,7 @@ const re = require( '../re' );
 const merge = require( '../merge' );
 const ribbon = require( '../ribbon' );
 
-const { parseAttr } = require( './attr' );
+const { parseAttr, addLineNumber } = require( './attr' );
 const { parsePhrase } = require( './phrase' );
 const { reIndent } = require( '../jsonml' );
 
@@ -55,7 +55,13 @@ function testTable ( src ) {
   return reTable.exec( src );
 }
 
-function parseTable ( src, options ) {
+function parseTable ( src, options, charOffset, charPosToLine ) {
+  if ( options.showOriginalLineNumber ) {
+    const removedSrc = src.match( /^\s+/ );
+    if ( removedSrc && removedSrc[0] ) {
+      charOffset += removedSrc[0].length;
+    }
+  }
   src = ribbon( src.trim() );
 
   const rowgroups = [];
@@ -128,7 +134,10 @@ function parseTable ( src, options ) {
 
       if ( m[2] && ( pba = parseAttr( m[2], 'tr' ) ) ) {
         // FIXME: requires "\.\s?" -- else what ?
-        row.push( pba[1] );
+        row.push( addLineNumber( pba[1], charPosToLine, charOffset, src.getPos() ) );
+      }
+      else {
+        row.push( addLineNumber({}, charPosToLine, charOffset, src.getPos() ) );
       }
 
       tCurr.push( '\n\t\t', row );

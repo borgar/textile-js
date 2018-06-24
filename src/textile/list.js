@@ -3,7 +3,7 @@ const ribbon = require( '../ribbon' );
 const re = require( '../re' );
 const merge = require( '../merge' );
 
-const { parseAttr } = require( './attr' );
+const { parseAttr, addLineNumber } = require( './attr' );
 const { parsePhrase } = require( './phrase' );
 
 const { txlisthd } = require( './re_ext' );
@@ -23,7 +23,13 @@ function testList ( src ) {
   return reList.exec( src );
 }
 
-function parseList ( src, options ) {
+function parseList ( src, options, charOffset, charPosToLine ) {
+  if ( options.showOriginalLineNumber ) {
+    const removedSrc = src.match( /(^|\r?\n)[\t ]+/ );
+    if ( removedSrc && removedSrc[0] ) {
+      charOffset++;
+    }
+  }
   src = ribbon( src.replace( /(^|\r?\n)[\t ]+/, '$1' ) );
 
   const stack = [];
@@ -57,6 +63,8 @@ function parseList ( src, options ) {
       m[2] = m[2].slice( pba[0] );
       pba = pba[1];
     }
+
+    pba = addLineNumber( pba, charPosToLine, charOffset, src.getPos() );
 
     // list control
     if ( /^\.\s*$/.test( m[2] ) ) {
