@@ -26,7 +26,8 @@ process.argv.slice( 2 ).forEach( function ( m, i, s ) {
 });
 
 // parse arguments
-var options = { showOriginalLineNumber:false , lineOffset:0 };
+var options = {};
+var lib_options = {};
 while ( args.length ) {
   var arg = args.shift();
   if ( arg === '-t' || arg === '--tokens' ) {
@@ -39,9 +40,9 @@ while ( args.length ) {
     options.output = args.shift();
   }
   else if ( arg === '--show-original-line-number' ) {
-    options.showOriginalLineNumber = true;
+    lib_options.showOriginalLineNumber = true;
   } else if ( arg === '--show-original-line-number-line-offset' ) {
-    options.lineOffset = parseInt( args.shift(), 10); 
+    lib_options.lineOffset = parseInt( args.shift(), 10); 
   }
   else {
     if ( !options.files ) { options.files = []; }
@@ -57,8 +58,8 @@ if ( options.input ) {
 // writer
 var data = '';
 function writeData () {
-  data = options.tokens ? JSON.stringify( textile.jsonml( data, { showOriginalLineNumber:options.showOriginalLineNumber, lineOffset:options.lineOffset } ), null, 2 )
-                        : textile( data, { showOriginalLineNumber:options.showOriginalLineNumber, lineOffset:options.lineOffset } );
+  data = options.tokens ? JSON.stringify( textile.jsonml( data, lib_options ), null, 2 )
+                        : textile( data, lib_options );
   if ( options.output ) {
     fs.writeFileSync( options.output, data );
   }
