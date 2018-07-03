@@ -84,7 +84,32 @@ ABBR(Abbreviation)`;
 <h2 data-line="3">level 2 heading</h2>
 <h3 data-line="5">level 3 heading</h3>
 <h4 data-line="7">level 4 heading</h4>
-<blockquote data-line="9">\n<p data-line="9">this is blockquoted text.<br />\nWith a seconde line.</p>\n</blockquote>\n<p data-line="12" class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> footnote 1,<br />\nWith a second line.</p>\n<p data-line="15" class="footnote" id="fn2"><a href="#fnr2"><sup>2</sup></a> footnote 2,</p>\n<p data-line="17">This text references a footnote<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>.</p>\n<p data-line="19"><em>emphasis</em><br />\n<strong>strong</strong><br />\n<cite>citation</cite><br />\n<del>deleted text</del><br />\n<ins>inserted text</ins><br />\n<sup>superscript</sup><br />\n<sub>subscript</sub><br />\n<span>span</span></p>\n<p class="class" data-line="28">paragraph with a classname</p>\n<p id="id" data-line="30">paragraph with an ID</p>\n<p style="color:red" data-line="32">paragrah with a <span class="caps">CSS</span> style</p>\n<p lang="fr" data-line="34">paragraphe en français</p>\n<p style="text-align:left" data-line="36">right aligned paragraph</p>\n<p style="text-align:right" data-line="38">left aligned paragraph</p>\n<p style="text-align:center" data-line="40">centered aligned paragraph</p>\n<p style="text-align:justify" data-line="42">justified text paragraph</p>\n<p data-line="44"><a href="url">linktext</a></p>\n<p data-line="46"><img src="imageurl" alt="" /></p>\n<p data-line="48"><acronym title="Abbreviation"><span class="caps">ABBR</span></acronym></p>` );
+<blockquote data-line="9">
+<p data-line="9">this is blockquoted text.<br />
+With a seconde line.</p>
+</blockquote>
+<p data-line="12" class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> footnote 1,<br />
+With a second line.</p>
+<p data-line="15" class="footnote" id="fn2"><a href="#fnr2"><sup>2</sup></a> footnote 2,</p>
+<p data-line="17">This text references a footnote<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>.</p>
+<p data-line="19"><em>emphasis</em><br />
+<strong>strong</strong><br />
+<cite>citation</cite><br />
+<del>deleted text</del><br />
+<ins>inserted text</ins><br />
+<sup>superscript</sup><br />
+<sub>subscript</sub><br />
+<span>span</span></p>
+<p class="class" data-line="28">paragraph with a classname</p>
+<p id="id" data-line="30">paragraph with an ID</p>
+<p style="color:red" data-line="32">paragrah with a <span class="caps">CSS</span> style</p>
+<p lang="fr" data-line="34">paragraphe en français</p>
+<p style="text-align:left" data-line="36">right aligned paragraph</p>
+<p style="text-align:right" data-line="38">left aligned paragraph</p>
+<p style="text-align:center" data-line="40">centered aligned paragraph</p>
+<p style="text-align:justify" data-line="42">justified text paragraph</p>
+<p data-line="44"><a href="url">linktext</a></p>\n<p data-line="46"><img src="imageurl" alt="" /></p>
+<p data-line="48"><acronym title="Abbreviation"><span class="caps">ABBR</span></acronym></p>` );
   t.end();
 });
 
