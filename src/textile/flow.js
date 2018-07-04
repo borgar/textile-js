@@ -153,7 +153,7 @@ function parseFlow ( src, options, lineOffset ) {
         src.advance( pba[0] );
         pba = pba[1];
       }
-      pba = addLineNumber( pba, charPosToLine, 0, src.getSlot() );
+      pba = addLineNumber( pba, options, charPosToLine, 0, src.getSlot() );
       if ( ( m = /^\.(\.?)(?:\s|(?=:))/.exec( src ) ) ) {
         // FIXME: this whole copyAttr seems rather strange?
         // slurp rest of block
@@ -333,7 +333,7 @@ function parseFlow ( src, options, lineOffset ) {
 
     // paragraph
     m = reBlockNormal.exec( src );
-    list.merge( paragraph( m[1], 'p', addLineNumber({}, charPosToLine, 0, src.getSlot() ), '\n', options ) );
+    list.merge( paragraph( m[1], 'p', addLineNumber({}, options, charPosToLine, 0, src.getSlot() ), '\n', options ) );
     src.advance( m[0] );
   }
 
