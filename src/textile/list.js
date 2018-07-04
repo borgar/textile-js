@@ -64,7 +64,7 @@ function parseList ( src, options, charOffset, charPosToLine ) {
       pba = pba[1];
     }
 
-    pba = addLineNumber( pba, charPosToLine, charOffset, src.getPos() );
+    pba = addLineNumber( pba, options, charPosToLine, charOffset, src.getPos() );
 
     // list control
     if ( /^\.\s*$/.test( m[2] ) ) {

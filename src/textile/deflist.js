@@ -42,7 +42,7 @@ function parseDefList ( src, options, charOffset, charPosToLine ) {
       const term = terms.shift();
       deflist.push( '\t'
                 , [ 'dt' ].concat(
-                  addLineNumber({}, charPosToLine, charOffset, src.getPos() + localCharOffset )
+                  addLineNumber({}, options, charPosToLine, charOffset, src.getPos() + localCharOffset )
                   , parsePhrase( term.trim(), options ) )
                 , '\n'
                 );
@@ -67,7 +67,7 @@ function parseDefList ( src, options, charOffset, charPosToLine ) {
     }
     deflist.push( '\t'
               , [ 'dd' ].concat(
-                  addLineNumber({}, charPosToLine, charOffset, src.getPos() + localCharOffset )
+                  addLineNumber({}, options, charPosToLine, charOffset, src.getPos() + localCharOffset )
                   , ( /=:$/.test( def ) )
                     ? parseFlow( def.slice( 0, -2 ).trim(), options, options.showOriginalLineNumber ? charPosToLine[ ( charOffset || 0 ) + localCharOffset + src.getPos() ] : 0 )
                     : parsePhrase( def, options )

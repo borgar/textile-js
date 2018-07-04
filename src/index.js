@@ -25,7 +25,9 @@ textile.defaults = {
   // by default, don't map the elements of HTML output, with the line numbers of input text
   'showOriginalLineNumber': false,
   // line number offset of the first char of input text, for showOriginalLineNumber option
-  'lineOffset': 0
+  'lineOffset': 0,
+  // by default, don't set a special CSS class name to each HTML element mapped to an original line number
+  'cssClassOriginalLineNumber': ''
 };
 textile.setOptions = textile.setoptions = function ( opt ) {
   merge( textile.defaults, opt );

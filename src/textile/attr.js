@@ -178,14 +178,16 @@ function parseAttr ( input, element, endToken ) {
   return ( remaining === input ) ? undefined : [ input.length - remaining.length, o ];
 }
 
-function addLineNumber ( jsonmlEntryAttr, charPosToLine, charOffset, charPos ) {
-  if ( charPosToLine ) {
+function addLineNumber ( jsonmlEntryAttr, options, charPosToLine, charOffset, charPos ) {
+  if ( options.showOriginalLineNumber && charPosToLine ) {
     charOffset = charOffset || 0;
     if ( !jsonmlEntryAttr ) {
       jsonmlEntryAttr = {};
     }
     jsonmlEntryAttr['data-line'] = charPosToLine[ charOffset + charPos ];
-    // jsonmlEntryAttr['class'] = ( jsonmlEntryAttr['class'] ? jsonmlEntryAttr['class'] + ' ' : '' ) + 'code-line';
+    if ( options.cssClassOriginalLineNumber ) {
+      jsonmlEntryAttr['class'] = ( jsonmlEntryAttr['class'] ? jsonmlEntryAttr['class'] + ' ' : '' ) + options.cssClassOriginalLineNumber;
+    }
   }
   return jsonmlEntryAttr;
 }

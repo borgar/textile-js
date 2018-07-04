@@ -134,10 +134,10 @@ function parseTable ( src, options, charOffset, charPosToLine ) {
 
       if ( m[2] && ( pba = parseAttr( m[2], 'tr' ) ) ) {
         // FIXME: requires "\.\s?" -- else what ?
-        row.push( addLineNumber( pba[1], charPosToLine, charOffset, src.getPos() ) );
+        row.push( addLineNumber( pba[1], options, charPosToLine, charOffset, src.getPos() ) );
       }
       else {
-        row.push( addLineNumber({}, charPosToLine, charOffset, src.getPos() ) );
+        row.push( addLineNumber({}, options, charPosToLine, charOffset, src.getPos() ) );
       }
 
       tCurr.push( '\n\t\t', row );
