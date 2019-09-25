@@ -27,7 +27,7 @@ module.exports = {
     'loaders': [
       {
         'test': /\.js$/,
-        'loader': 'babel',
+        'loader': 'babel-loader',
         'exclude': /(node_modules|bower_components)/,
         'query': {
           'presets': ['es2015'],

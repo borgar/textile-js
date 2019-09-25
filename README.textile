@@ -10,12 +10,29 @@ h2. Install
 bc. $ npm install textile-js
 
 
-h2. Options
+h2. The @textile@ function
 
 The basic interface mimics "marked":https://github.com/chjj/marked, the popular markdown parser. So if you use that in your project then you can support Textile as well with minimal effort.
 
-Currently, the only supported option is @breaks@ which can be used to enable/disable the default behavior of line-breaking single newlines within blocks.
+Currently, the only option imported from marked is @breaks@ which can be used to enable/disable the default behavior of line-breaking single newlines within blocks.
 
+h3. Syntax
+
+bc. textile( textileString [, options] )
+
+|*Argument*|*Type*|*Notes*|
+|textileString|@string@|String of textile source to be compiled.|
+|"options":#options|@object@|Hash of options. Can also use @textile.setOptions@.|
+
+h3. <a name="options" />Options
+
+|*Member*|*Type*|*Default*|*Notes*|
+|break|@boolean@|true|Convert single-line linebreaks to @<br>@.|
+|cssClassOriginalLineNumber|@string@|''|Add this CSS class name, to each elements of HTML output, mapped to a the line numbers of input text.
+Works only when @showOriginalLineNumber@ option is enabled.|
+|lineOffset|@integer@|0|Line number offset of the first char in input text, for @showOriginalLineNumber@ option.|
+|showOriginalLineNumber|@boolean@|false|Maps the elements of HTML output, with the line numbers of input text.
+An HTML attribute @data-line@ is added to the HTML block elements. It's value is the line number in input text, of the first char of text inside that HTML block.|
 
 h2. Usage
 

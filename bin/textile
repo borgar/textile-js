@@ -27,6 +27,7 @@ process.argv.slice( 2 ).forEach( function ( m, i, s ) {
 
 // parse arguments
 var options = {};
+var lib_options = {};
 while ( args.length ) {
   var arg = args.shift();
   if ( arg === '-t' || arg === '--tokens' ) {
@@ -37,6 +38,11 @@ while ( args.length ) {
   }
   else if ( arg === '-o' || arg === '--output' ) {
     options.output = args.shift();
+  }
+  else if ( arg === '--show-original-line-number' ) {
+    lib_options.showOriginalLineNumber = true;
+  } else if ( arg === '--show-original-line-number-line-offset' ) {
+    lib_options.lineOffset = parseInt( args.shift(), 10); 
   }
   else {
     if ( !options.files ) { options.files = []; }
@@ -52,8 +58,8 @@ if ( options.input ) {
 // writer
 var data = '';
 function writeData () {
-  data = options.tokens ? JSON.stringify( textile.jsonml( data ), null, 2 )
-                        : textile( data );
+  data = options.tokens ? JSON.stringify( textile.jsonml( data, lib_options ), null, 2 )
+                        : textile( data, lib_options );
   if ( options.output ) {
     fs.writeFileSync( options.output, data );
   }

@@ -9,7 +9,7 @@ const fixLinks = require( '../fixlinks' );
 const { parseHtml, tokenize, parseHtmlAttr, singletons, testComment, testOpenTagBlock } = require( '../html' );
 
 const { parsePhrase } = require( './phrase' );
-const { copyAttr, parseAttr } = require( './attr' );
+const { copyAttr, parseAttr, addLineNumber } = require( './attr' );
 const { testList, parseList } = require( './list' );
 const { testDefList, parseDefList } = require( './deflist' );
 const { testTable, parseTable } = require( './table' );
@@ -45,6 +45,7 @@ const reRuler = /^(\-\-\-+|\*\*\*+|___+)(\r?\n\s+|$)/;
 const reLinkRef = re.compile( /^\[([^\]]+)\]((?:https?:\/\/|\/)\S+)(?:\s*\n|$)/ );
 const reFootnoteDef = /^fn\d+$/;
 
+const reCleanBegin = /^( *\r?\n)+/;
 
 const hasOwn = Object.prototype.hasOwnProperty;
 function extend ( target, ...args ) {
@@ -80,13 +81,52 @@ function paragraph ( s, tag, pba, linebreak, options ) {
   return out;
 };
 
-function parseFlow ( src, options ) {
+function computeCharOffset ( src, options, lineOffset ) {
+  if ( options.showOriginalLineNumber ) {
+    lineOffset = lineOffset || 0;
+
+    const removedSrc = src.match( reCleanBegin );
+    if ( removedSrc && removedSrc[0] ) {
+      lineOffset += ( removedSrc[0].match( /\n/g ) || [] ).length;
+    }
+    return lineOffset;
+  }
+  else {
+    return 0;
+  }
+}
+
+function storeCharPosToLine ( src, options, charOffset ) {
+  // FIXME: don't store all chr ?
+  if ( options.showOriginalLineNumber ) {
+    const charPosToLine = [];
+    const realSrc = src.toString();
+    for ( const i in realSrc ) {
+      charPosToLine[ i ] = charOffset;
+      if ( realSrc[ i ] === '\n' ) {
+        charOffset++;
+      }
+    }
+    return charPosToLine;
+  }
+  else {
+    return void 0;
+  }
+}
+
+function parseFlow ( src, options, lineOffset ) {
   const list = builder();
 
   let linkRefs;
   let m;
 
-  src = ribbon( src.replace( /^( *\r?\n)+/, '' ) );
+  // keep as local variable, for nested calls (->block HTML)
+  const charLineOffset = computeCharOffset( src, options, lineOffset );
+
+  src = ribbon( src.replace( reCleanBegin, '' ) );
+
+  // keep as local variable, for nested calls (->block HTML)
+  const charPosToLine = storeCharPosToLine( src, options, charLineOffset );
 
   // loop
   while ( src.valueOf() ) {
@@ -113,6 +153,7 @@ function parseFlow ( src, options ) {
         src.advance( pba[0] );
         pba = pba[1];
       }
+      pba = addLineNumber( pba, options, charPosToLine, 0, src.getSlot() );
       if ( ( m = /^\.(\.?)(?:\s|(?=:))/.exec( src ) ) ) {
         // FIXME: this whole copyAttr seems rather strange?
         // slurp rest of block
@@ -272,27 +313,27 @@ function parseFlow ( src, options ) {
     // list
     if ( ( m = testList( src ) ) ) {
       src.advance( m[0] );
-      list.add( parseList( m[0], options ) );
+      list.add( parseList( m[0], options, src.getSlot(), charPosToLine ) );
       continue;
     }
 
     // definition list
     if ( ( m = testDefList( src ) ) ) {
       src.advance( m[0] );
-      list.add( parseDefList( m[0], options ) );
+      list.add( parseDefList( m[0], options, src.getSlot(), charPosToLine ) );
       continue;
     }
 
     // table
     if ( ( m = testTable( src ) ) ) {
       src.advance( m[0] );
-      list.add( parseTable( m[1], options ) );
+      list.add( parseTable( m[1], options, src.getSlot(), charPosToLine ) );
       continue;
     }
 
     // paragraph
     m = reBlockNormal.exec( src );
-    list.merge( paragraph( m[1], 'p', undefined, '\n', options ) );
+    list.merge( paragraph( m[1], 'p', addLineNumber({}, options, charPosToLine, 0, src.getSlot() ), '\n', options ) );
     src.advance( m[0] );
   }
 
