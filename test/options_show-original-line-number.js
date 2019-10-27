@@ -6,7 +6,7 @@ const textile = require( '../src' );
 test( 'paragraphs showing original line number', function ( t ) {
   let tx = "A single paragraph.\n\n\
 Followed by another.";
-  t.is( textile.convert( tx, { showOriginalLineNumber:true } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true }),
     '<p data-line="0">A single paragraph.</p>\n\
 <p data-line="2">Followed by another.</p>' );
   t.end();
@@ -15,19 +15,19 @@ Followed by another.";
 test( 'paragraphs preceded by noise, showing original line number', function ( t ) {
   let tx = "\n\nA single paragraph.\n\n\
 Followed by another.";
-  t.is( textile.convert( tx, { showOriginalLineNumber:true } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true }),
     '<p data-line="2">A single paragraph.</p>\n\
 <p data-line="4">Followed by another.</p>' );
   t.end();
 });
-  
+
 test( 'paragraphs preceded by noise and 3 lines offset, showing original line number', function ( t ) {
-	let tx = "\n\nA single paragraph.\n\n\
+  let tx = "\n\nA single paragraph.\n\n\
 Followed by another.";
-	t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:3 } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 3 }),
     '<p data-line="5">A single paragraph.</p>\n\
 <p data-line="7">Followed by another.</p>' );
-	t.end();
+  t.end();
 });
 
 test( 'Headers, paragraphs, and elements, showing original line number', function ( t ) {
@@ -79,7 +79,7 @@ p<>. justified text paragraph
 !imageurl!
 
 ABBR(Abbreviation)`;
-  t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:1 } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1 }),
     `<h1 data-line="1">level 1 heading</h1>
 <h2 data-line="3">level 2 heading</h2>
 <h3 data-line="5">level 3 heading</h3>
@@ -129,7 +129,7 @@ with a second line
 ** with a sub item 1
 with a seconde line
 ** with a sub item 2`;
-  t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:1 } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1 }),
     `<ol>
 \t<li data-line="1">numbered list item 1<br />
 with a second line</li>
@@ -159,7 +159,7 @@ test( 'Table, showing original line number', function ( t ) {
 | a multiline
 value| table | row 1 |
 | a | table | row 2 |`;
-  t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:1 } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1 }),
     `<table>
 \t<tr data-line="1">
 \t\t<th>head </th>
@@ -191,7 +191,7 @@ Word1 ter := Definition 1.
 Beginning of
 a multi-lines
 definition =:`;
-  t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:1 } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1 }),
     `<dl>
 \t<dt data-line="1">Word1<br />
 Word1 bis<br />
@@ -256,7 +256,7 @@ p<>. justified text paragraph
 !imageurl!
 
 ABBR(Abbreviation)`;
-  t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:1, cssClassOriginalLineNumber:'code-line' } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
     `<h1 data-line="1" class="code-line">level 1 heading</h1>
 <h2 data-line="3" class="code-line">level 2 heading</h2>
 <h3 data-line="5" class="code-line">level 3 heading</h3>
@@ -306,7 +306,7 @@ with a second line
 ** with a sub item 1
 with a seconde line
 ** with a sub item 2`;
-  t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:1, cssClassOriginalLineNumber:'code-line' } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
     `<ol>
 \t<li data-line="1" class="code-line">numbered list item 1<br />
 with a second line</li>
@@ -336,7 +336,7 @@ test( 'Table, showing original line number and CSS class name', function ( t ) {
 | a multiline
 value| table | row 1 |
 | a | table | row 2 |`;
-  t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:1, cssClassOriginalLineNumber:'code-line' } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
     `<table>
 \t<tr data-line="1" class="code-line">
 \t\t<th>head </th>
@@ -368,7 +368,7 @@ Word1 ter := Definition 1.
 Beginning of
 a multi-lines
 definition =:`;
-  t.is( textile.convert( tx, { showOriginalLineNumber:true, lineOffset:1, cssClassOriginalLineNumber:'code-line' } ),
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
     `<dl>
 \t<dt data-line="1" class="code-line">Word1<br />
 Word1 bis<br />
