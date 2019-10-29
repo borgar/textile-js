@@ -1,36 +1,35 @@
-/* eslint-disable prefer-const, no-multi-str, quotes */
-const test = require( 'tape' );
-const textile = require( '../src' );
+const test = require('tape');
+const textile = require('../src');
 // html.yml
 
-test( 'html:1', function ( t ) {
-  let tx = "*this <span></span> is strong*";
-  t.is( textile.convert( tx ),
-    "<p><strong>this <span></span> is strong</strong></p>", tx );
+test('html:1', function (t) {
+  const tx = '*this <span></span> is strong*';
+  t.is(textile.convert(tx),
+    '<p><strong>this <span></span> is strong</strong></p>', tx);
   t.end();
 });
 
 
-test( 'html:2', function ( t ) {
-  let tx = "*this <span>test</span> is strong*";
-  t.is( textile.convert( tx ),
-    "<p><strong>this <span>test</span> is strong</strong></p>", tx );
+test('html:2', function (t) {
+  const tx = '*this <span>test</span> is strong*';
+  t.is(textile.convert(tx),
+    '<p><strong>this <span>test</span> is strong</strong></p>', tx);
   t.end();
 });
 
 
-test( 'html:3', function ( t ) {
-  let tx = "A simple <!-- HTML comment -->";
-  t.is( textile.convert( tx ),
-    "<p>A simple <!-- HTML comment --></p>", tx );
+test('html:3', function (t) {
+  const tx = 'A simple <!-- HTML comment -->';
+  t.is(textile.convert(tx),
+    '<p>A simple <!-- HTML comment --></p>', tx);
   t.end();
 });
 
 
-test( 'html:4', function ( t ) {
-  let tx = "A simple <!-- HTML comment with hy-phen-a-tion -->";
-  t.is( textile.convert( tx ),
-    "<p>A simple <!-- HTML comment with hy-phen-a-tion --></p>", tx );
+test('html:4', function (t) {
+  const tx = 'A simple <!-- HTML comment with hy-phen-a-tion -->';
+  t.is(textile.convert(tx),
+    '<p>A simple <!-- HTML comment with hy-phen-a-tion --></p>', tx);
   t.end();
 });
 
@@ -58,92 +57,92 @@ if you break.</li>\n\
 
 */
 
-test( 'line breaks', function ( t ) {
-  let tx = "I spoke.<br />\n\
-And none replied.";
-  t.is( textile.convert( tx ),
-    "<p>I spoke.<br />\n\
-And none replied.</p>", tx );
+test('line breaks', function (t) {
+  const tx = 'I spoke.<br />\n\
+And none replied.';
+  t.is(textile.convert(tx),
+    '<p>I spoke.<br />\n\
+And none replied.</p>', tx);
   t.end();
 });
 
 
-test( 'mixing of textile and XHTML', function ( t ) {
-  let tx = "<img src=\"test.jpg\" alt=\"test\" />\n\n\
+test('mixing of textile and XHTML', function (t) {
+  const tx = '<img src="test.jpg" alt="test" />\n\n\
 Regular *paragraph*.\n\n\
-<div class=\"test\">\n\
+<div class="test">\n\
 This is one paragraph.\n\n\
 This is another.\n\n\
 !an/image.jpg!\n\n\
 * A list\n\
 * in a div.\n\n\
 </div>\n\n\
-Another paragraph.";
-  t.is( textile.convert( tx ),
-    "<p><img src=\"test.jpg\" alt=\"test\" /></p>\n\
+Another paragraph.';
+  t.is(textile.convert(tx),
+    '<p><img src="test.jpg" alt="test" /></p>\n\
 <p>Regular <strong>paragraph</strong>.</p>\n\
-<div class=\"test\">\n\
+<div class="test">\n\
 <p>This is one paragraph.</p>\n\
 <p>This is another.</p>\n\
-<p><img src=\"an/image.jpg\" alt=\"\" /></p>\n\
+<p><img src="an/image.jpg" alt="" /></p>\n\
 <ul>\n\
 \t<li>A list</li>\n\
 \t<li>in a div.</li>\n\
 </ul>\n\
 </div>\n\
-<p>Another paragraph.</p>", tx );
+<p>Another paragraph.</p>', tx);
   t.end();
 });
 
 
-test( 'mixing of textile and XHTML', function ( t ) {
-  let tx = "<img src=\"test.jpg\" alt=\"test\" />\n\n\
-Regular *paragraph*.";
-  t.is( textile.convert( tx ),
-    "<p><img src=\"test.jpg\" alt=\"test\" /></p>\n\
-<p>Regular <strong>paragraph</strong>.</p>", tx );
+test('mixing of textile and XHTML', function (t) {
+  const tx = '<img src="test.jpg" alt="test" />\n\n\
+Regular *paragraph*.';
+  t.is(textile.convert(tx),
+    '<p><img src="test.jpg" alt="test" /></p>\n\
+<p>Regular <strong>paragraph</strong>.</p>', tx);
   t.end();
 });
 
 
-test( 'wraps inline HTML in paragraphs', function ( t ) {
-  let tx = "<em>asd</em> blabla \"google\":http://google.com";
-  t.is( textile.convert( tx ),
-    "<p><em>asd</em> blabla <a href=\"http://google.com\">google</a></p>", tx );
+test('wraps inline HTML in paragraphs', function (t) {
+  const tx = '<em>asd</em> blabla "google":http://google.com';
+  t.is(textile.convert(tx),
+    '<p><em>asd</em> blabla <a href="http://google.com">google</a></p>', tx);
   t.end();
 });
 
 
-test( 'self closing XHTML with following text not recognized', function ( t ) {
-  let tx = "<hr /> this has been a horizontal rule";
-  t.is( textile.convert( tx ),
-    "<p><hr /> this has been a horizontal rule</p>", tx );
+test('self closing XHTML with following text not recognized', function (t) {
+  const tx = '<hr /> this has been a horizontal rule';
+  t.is(textile.convert(tx),
+    '<p><hr /> this has been a horizontal rule</p>', tx);
   t.end();
 });
 
 
-test( 'self closing HTML with following text not recognized', function ( t ) {
-  let tx = "<hr> that was a horizontal rule too";
-  t.is( textile.convert( tx ),
-    "<p><hr /> that was a horizontal rule too</p>", tx );
+test('self closing HTML with following text not recognized', function (t) {
+  const tx = '<hr> that was a horizontal rule too';
+  t.is(textile.convert(tx),
+    '<p><hr /> that was a horizontal rule too</p>', tx);
   t.end();
 });
 
 
-test( 'preserves block html', function ( t ) {
-  let tx = "<div>123 Anystreet</div>\n\n\
-<p foo=\"bar\">Explicit paragraph</p>";
-  t.is( textile.convert( tx ),
-    "<div>123 Anystreet</div>\n\
-<p foo=\"bar\">Explicit paragraph</p>", tx );
+test('preserves block html', function (t) {
+  const tx = '<div>123 Anystreet</div>\n\n\
+<p foo="bar">Explicit paragraph</p>';
+  t.is(textile.convert(tx),
+    '<div>123 Anystreet</div>\n\
+<p foo="bar">Explicit paragraph</p>', tx);
   t.end();
 });
 
 
-test( 'preserves empty block standalone elements', function ( t ) {
-  let tx = "<hr />";
-  t.is( textile.convert( tx ),
-    "<hr />", tx );
+test('preserves empty block standalone elements', function (t) {
+  const tx = '<hr />';
+  t.is(textile.convert(tx),
+    '<hr />', tx);
   t.end();
 });
 
@@ -171,58 +170,58 @@ More div text.", tx );
 });
 */
 
-test( 'complex example from real life', function ( t ) {
-  let tx = "<div class=\"span-17 last\">\n\
-<div class=\"span-8\"><r:attachment:image name=\"logo.jpg\" /></div>\n\n\
-<div class=\"span-9 last\">\n\
+test('complex example from real life', function (t) {
+  const tx = '<div class="span-17 last">\n\
+<div class="span-8"><r:attachment:image name="logo.jpg" /></div>\n\n\
+<div class="span-9 last">\n\
 h1. Contact\n\n\
 Please contact us if you have questions or need help making arrangements.\n\n\
 </div>\n\
 </div>\n\n\
-<div class=\"span-8\">\n\
+<div class="span-8">\n\
 h2. Tom\n\n\
 (540) 555-1212\n\n\
 h3. Jerry\n\n\
 (540) 555-1234\n\n\
-</div>";
-  t.is( textile.convert( tx ),
-    "<div class=\"span-17 last\">\n\
-<div class=\"span-8\"><r:attachment:image name=\"logo.jpg\" /></div>\n\
-<div class=\"span-9 last\">\n\
+</div>';
+  t.is(textile.convert(tx),
+    '<div class="span-17 last">\n\
+<div class="span-8"><r:attachment:image name="logo.jpg" /></div>\n\
+<div class="span-9 last">\n\
 <h1>Contact</h1>\n\
 <p>Please contact us if you have questions or need help making arrangements.</p>\n\
 </div>\n\
 </div>\n\
-<div class=\"span-8\">\n\
+<div class="span-8">\n\
 <h2>Tom</h2>\n\
 <p>(540) 555-1212</p>\n\
 <h3>Jerry</h3>\n\
 <p>(540) 555-1234</p>\n\
-</div>", tx );
+</div>', tx);
   t.end();
 });
 
 
-test( 'HTML end tag can end blockquote', function ( t ) {
-  let tx = "<div>\n\
+test('HTML end tag can end blockquote', function (t) {
+  const tx = '<div>\n\
 bq. This is a blockquote.\n\
-</div>";
-  t.is( textile.convert( tx ),
-    "<div>\n\
+</div>';
+  t.is(textile.convert(tx),
+    '<div>\n\
 bq. This is a blockquote.\n\
-</div>", tx );
+</div>', tx);
   t.end();
 });
 
 
 // BT: this disagrees with PHP which emits: <p><div></p>\n...
-test( 'before table does not affect table', function ( t ) {
-  let tx = "<div>\n\n\
+test('before table does not affect table', function (t) {
+  const tx = '<div>\n\n\
 h2. heading\n\n\
 |a|b|c|\n\
-|d|e|f|";
-  t.is( textile.convert( tx ),
-    "<p>&lt;div&gt;</p>\n\
+|d|e|f|';
+  t.is(textile.convert(tx),
+    '<p>&lt;div&gt;</p>\n\
 <h2>heading</h2>\n\
 <table>\n\
 \t<tr>\n\
@@ -235,46 +234,46 @@ h2. heading\n\n\
 \t\t<td>e</td>\n\
 \t\t<td>f</td>\n\
 \t</tr>\n\
-</table>", tx );
+</table>', tx);
   t.end();
 });
 
 
-test( 'tilde in innerHTML is not altered', function ( t ) {
-  let tx = "<a href=\"http://foo.com/bar?something=1~2~3\">http://foo.com/bar?something=1~2~3</a>";
-  t.is( textile.convert( tx ),
-    "<p><a href=\"http://foo.com/bar?something=1~2~3\">http://foo.com/bar?something=1~2~3</a></p>", tx );
+test('tilde in innerHTML is not altered', function (t) {
+  const tx = '<a href="http://foo.com/bar?something=1~2~3">http://foo.com/bar?something=1~2~3</a>';
+  t.is(textile.convert(tx),
+    '<p><a href="http://foo.com/bar?something=1~2~3">http://foo.com/bar?something=1~2~3</a></p>', tx);
   t.end();
 });
 
 
-test( 'empty block', function ( t ) {
-  let tx = "<div class=\"test\"></div>";
-  t.is( textile.convert( tx ),
-    "<div class=\"test\"></div>", tx );
+test('empty block', function (t) {
+  const tx = '<div class="test"></div>';
+  t.is(textile.convert(tx),
+    '<div class="test"></div>', tx);
   t.end();
 });
 
 
-test( 'in code escaped properly', function ( t ) {
-  let tx = "<pre><code>some <b>bold</b> text</code></pre>";
-  t.is( textile.convert( tx ),
-    "<pre><code>some &lt;b&gt;bold&lt;/b&gt; text</code></pre>", tx );
+test('in code escaped properly', function (t) {
+  const tx = '<pre><code>some <b>bold</b> text</code></pre>';
+  t.is(textile.convert(tx),
+    '<pre><code>some &lt;b&gt;bold&lt;/b&gt; text</code></pre>', tx);
   t.end();
 });
 
 
-test( 'in code with class attribute escaped properly', function ( t ) {
-  let tx = "<pre><code class='myclass'>some <b>bold</b> text</code></pre>";
-  t.is( textile.convert( tx ),
-    "<pre><code class=\"myclass\">some &lt;b&gt;bold&lt;/b&gt; text</code></pre>", tx );
+test('in code with class attribute escaped properly', function (t) {
+  const tx = "<pre><code class='myclass'>some <b>bold</b> text</code></pre>";
+  t.is(textile.convert(tx),
+    '<pre><code class="myclass">some &lt;b&gt;bold&lt;/b&gt; text</code></pre>', tx);
   t.end();
 });
 
 
-test( 'notextile beginning the line', function ( t ) {
-  let tx = "<notextile><a href=\"http://a.com\">Sir Bobby Robson</a></notextile>, is a famous footballer";
-  t.is( textile.convert( tx ),
-    "<p><a href=\"http://a.com\">Sir Bobby Robson</a>, is a famous footballer</p>", tx );
+test('notextile beginning the line', function (t) {
+  const tx = '<notextile><a href="http://a.com">Sir Bobby Robson</a></notextile>, is a famous footballer';
+  t.is(textile.convert(tx),
+    '<p><a href="http://a.com">Sir Bobby Robson</a>, is a famous footballer</p>', tx);
   t.end();
 });

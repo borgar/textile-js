@@ -4,10 +4,11 @@
   "author": "Borgar Þorsteinsson <borgar@borgar.net>",
   "version": "2.0.4",
   "scripts": {
-    "build": "webpack && WEBPACK_ENV=min webpack",
-    "dev": "webpack --progress --watch",
+    "build": "wp && WEBPACK_ENV=min wp",
+    "dev": "wp --progress --watch",
     "test": "tape test/*js",
-    "coverage": "nyc report --reporter=html --reporter=text tape test/*js",
+    "lint": "eslint src/*js test/*js",
+    "coverage": "nyc --reporter html --reporter text tape test/*js",
     "pub": "node scripts/publish.js",
     "dingus": "node scripts/updatedingus.js"
   },
@@ -31,17 +32,21 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "babel": "^6.5.2",
-    "babel-core": "^6.8.0",
-    "babel-loader": "^6.2.4",
-    "babel-plugin-add-module-exports": "^0.2.0",
-    "babel-preset-es2015": "^6.6.0",
-    "babel-preset-es2015-node6": "^0.2.0",
-    "eslint": "^2.9.0",
-    "eslint-loader": "^1.3.0",
-    "eslint-plugin-promise": "^1.1.0",
-    "nyc": "^6.6.1",
-    "tape": "^4.6.3",
-    "webpack": "^1.13.0"
+    "@babel/core": "~7.6.2",
+    "@babel/plugin-proposal-class-properties": "~7.5.5",
+    "@babel/plugin-proposal-export-default-from": "~7.5.2",
+    "@babel/polyfill": "~7.6.0",
+    "@babel/preset-env": "~7.6.2",
+    "@babel/register": "~7.6.2",
+    "@borgar/eslint-config": "~1.0.3",
+    "babel-loader": "~8.0.6",
+    "eslint": "~6.5.1",
+    "eslint-plugin-import": "~2.18.2",
+    "nyc": "~14.1.1",
+    "ssf": "~0.10.2",
+    "tape": "~4.11.0",
+    "uglifyjs-webpack-plugin": "~2.2.0",
+    "webpack": "~4.41.0",
+    "webpack-command": "~0.5.0"
   }
 }

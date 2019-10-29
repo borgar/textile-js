@@ -1,10 +1,9 @@
-/* eslint-disable prefer-const, no-multi-str, quotes */
-const test = require( 'tape' );
-const textile = require( '../src' );
+const test = require('tape');
+const textile = require('../src');
 // poignant.yml
 
-test( 'poignant:1', function ( t ) {
-  let tx = "h3. False\n\n\
+test('poignant:1', function (t) {
+  const tx = "h3. False\n\n\
 !<i/blix-neg.gif(Shape of a cat.)!\n\n\
 _The cat Trady Blix.  Frozen in emptiness.  Immaculate whiskers rigid.  Placid eyes of lake.  Tail of warm icicle.  Sponsored by a Very Powerful Pause Button._\n\n\
 The darkness surrounding Blix can be called *negative space*.  Hang on to that phrase. Let it suggest that the emptiness has a negative connotation.  In a similar way, @nil@ has a slightly sour note that it whistles.\n\n\
@@ -28,7 +27,7 @@ You can also use @if@ and @unless@ at the end of a single line of code, if that'
   print \"Hardly. It's down.\" unless plastic_cup\n\
 </pre>\n\n\
 Now that you've met @false@, I'm sure you can see what's on next.";
-  t.is( textile.convert( tx ),
+  t.is(textile.convert(tx),
     "<h3>False</h3>\n\
 <p><img align=\"left\" src=\"i/blix-neg.gif\" title=\"Shape of a cat.\" alt=\"Shape of a cat.\" /></p>\n\
 <p><em>The cat Trady Blix.  Frozen in emptiness.  Immaculate whiskers rigid.  Placid eyes of lake.  Tail of warm icicle.  Sponsored by a Very Powerful Pause Button.</em></p>\n\
@@ -52,7 +51,7 @@ Now that you've met @false@, I'm sure you can see what's on next.";
   print \"Yeah, plastic cup is up again!\" if plastic_cup\n\
   print \"Hardly. It's down.\" unless plastic_cup\n\
 </pre>\n\
-<p>Now that you&#8217;ve met <code>false</code>, I&#8217;m sure you can see what&#8217;s on next.</p>", tx );
+<p>Now that you&#8217;ve met <code>false</code>, I&#8217;m sure you can see what&#8217;s on next.</p>", tx);
   t.end();
 });
 

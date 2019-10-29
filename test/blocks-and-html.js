@@ -1,6 +1,5 @@
-/* eslint-disable prefer-const, no-multi-str, quotes */
-const test = require( 'tape' );
-const textile = require( '../src' );
+const test = require('tape');
+const textile = require('../src');
 
 /*
 
@@ -12,33 +11,33 @@ syntax, then it gets converted accordingly.
 
 */
 
-test( 'Block level tag parsing', t => {
+test('Block level tag parsing', t => {
   const tx = `A
 p. inside
 A`;
   const op = `<p>A<br />
 p. inside<br />
 A</p>`;
-  t.is( textile.convert( tx ), op, tx ); t.end();
+  t.is(textile.convert(tx), op, tx); t.end();
 });
 
 
-test( 'An auto-paragraph', function ( t ) {
+test('An auto-paragraph', function (t) {
   const tx = `A paragraph.
 
 Another paragraph.`;
   const op = `<p>A paragraph.</p>
 <p>Another paragraph.</p>`;
-  t.is( textile.convert( tx ), op, tx ); t.end();
+  t.is(textile.convert(tx), op, tx); t.end();
 });
 
 
-test( 'Intra-block line breaks', function ( t ) {
+test('Intra-block line breaks', function (t) {
   const tx = `A paragraph with
 a line break.`;
   const op = `<p>A paragraph with<br />
 a line break.</p>`;
-  t.is( textile.convert( tx ), op, tx ); t.end();
+  t.is(textile.convert(tx), op, tx); t.end();
 });
 
 /*
@@ -86,7 +85,7 @@ With two lines.
 
 */
 
-test( 'Block level markup is not parsed inside HTML', t => {
+test('Block level markup is not parsed inside HTML', t => {
   const tx = `<div>
 p. This is *a block*.
 With two lines.
@@ -95,7 +94,7 @@ With two lines.
 p. This is <strong>a block</strong>.
 With two lines.
 </div>`;
-  t.is( textile.convert( tx ), op, tx ); t.end();
+  t.is(textile.convert(tx), op, tx); t.end();
 });
 
 /*
@@ -160,7 +159,7 @@ the HTML parsing rules regarless of any leading spaces.
 
 */
 
-test( 'Don\'t chunk blocks inside HTML', t => {
+test('Don\'t chunk blocks inside HTML', t => {
   const tx = `Some text
 
  <div>
@@ -175,14 +174,14 @@ p. inside
 <p>inside</p>
 <p>inside</p>
 </div>`;
-  t.is( textile.convert( tx ), op, tx ); t.end();
+  t.is(textile.convert(tx), op, tx); t.end();
 });
 
 
 // This is different from PHP behaviour, but there
 // is no sane rationale for the PHP outcome which
 // I don't believe is useful to anyone.
-test( 'Don\'t chunk blocks inside HTML', t => {
+test('Don\'t chunk blocks inside HTML', t => {
   const tx = `<div>
 p. This is *a block*.
 
@@ -192,11 +191,11 @@ With two lines.
 <p>This is <strong>a block</strong>.</p>
 <p>With two lines.</p>
 </div>`;
-  t.is( textile.convert( tx ), op, tx ); t.end();
+  t.is(textile.convert(tx), op, tx); t.end();
 });
 
 
-test( "Spaces don't matter to HTML.", t => {
+test("Spaces don't matter to HTML.", t => {
   const tx = ` <div>
 p. This is *a block*.
 
@@ -206,18 +205,18 @@ With two lines.
 <p>This is <strong>a block</strong>.</p>
 <p>With two lines.</p>
 </div>`;
-  t.is( textile.convert( tx ), op, tx ); t.end();
+  t.is(textile.convert(tx), op, tx); t.end();
 });
 
 
-test( "Spaces don't matter to HTML.", t => {
+test("Spaces don't matter to HTML.", t => {
   const tx = ` <div>
 p. This is *a block*.
  </div>`;
   const op = `<div>
 p. This is <strong>a block</strong>.
 </div>`;
-  t.is( textile.convert( tx ), op, tx ); t.end();
+  t.is(textile.convert(tx), op, tx); t.end();
 });
 
 

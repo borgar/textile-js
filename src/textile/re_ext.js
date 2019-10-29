@@ -29,6 +29,6 @@ const attr_lang = exports.attr_lang = '\\[[^\\[\\]]+\\]';
 const attr_align = exports.attr_align = '(?:<>|<|>|=)';
 const attr_pad = exports.attr_pad = '[\\(\\)]+';
 
-const txattr = exports.txattr = `(?:${ attr_class }|${ attr_style }|${ attr_lang }|${ attr_align }|${ attr_pad })*`;
+const txattr = exports.txattr = `(?:${attr_class}|${attr_style}|${attr_lang}|${attr_align}|${attr_pad})*`;
 
-exports.txlisthd = `[\\t ]*[\\#\\*]*(\\*|\\#(?:_|\\d+)?)${ txattr }(?: +\\S|\\.\\s*(?=\\S|\\n))`;
+exports.txlisthd = `[\\t ]*[\\#\\*]*(\\*|\\#(?:_|\\d+)?)${txattr}(?: +\\S|\\.\\s*(?=\\S|\\n))`;

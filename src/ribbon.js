@@ -1,5 +1,5 @@
-module.exports = function ribbon ( feed ) {
-  const org = String( feed );
+module.exports = function ribbon (feed) {
+  const org = String(feed);
   let slot;
   let pos = 0;
   const self = {
@@ -15,21 +15,21 @@ module.exports = function ribbon ( feed ) {
 
     load: () => {
       pos = slot;
-      feed = org.slice( pos );
+      feed = org.slice(pos);
       return self;
     },
 
     advance: n => {
-      pos += ( typeof n === 'string' ) ? n.length : n;
-      feed = org.slice( pos );
+      pos += (typeof n === 'string') ? n.length : n;
+      feed = org.slice(pos);
       return feed;
     },
 
     skipWS: () => {
-      const ws = /^\s+/.exec( feed );
-      if ( ws ) {
+      const ws = /^\s+/.exec(feed);
+      if (ws) {
         pos += ws[0].length;
-        feed = org.slice( pos );
+        feed = org.slice(pos);
         return ws[0];
       }
       return '';
@@ -37,15 +37,15 @@ module.exports = function ribbon ( feed ) {
 
     lookbehind: nchars => {
       nchars = nchars == null ? 1 : nchars;
-      return org.slice( pos - nchars, pos );
+      return org.slice(pos - nchars, pos);
     },
 
     startsWith: s => {
-      return feed.substring( 0, s.length ) === s;
+      return feed.substring(0, s.length) === s;
     },
 
-    slice: ( a, b ) => {
-      return b != null ? feed.slice( a, b ) : feed.slice( a );
+    slice: (a, b) => {
+      return b != null ? feed.slice(a, b) : feed.slice(a);
     },
 
     valueOf: () => {

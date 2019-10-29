@@ -1,0 +1,8 @@
+{
+  rules: {
+    no-multi-str: 'off'
+  },
+  env: {
+    "node": true
+  }
+}
