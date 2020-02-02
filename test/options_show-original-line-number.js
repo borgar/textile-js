@@ -383,3 +383,28 @@ definition</p></dd>
 </dl>` );
   t.end();
 });
+
+
+// I have to break this rule : https://textile-lang.com/doc/html# : "Raw HTML tags are generally left untouched by Textile."
+test( 'PRE block, showing original line number', function ( t ) {
+  let tx = '<pre>Test</pre>';
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<pre data-line="1" class="code-line">Test</pre>' );
+  t.end();
+});
+
+// I have to break this rule : https://textile-lang.com/doc/html# : "Raw HTML tags are generally left untouched by Textile."
+test( 'P block, showing original line number', function ( t ) {
+  let tx = "<p>\nbq. This is a blockquote.\n</p>";
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<p data-line="1" class="code-line">\nbq. This is a blockquote.\n</p>' );
+  t.end();
+});
+
+// I have to break this rule : https://textile-lang.com/doc/html# : "Raw HTML tags are generally left untouched by Textile."
+test( 'HR, showing original line number', function ( t ) {
+  let tx = "<hr>\n<hr>";
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<hr data-line="1" class="code-line" />\n<hr data-line="2" class="code-line" />' );
+  t.end();
+});

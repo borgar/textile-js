@@ -225,10 +225,18 @@ function parseFlow ( src, options, lineOffset ) {
       // Is block tag? ...
       if ( tag in allowedBlocktags ) {
         if ( m[3] || tag in singletons ) { // single?
+          const srcSlot = src.getSlot();
           src.advance( m[0] );
           if ( /^\s*(\n|$)/.test( src ) ) {
             const elm = [ tag ];
-            if ( m[2] ) { elm.push( parseHtmlAttr( m[2] ) ); }
+            if ( options.showOriginalLineNumber ) {
+              elm.push( addLineNumber( m[2] ? parseHtmlAttr( m[2] ) : {}, options, charPosToLine, 0, srcSlot ) );
+            }
+            else {
+              if ( m[2] ) {
+                elm.push( parseHtmlAttr( m[2] ) );
+              }
+            }
             list.add( elm );
             src.skipWS();
             continue;
@@ -236,6 +244,9 @@ function parseFlow ( src, options, lineOffset ) {
         }
         else if ( tag === 'pre' ) {
           const t = tokenize( src, { 'pre': 1, 'code': 1 }, tag );
+          if ( options.showOriginalLineNumber ) {
+            t[0].attr = addLineNumber( t[0].attr, options, charPosToLine, 0, src.getSlot() );
+          }
           const p = parseHtml( t, true );
           src.load().advance( p.sourceLength );
           if ( /^\s*(\n|$)/.test( src ) ) {
@@ -247,6 +258,7 @@ function parseFlow ( src, options, lineOffset ) {
         else if ( tag === 'notextile' ) {
           // merge all child elements
           const t = tokenize( src, null, tag );
+          // it's not possible to addLineNumber here (no tag)
           let s = 1; // start after open tag
           while ( /^\s+$/.test( t[s].src ) ) {
             s++; // skip whitespace
@@ -263,6 +275,7 @@ function parseFlow ( src, options, lineOffset ) {
         else {
           src.skipWS();
           const t = tokenize( src, null, tag );
+          const srcSlot = src.getSlot();
           const x = t.pop(); // this should be the end tag
           let s = 1; // start after open tag
           while ( t[s] && /^[\n\r]+$/.test( t[s].src ) ) {
@@ -274,7 +287,14 @@ function parseFlow ( src, options, lineOffset ) {
             src.advance( x.pos + x.src.length );
             if ( /^\s*(\n|$)/.test( src ) ) {
               let elm = [ tag ];
-              if ( m[2] ) { elm.push( parseHtmlAttr( m[2] ) ); }
+              if ( options.showOriginalLineNumber ) {
+                elm.push( addLineNumber( m[2] ? parseHtmlAttr( m[2] ) : {}, options, charPosToLine, 0, srcSlot ) );
+              }
+              else {
+                if ( m[2] ) {
+                  elm.push( parseHtmlAttr( m[2] ) );
+                }
+              }
               if ( tag === 'script' || tag === 'style' ) {
                 elm.push( inner );
               }
