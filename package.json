@@ -6,7 +6,7 @@
   "scripts": {
     "build": "wp && WEBPACK_ENV=min wp",
     "dev": "wp --progress --watch",
-    "test": "tape test/*js",
+    "test": "tape test/*js | tap-min",
     "lint": "eslint src/*js test/*js",
     "coverage": "nyc --reporter html --reporter text tape test/*js",
     "pub": "node scripts/publish.js",
@@ -32,21 +32,23 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "~7.6.2",
-    "@babel/plugin-proposal-class-properties": "~7.5.5",
-    "@babel/plugin-proposal-export-default-from": "~7.5.2",
-    "@babel/polyfill": "~7.6.0",
-    "@babel/preset-env": "~7.6.2",
-    "@babel/register": "~7.6.2",
-    "@borgar/eslint-config": "~1.0.3",
+    "@babel/core": "~7.8.4",
+    "@babel/plugin-proposal-class-properties": "~7.8.3",
+    "@babel/plugin-proposal-export-default-from": "~7.8.3",
+    "@babel/polyfill": "~7.8.3",
+    "@babel/preset-env": "~7.8.4",
+    "@babel/register": "~7.8.3",
+    "@borgar/eslint-config": "~1.1.0",
     "babel-loader": "~8.0.6",
-    "eslint": "~6.5.1",
-    "eslint-plugin-import": "~2.18.2",
-    "nyc": "~14.1.1",
-    "ssf": "~0.10.2",
-    "tape": "~4.11.0",
+    "eslint": "~6.8.0",
+    "eslint-plugin-import": "~2.20.1",
+    "nyc": "~15.0.0",
+    "tape": "~4.13.0",
     "uglifyjs-webpack-plugin": "~2.2.0",
-    "webpack": "~4.41.0",
+    "webpack": "~4.41.5",
     "webpack-command": "~0.5.0"
+  },
+  "dependencies": {
+    "tap-min": "~2.0.0"
   }
 }
