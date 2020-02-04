@@ -101,7 +101,7 @@ function parsePhrase (src, options) {
         const t1 = re.escape(tok.charAt(0));
         mMid = (code) ? '^(\\S+|\\S+.*?\\S)'
           : `^([^\\s${t1}]+|[^\\s${t1}].*?\\S(${t1}*))`;
-        mEnd = '(?=$|[\\s.,"\'!?;:()«»„“”‚‘’])';
+        mEnd = '(?=$|[\\s.,"\'!?;:()«»„“”‚‘’<>])';
       }
       const rx = re.compile(`${mMid}(${re.escape(tok)})${mEnd}`);
       if ((m = rx.exec(src)) && m[1]) {
