@@ -130,6 +130,12 @@ function parseFlow ( src, options, lineOffset ) {
 
   // loop
   while ( src.valueOf() ) {
+    // Fix for #52
+    const garbage = reCleanBegin.exec( src );
+    if ( garbage && garbage[0] ) {
+      src.advance( garbage[0].length );
+    }
+
     src.save();
 
     // link_ref -- this goes first because it shouldn't trigger a linebreak
