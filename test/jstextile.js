@@ -620,3 +620,17 @@ test( 'notextile should work inline (#49)', function ( t ) {
     '<p>pre *.Catalog und *.* post</p>' );
   t.end();
 });
+
+test( 'inline tag should bound phrase (#57)', function ( t ) {
+  const tx = '*foo*<notextile></notextile>bar';
+  t.is( textile.convert( tx ),
+    '<p><strong>foo</strong>bar</p>' );
+  t.end();
+});
+
+test( 'inline tag should bound phrase [2] (#57)', function ( t ) {
+  const tx = '*fo<i/>o*<i/>bar';
+  t.is( textile.convert( tx ),
+    '<p><strong>fo<i></i>o</strong><i></i>bar</p>' );
+  t.end();
+});
