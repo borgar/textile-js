@@ -21,7 +21,8 @@ module.exports = textile;
 // options
 textile.defaults = {
   // single-line linebreaks are converted to <br> by default
-  breaks: true
+  breaks: true,
+  inlineTables: false
 };
 textile.setOptions = textile.setoptions = function (opt) {
   merge(textile.defaults, opt);

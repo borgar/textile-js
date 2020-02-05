@@ -56,6 +56,20 @@ function parsePhrase (src, options) {
       if (src.startsWith(' ')) {
         src.advance(1);
       }
+      else if (options.inlineTables && src.startsWith('|')) {
+        if (options.breaks) {
+          list.add([ 'br' ]);
+        }
+        list.add('\n');
+        // because require can't handle circular dependencies.
+        const { testTable, parseTable } = require('./table');
+        if ((m = testTable(src))) {
+          src.advance(m[0]);
+          const opts = { ...options, inlineTables: false };
+          list.add(parseTable(m[1], opts));
+          continue;
+        }
+      }
       else if (options.breaks) {
         list.add([ 'br' ]);
       }
