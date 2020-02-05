@@ -1,7 +1,7 @@
 const test = require('tape');
 const textile = require('../src');
 
-test('poignant:1', function (t) {
+test('table in list', function (t) {
   const tx = `* [*H*]attric: *DO*
 |*D*|Diversity|
 |*O*|Obstacles|`;
