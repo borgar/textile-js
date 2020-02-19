@@ -37,10 +37,14 @@ textile.setOptions = textile.setoptions = function ( opt ) {
 textile.parse = textile.convert = textile;
 textile.html_parser = parseHtml;
 
-textile.jsonml = function ( txt, opt ) {
+textile.tokenize = function ( txt, opt ) {
   // get a throw-away copy of options
   opt = merge( merge({}, textile.defaults ), opt || {});
   // parse and return tree
-  return [ 'html' ].concat( parseFlow( txt, opt, opt.lineOffset ) );
+  return parseFlow( txt, opt, opt.lineOffset );
+};
+textile.jsonml = function ( txt, opt ) {
+  // parse and return tree
+  return [ 'html' ].concat( textile.tokenize( txt, opt ) );
 };
 textile.serialize = toHTML;
