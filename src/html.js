@@ -7,8 +7,8 @@ re.pattern.html_attr = '(?:"[^"]+"|\'[^\']+\'|[^>\\s]+)';
 const reAttr = re.compile( /^\s*([^=\s]+)(?:\s*=\s*("[^"]+"|'[^']+'|[^>\s]+))?/ );
 const reComment = re.compile( /^<!--(.+?)-->/, 's' );
 const reEndTag = re.compile( /^<\/([:html_id:])([^>]*)>/ );
-const reTag = re.compile( /^<([:html_id:])((?:\s[^=\s\/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>/ );
-const reHtmlTagBlock = re.compile( /^\s*<([:html_id:](?::[a-zA-Z\d]+)*)((?:\s[^=\s\/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>/ );
+const reTag = re.compile( /^<([:html_id:])((?:\s[^=\s/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>/ );
+const reHtmlTagBlock = re.compile( /^\s*<([:html_id:](?::[a-zA-Z\d]+)*)((?:\s[^=\s/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>/ );
 
 const singletons = {
   area: 1,
@@ -101,10 +101,10 @@ function tokenize ( src, whitelistTags, lazy ) {
       nestCount--;
       // console.log( '/' + token.tag, nestCount, nesting );
       if ( lazy && (
-          !nestCount ||
-          !nesting[token.tag] < 0 ||
-          isNaN( nesting[token.tag] )
-        ) ) {
+        !nestCount ||
+        !nesting[token.tag] < 0 ||
+        isNaN( nesting[token.tag] )
+      ) ) {
         return tokens;
       }
       // if parse is in text mode then that ends here

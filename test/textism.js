@@ -11,14 +11,12 @@ test( 'header one', function ( t ) {
 });
 
 
-
 test( 'header two', function ( t ) {
   let tx = "h2. Header 2";
   t.is( textile.convert( tx ),
     "<h2>Header 2</h2>", tx );
   t.end();
 });
-
 
 
 test( 'header three', function ( t ) {
@@ -29,14 +27,12 @@ test( 'header three', function ( t ) {
 });
 
 
-
 test( 'header four', function ( t ) {
   let tx = "h4. Header 4";
   t.is( textile.convert( tx ),
     "<h4>Header 4</h4>", tx );
   t.end();
 });
-
 
 
 test( 'header five', function ( t ) {
@@ -47,14 +43,12 @@ test( 'header five', function ( t ) {
 });
 
 
-
 test( 'header six', function ( t ) {
   let tx = "h6. Header 6";
   t.is( textile.convert( tx ),
     "<h6>Header 6</h6>", tx );
   t.end();
 });
-
 
 
 test( 'blockquote', function ( t ) {
@@ -72,7 +66,6 @@ Any old text.\n\
 });
 
 
-
 test( 'textism:8', function ( t ) {
   let tx = "# A first item\n\
 # A second item\n\
@@ -87,7 +80,6 @@ test( 'textism:8', function ( t ) {
 </ol>", tx );
   t.end();
 });
-
 
 
 test( 'textism:9', function ( t ) {
@@ -107,14 +99,12 @@ test( 'textism:9', function ( t ) {
 });
 
 
-
 test( 'textism:10', function ( t ) {
   let tx = "_a phrase_";
   t.is( textile.convert( tx ),
     "<p><em>a phrase</em></p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:11', function ( t ) {
@@ -125,14 +115,12 @@ test( 'textism:11', function ( t ) {
 });
 
 
-
 test( 'textism:12', function ( t ) {
   let tx = "*a phrase*";
   t.is( textile.convert( tx ),
     "<p><strong>a phrase</strong></p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:13', function ( t ) {
@@ -143,14 +131,12 @@ test( 'textism:13', function ( t ) {
 });
 
 
-
 test( 'textism:14', function ( t ) {
   let tx = "Nabokov's ??Pnin??";
   t.is( textile.convert( tx ),
     "<p>Nabokov&#8217;s <cite>Pnin</cite></p>", tx );
   t.end();
 });
-
 
 
 test( 'del part of word', function ( t ) {
@@ -161,14 +147,12 @@ test( 'del part of word', function ( t ) {
 });
 
 
-
 test( 'del part of word that contains a hyphen', function ( t ) {
   let tx = "An [-extra-extra-]ordinary day.";
   t.is( textile.convert( tx ),
     "<p>An <del>extra-extra</del>ordinary day.</p>", tx );
   t.end();
 });
-
 
 
 test( 'del a phrase', function ( t ) {
@@ -179,14 +163,12 @@ test( 'del a phrase', function ( t ) {
 });
 
 
-
 test( 'del a phrase that contains hyphens', function ( t ) {
   let tx = "Delete -a no-nonsense phrase- this way.";
   t.is( textile.convert( tx ),
     "<p>Delete <del>a no-nonsense phrase</del> this way.</p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:19', function ( t ) {
@@ -197,14 +179,12 @@ test( 'textism:19', function ( t ) {
 });
 
 
-
 test( 'textism:20', function ( t ) {
   let tx = "^a phrase^";
   t.is( textile.convert( tx ),
     "<p><sup>a phrase</sup></p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:21', function ( t ) {
@@ -215,14 +195,12 @@ test( 'textism:21', function ( t ) {
 });
 
 
-
 test( 'textism:22', function ( t ) {
   let tx = "%(myclass)SPAN%";
   t.is( textile.convert( tx ),
     "<p><span class=\"myclass\"><span class=\"caps\">SPAN</span></span></p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:23', function ( t ) {
@@ -233,14 +211,12 @@ test( 'textism:23', function ( t ) {
 });
 
 
-
 test( 'textism:24', function ( t ) {
   let tx = "%[fr]rouge%";
   t.is( textile.convert( tx ),
     "<p><span lang=\"fr\">rouge</span></p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:25', function ( t ) {
@@ -251,14 +227,12 @@ test( 'textism:25', function ( t ) {
 });
 
 
-
 test( 'textism:26', function ( t ) {
   let tx = "p=. A centered paragraph.";
   t.is( textile.convert( tx ),
     "<p style=\"text-align:center\">A centered paragraph.</p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:27', function ( t ) {
@@ -269,14 +243,12 @@ test( 'textism:27', function ( t ) {
 });
 
 
-
 test( 'textism:28', function ( t ) {
   let tx = "p{color:#ddd}. A paragraph";
   t.is( textile.convert( tx ),
     "<p style=\"color:#ddd\">A paragraph</p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:29', function ( t ) {
@@ -287,14 +259,12 @@ test( 'textism:29', function ( t ) {
 });
 
 
-
 test( 'textism:30', function ( t ) {
   let tx = "h2()>. right-aligned header2, indented 1em both side";
   t.is( textile.convert( tx ),
     "<h2 style=\"padding-left:1em;padding-right:1em;text-align:right\">right-aligned header2, indented 1em both side</h2>", tx );
   t.end();
 });
-
 
 
 test( 'textism:31', function ( t ) {
@@ -305,7 +275,6 @@ test( 'textism:31', function ( t ) {
 });
 
 
-
 test( 'textism:32', function ( t ) {
   let tx = "!>/image.gif! right-aligned image";
   t.is( textile.convert( tx ),
@@ -314,14 +283,12 @@ test( 'textism:32', function ( t ) {
 });
 
 
-
 test( 'textism:33', function ( t ) {
   let tx = "p[no]{color:red}. A Norse of a different colour.";
   t.is( textile.convert( tx ),
     "<p style=\"color:red\" lang=\"no\">A Norse of a different colour.</p>", tx );
   t.end();
 });
-
 
 
 test( 'textism:34', function ( t ) {
@@ -348,7 +315,6 @@ test( 'textism:34', function ( t ) {
 });
 
 
-
 test( 'textism:35', function ( t ) {
   let tx = "table{border:1px solid black}.\n\
 |This|is|a|row|\n\
@@ -372,7 +338,6 @@ test( 'textism:35', function ( t ) {
 });
 
 
-
 test( 'textism:36', function ( t ) {
   let tx = "{background:#ddd}. |This|is|a|row|";
   t.is( textile.convert( tx ),
@@ -386,7 +351,6 @@ test( 'textism:36', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'textism:37', function ( t ) {
@@ -411,7 +375,6 @@ test( 'textism:37', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'basics', function ( t ) {

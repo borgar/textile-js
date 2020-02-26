@@ -4,12 +4,12 @@ const textile = require( '../src' );
 
 test( 'HTML blockquote spanning paragraphs', function ( t ) {
   t.is( textile.convert(
-      "A line break delimited block quote:\n\n" +
+    "A line break delimited block quote:\n\n" +
       "<blockquote>\n" +
       "How unbearable at times are people who are happy, people for whom everything works out.\n\n" +
       "Anton Pavlovich Chekhov - 1860-1904\n" +
       "</blockquote>" ),
-    "<p>A line break delimited block quote:</p>\n" +
+  "<p>A line break delimited block quote:</p>\n" +
     "<blockquote>\n" +
     "<p>How unbearable at times are people who are happy, people for whom everything works out.</p>\n" +
     "<p>Anton Pavlovich Chekhov &#8211; 1860-1904</p>\n" +
@@ -20,13 +20,13 @@ test( 'HTML blockquote spanning paragraphs', function ( t ) {
 
 test( 'User has mistaken list format for markdowns', function ( t ) {
   t.is( textile.convert(
-      "Here a tricky list\n\n" +
+    "Here a tricky list\n\n" +
       "* item1\n" +
       "    * item2\n" +
       "* item3\n" +
       "* item4\n\n" +
       "Tailing line." ),
-    "<p>Here a tricky list</p>\n" +
+  "<p>Here a tricky list</p>\n" +
     "<ul>\n" +
     "\t<li>item1</li>\n" +
     "\t<li>item2</li>\n" +
@@ -40,14 +40,14 @@ test( 'User has mistaken list format for markdowns', function ( t ) {
 
 test( 'HTML list', function ( t ) {
   t.is( textile.convert(
-      "Your inventory:\n\n" +
+    "Your inventory:\n\n" +
       "<ul>\n" +
       "<li>Lamp</li>\n" +
       "<li>Napkin</li>\n" +
       "<li>Sword</li>\n" +
       "<li>Plastic Cup</li>\n" +
       "</ul>" ),
-    "<p>Your inventory:</p>\n" +
+  "<p>Your inventory:</p>\n" +
     "<ul>\n" +
     "<li>Lamp</li>\n" +
     "<li>Napkin</li>\n" +
@@ -60,7 +60,7 @@ test( 'HTML list', function ( t ) {
 
 test( 'Span with an ending percentage', function ( t ) {
   t.is( textile.convert( "span %percent 10%% of stuff" ),
-         "<p>span <span>percent 10%</span> of stuff</p>" );
+    "<p>span <span>percent 10%</span> of stuff</p>" );
   t.end();
 });
 
@@ -136,11 +136,11 @@ test( '__test_', function ( t ) {
 // While it IS bizarre input, we should still try to stay in control.
 test( 'Strange list', function ( t ) {
   t.is( textile.convert(
-      "* a\n" +
+    "* a\n" +
       "*** b\n" +
       "** c\n" +
       "*** d" ),
-    "<ul>\n" +
+  "<ul>\n" +
     "\t<li>a\n" +
     "\t<ul>\n" +
     "\t\t<li>\n" +
@@ -310,8 +310,8 @@ test( 'empty block 1', function ( t ) {
 
 test( 'empty block 2', function ( t ) {
   t.is( textile.convert( "h1. " ),
-  "<h1></h1>",
-  "empty block #2" );
+    "<h1></h1>",
+    "empty block #2" );
   t.end();
 });
 
@@ -422,34 +422,34 @@ test( 'bold line vs. list', function ( t ) {
 
 test( 'strict list matching (1)', function ( t ) {
   t.is( textile.convert(
-      '*{color:red} item*\n\n' +
+    '*{color:red} item*\n\n' +
       '* item*\n\n' +
       '*item*' ),
-    '<ul style="color:red">\n' +
+  '<ul style="color:red">\n' +
     '\t<li>item*</li>\n' +
     '</ul>\n' +
     '<ul>\n' +
     '\t<li>item*</li>\n' +
     '</ul>\n' +
     '<p><strong>item</strong></p>',
-    "strict list matching (1)" );
+  "strict list matching (1)" );
   t.end();
 });
 
 
 test( 'strict list matching (2)', function ( t ) {
   t.is( textile.convert(
-      '*{color:red} item\n\n' +
+    '*{color:red} item\n\n' +
       '* item\n\n' +
       '*item' ),
-    '<ul style="color:red">\n' +
+  '<ul style="color:red">\n' +
     '\t<li>item</li>\n' +
     '</ul>\n' +
     '<ul>\n' +
     '\t<li>item</li>\n' +
     '</ul>\n' +
     '<p>*item</p>',
-    "strict list matching (2)" );
+  "strict list matching (2)" );
   t.end();
 });
 
@@ -553,22 +553,22 @@ test( 'bc blocks should not be terminated by lists (#45)', function ( t ) {
   t.is( textile.convert(
     'bc. # here comes foo\nFoo\n# here comes bar\nBar'
   ),
-    '<pre><code># here comes foo\nFoo\n# here comes bar\nBar</code></pre>'
+  '<pre><code># here comes foo\nFoo\n# here comes bar\nBar</code></pre>'
   );
   t.is( textile.convert(
     'bc.. # here comes foo\nFoo\n\n# here comes bar\nBar'
   ),
-    '<pre><code># here comes foo\nFoo\n\n# here comes bar\nBar</code></pre>'
+  '<pre><code># here comes foo\nFoo\n\n# here comes bar\nBar</code></pre>'
   );
   t.is( textile.convert(
     'bc. * here comes foo\nFoo\n* here comes bar\nBar'
   ),
-    '<pre><code>* here comes foo\nFoo\n* here comes bar\nBar</code></pre>'
+  '<pre><code>* here comes foo\nFoo\n* here comes bar\nBar</code></pre>'
   );
   t.is( textile.convert(
     'bc.. * here comes foo\nFoo\n\n* here comes bar\nBar'
   ),
-    '<pre><code>* here comes foo\nFoo\n\n* here comes bar\nBar</code></pre>'
+  '<pre><code>* here comes foo\nFoo\n\n* here comes bar\nBar</code></pre>'
   );
   t.end();
 });
@@ -578,22 +578,22 @@ test( 'pre blocks should not be terminated by lists (#45)', function ( t ) {
   t.is( textile.convert(
     'pre. # here comes foo\nFoo\n# here comes bar\nBar'
   ),
-    '<pre># here comes foo\nFoo\n# here comes bar\nBar</pre>'
+  '<pre># here comes foo\nFoo\n# here comes bar\nBar</pre>'
   );
   t.is( textile.convert(
     'pre.. # here comes foo\nFoo\n\n# here comes bar\nBar'
   ),
-    '<pre># here comes foo\nFoo\n\n# here comes bar\nBar</pre>'
+  '<pre># here comes foo\nFoo\n\n# here comes bar\nBar</pre>'
   );
   t.is( textile.convert(
     'pre. * here comes foo\nFoo\n* here comes bar\nBar'
   ),
-    '<pre>* here comes foo\nFoo\n* here comes bar\nBar</pre>'
+  '<pre>* here comes foo\nFoo\n* here comes bar\nBar</pre>'
   );
   t.is( textile.convert(
     'pre.. * here comes foo\nFoo\n\n* here comes bar\nBar'
   ),
-    '<pre>* here comes foo\nFoo\n\n* here comes bar\nBar</pre>'
+  '<pre>* here comes foo\nFoo\n\n* here comes bar\nBar</pre>'
   );
   t.end();
 });

@@ -25,7 +25,6 @@ h3. A header after the table";
 });
 
 
-
 test( 'table:2', function ( t ) {
   let tx = "|_. a|_. b|_. c|\n\
 |1|2|3|";
@@ -44,7 +43,6 @@ test( 'table:2', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'table:3', function ( t ) {
@@ -71,7 +69,6 @@ test( 'table:3', function ( t ) {
 });
 
 
-
 test( 'table:4', function ( t ) {
   let tx = "table{border:1px solid black}.\n\
 |This|is|a|row|\n\
@@ -95,7 +92,6 @@ test( 'table:4', function ( t ) {
 });
 
 
-
 test( 'table:5', function ( t ) {
   let tx = "{background:#ddd}. |This|is|a|row|";
   t.is( textile.convert( tx ),
@@ -109,7 +105,6 @@ test( 'table:5', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'table:6', function ( t ) {
@@ -130,7 +125,6 @@ test( 'table:6', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'table:7', function ( t ) {
@@ -174,7 +168,6 @@ test( 'table:7', function ( t ) {
 });
 
 
-
 test( 'table:8', function ( t ) {
   let tx = "|{background:#ddd}. Cell with gray background|Normal cell|\n\
 |\\2. Cell spanning 2 columns|\n\
@@ -204,7 +197,6 @@ test( 'table:8', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'row spanning mid-row', function ( t ) {
@@ -241,7 +233,6 @@ test( 'row spanning mid-row', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'table:10', function ( t ) {
@@ -308,7 +299,6 @@ test( 'table:10', function ( t ) {
 });
 
 
-
 test( 'combined table header and colspan', function ( t ) {
   let tx = "table(my_class).\n\
 |_\\2. a |_. b |_. c |\n\
@@ -329,7 +319,6 @@ test( 'combined table header and colspan', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'two adjacent tables', function ( t ) {
@@ -354,7 +343,6 @@ test( 'two adjacent tables', function ( t ) {
 });
 
 
-
 test( 'with cell attributes', function ( t ) {
   let tx = "|[en]. lang-ok|{color:red;}. style-ok|(myclass). class-ok|";
   t.is( textile.convert( tx ),
@@ -369,7 +357,6 @@ test( 'with cell attributes', function ( t ) {
 });
 
 
-
 test( 'with improper cell attributes', function ( t ) {
   let tx = "|[en]lang-bad|{color:red;}style-bad|(myclass)class-bad|";
   t.is( textile.convert( tx ),
@@ -382,7 +369,6 @@ test( 'with improper cell attributes', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'with line breaks in the cell', function ( t ) {
@@ -407,7 +393,6 @@ c</td>\n\
 });
 
 
-
 test( 'with missing cells', function ( t ) {
   let tx = "|a|b|\n\
 |a|\n\
@@ -428,7 +413,6 @@ test( 'with missing cells', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'with empty cells', function ( t ) {

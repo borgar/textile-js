@@ -16,12 +16,12 @@ const re = module.exports = {
   },
 
   escape: function ( src ) {
-    return src.replace( /[\-\[\]\{\}\(\)\*\+\?\.,\\\^\$\|#\s]/g, '\\$&' );
+    return src.replace( /[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&' );
   },
 
   collapse: function ( src ) {
     return src.replace( /(?:#.*?(?:\n|$))/g, '' )
-              .replace( /\s+/g, '' );
+      .replace( /\s+/g, '' );
   },
 
   expandPatterns: function ( src ) {

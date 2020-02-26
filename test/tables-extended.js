@@ -21,7 +21,6 @@ test( 'headers and cells', function ( t ) {
 });
 
 
-
 test( 'captions', function ( t ) {
   let tx = "|=. Your caption goes here\n\
 |foo|bar|";
@@ -37,7 +36,6 @@ test( 'captions', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'tailing pipes should be stripped from captions', function ( t ) {
@@ -66,7 +64,6 @@ test( 'tailing pipes should be stripped from captions', function ( t ) {
 });
 
 
-
 test( 'table summary', function ( t ) {
   let tx = "table(myTable). This is a journey into sound. Stereophonic sound.\n\
 | foo |";
@@ -78,7 +75,6 @@ test( 'table summary', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'tbody/thead/tfoot', function ( t ) {
@@ -110,7 +106,6 @@ test( 'tbody/thead/tfoot', function ( t ) {
 });
 
 
-
 test( 'colgroup', function ( t ) {
   let tx = "|:. 100|\n\
 |cell|";
@@ -128,7 +123,6 @@ test( 'colgroup', function ( t ) {
 });
 
 
-
 test( 'colgroup span size', function ( t ) {
   let tx = "|:\\3. 100|\n\
 |cell|";
@@ -144,7 +138,6 @@ test( 'colgroup span size', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'can target individual cols', function ( t ) {
@@ -167,7 +160,6 @@ test( 'can target individual cols', function ( t ) {
 });
 
 
-
 test( 'can style colgroup', function ( t ) {
   let tx = "|:\\5(grpclass#grpid). 200 | 100 |||80|\n\
 |cell|cell|";
@@ -188,7 +180,6 @@ test( 'can style colgroup', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'extened table syntax:10', function ( t ) {
@@ -220,7 +211,6 @@ test( 'extened table syntax:10', function ( t ) {
 });
 
 
-
 test( 'extened table syntax:11', function ( t ) {
   let tx = "|~.\n\
 |\\2=. A footer, centered & across two columns |\n\
@@ -250,7 +240,6 @@ test( 'extened table syntax:11', function ( t ) {
 });
 
 
-
 test( 'styleable cells', function ( t ) {
   let tx = "|a|{color:red}. styled|cell|\n\
 ";
@@ -266,7 +255,6 @@ test( 'styleable cells', function ( t ) {
 });
 
 
-
 test( 'row class', function ( t ) {
   let tx = "(rowclass). |a|classy|row|";
   t.is( textile.convert( tx ),
@@ -279,7 +267,6 @@ test( 'row class', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'table class', function ( t ) {
@@ -303,7 +290,6 @@ test( 'table class', function ( t ) {
 });
 
 
-
 test( 'column span', function ( t ) {
   let tx = "|\\2. spans two cols |\n\
 | col 1 | col 2 |";
@@ -319,7 +305,6 @@ test( 'column span', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'row span', function ( t ) {
@@ -343,7 +328,6 @@ test( 'row span', function ( t ) {
 });
 
 
-
 test( 'cell text v-alignment', function ( t ) {
   let tx = "|^. top alignment|\n\
 |-. middle alignment|\n\
@@ -362,7 +346,6 @@ test( 'cell text v-alignment', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'cell text h-alignment', function ( t ) {
@@ -389,7 +372,6 @@ test( 'cell text h-alignment', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'a complex table example', function ( t ) {
@@ -485,7 +467,6 @@ table(#dvds){border-collapse:collapse}. Great films on DVD employing Textile sum
 });
 
 
-
 test( 'attr can be passed to all the containers', function ( t ) {
   let tx = "table(tabl).\n\
 |=(cap#id1). caption\n\
@@ -522,7 +503,6 @@ test( 'attr can be passed to all the containers', function ( t ) {
 </table>", tx );
   t.end();
 });
-
 
 
 test( 'classes on cols', function ( t ) {

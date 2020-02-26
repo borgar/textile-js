@@ -36,10 +36,10 @@ function reIndent ( ml, shiftBy ) {
 
 function escape ( text, escapeQuotes ) {
   return text.replace( /&(?!(#\d{2,}|#x[\da-fA-F]{2,}|[a-zA-Z][a-zA-Z1-4]{1,6});)/g, '&amp;' )
-             .replace( /</g, '&lt;' )
-             .replace( />/g, '&gt;' )
-             .replace( /"/g, escapeQuotes ? '&quot;' : '"' )
-             .replace( /'/g, escapeQuotes ? '&#39;' : "'" );
+    .replace( /</g, '&lt;' )
+    .replace( />/g, '&gt;' )
+    .replace( /"/g, escapeQuotes ? '&quot;' : '"' )
+    .replace( /'/g, escapeQuotes ? '&#39;' : "'" );
 }
 
 function toHTML ( jsonml ) {
@@ -65,8 +65,8 @@ function toHTML ( jsonml ) {
 
   for ( const a in attributes ) {
     tagAttrs += ( attributes[a] == null )
-            ? ` ${ a }`
-            : ` ${ a }="${ escape( String( attributes[a] ), true ) }"`;
+      ? ` ${ a }`
+      : ` ${ a }="${ escape( String( attributes[a] ), true ) }"`;
   }
 
   // be careful about adding whitespace here for inline elements
