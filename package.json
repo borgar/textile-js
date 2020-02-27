@@ -8,7 +8,7 @@
     "dev": "webpack --progress --watch",
     "test": "tape test/*js | tap-min",
     "lint": "eslint src/*js test/*js script/*js",
-    "coverage": "nyc report --reporter=html --reporter=text tape test/*js",
+    "coverage": "nyc --reporter html --reporter text tape test/*js",
     "pub": "node scripts/publish.js",
     "dingus": "node scripts/updatedingus.js"
   },
