@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [DOC] Move CHANGELOG to the right place
 - [INTERNAL] Linting
 
+### Added
+- [LIBRARY] Add version and build date as comment in the produced code (full and minimized)
+
 
 ## [2.0.102] - 20200219
 ### Added

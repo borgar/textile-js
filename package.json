@@ -42,10 +42,11 @@
     "eslint": "^6.8.0",
     "eslint-plugin-import": "~2.20.1",
     "nyc": "^15.0.0",
+    "tap-min": "~2.0.0",
     "tape": "^4.13.0",
     "uglifyjs-webpack-plugin": "~2.2.0",
     "webpack": "^4.41.5",
-    "webpack-command": "~0.5.0",
-    "tap-min": "~2.0.0"
+    "webpack-auto-inject-version": "^1.2.2",
+    "webpack-command": "~0.5.0"
   }
 }
