@@ -4,7 +4,7 @@ Attempt at an implementation of fully featured Textile parser in JavaScript that
 
 **Please Note :** This is a fork containing some changes and fixes, used for my Visual Studio Code extension "Textile Language Features":https://github.com/GehDoc/vscode-textile-preview :
 * map each HTML output tag, to the corresponding source code line;
-* fix for bug borgar/textile-js#52.
+* fix for bug "borgar/textile-js#52":https://github.com/borgar/textile-js/issues/52.
 
 Give it a go in "a live textile web editor":https://gehdoc.github.io/textile-js/.
 
