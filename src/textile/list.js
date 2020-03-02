@@ -9,7 +9,7 @@ const { parsePhrase } = require( './phrase' );
 const { txlisthd } = require( './re_ext' );
 re.pattern.txlisthd = txlisthd;
 const reList = re.compile( /^((?:[:txlisthd:][^\0]*?(?:\r?\n|$))+)(\s*\n|$)/, 's' );
-const reItem = re.compile( /^([#\*]+)([^\0]+?)(\n(?=[:txlisthd:])|$)/, 's' );
+const reItem = re.compile( /^([#*]+)([^\0]+?)(\n(?=[:txlisthd:])|$)/, 's' );
 
 function listPad ( n ) {
   let s = '\n';
@@ -54,8 +54,8 @@ function parseList ( src, options, charOffset, charPosToLine ) {
     // list starts and continuations
     if ( ( n = /^(_|\d+)/.exec( m[2] ) ) ) {
       itemIndex = isFinite( n[1] )
-            ? parseInt( n[1], 10 )
-            : lastIndex[ destLevel ] || currIndex[ destLevel ] || 1;
+        ? parseInt( n[1], 10 )
+        : lastIndex[ destLevel ] || currIndex[ destLevel ] || 1;
       m[2] = m[2].slice( n[1].length );
     }
 

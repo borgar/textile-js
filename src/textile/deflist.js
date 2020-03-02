@@ -31,21 +31,21 @@ function parseDefList ( src, options, charOffset, charPosToLine ) {
 
   while ( ( m = reItem.exec( src ) ) ) {
     // add terms
-    terms = m[1].split( /(?:^|\n)\- / );
+    terms = m[1].split( /(?:^|\n)- / );
     let localCharOffset = terms[0].length;
     terms = terms.slice( 1 );
     let separators = [];
     if ( options.showOriginalLineNumber ) {
-      separators = m[1].match( /(?:^|\n)\- /g ).slice( 1 );
+      separators = m[1].match( /(?:^|\n)- /g ).slice( 1 );
     }
     while ( terms.length ) {
       const term = terms.shift();
       deflist.push( '\t'
-                , [ 'dt' ].concat(
-                  addLineNumber({}, options, charPosToLine, charOffset, src.getPos() + localCharOffset )
-                  , parsePhrase( term.trim(), options ) )
-                , '\n'
-                );
+        , [ 'dt' ].concat(
+          addLineNumber({}, options, charPosToLine, charOffset, src.getPos() + localCharOffset )
+          , parsePhrase( term.trim(), options ) )
+        , '\n'
+      );
       if ( options.showOriginalLineNumber ) {
         localCharOffset += term.length;
         // perhaps no separator at the end of the list
@@ -66,14 +66,14 @@ function parseDefList ( src, options, charOffset, charPosToLine ) {
       }
     }
     deflist.push( '\t'
-              , [ 'dd' ].concat(
-                  addLineNumber({}, options, charPosToLine, charOffset, src.getPos() + localCharOffset )
-                  , ( /=:$/.test( def ) )
-                    ? parseFlow( def.slice( 0, -2 ).trim(), options, options.showOriginalLineNumber ? charPosToLine[ ( charOffset || 0 ) + localCharOffset + src.getPos() ] : 0 )
-                    : parsePhrase( def, options )
-                )
-              , '\n'
-              );
+      , [ 'dd' ].concat(
+        addLineNumber({}, options, charPosToLine, charOffset, src.getPos() + localCharOffset )
+        , ( /=:$/.test( def ) )
+          ? parseFlow( def.slice( 0, -2 ).trim(), options, options.showOriginalLineNumber ? charPosToLine[ ( charOffset || 0 ) + localCharOffset + src.getPos() ] : 0 )
+          : parsePhrase( def, options )
+      )
+      , '\n'
+    );
     src.advance( m[0] );
   }
   return deflist;

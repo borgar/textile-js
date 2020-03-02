@@ -1,14 +1,14 @@
-const reClassid = /^\(([^\(\)\n]+)\)/;
+const reClassid = /^\(([^()\n]+)\)/;
 const rePaddingL = /^(\(+)/;
 const rePaddingR = /^(\)+)/;
 const reAlignBlock = /^(<>|<|>|=)/;
 const reAlignImg = /^(<|>|=)/;
-const reVAlign = /^(~|\^|\-)/;
+const reVAlign = /^(~|\^|-)/;
 const reColSpan = /^\\(\d+)/;
 const reRowSpan = /^\/(\d+)/;
-const reStyles = /^\{([^\}]*)\}/;
+const reStyles = /^\{([^}]*)\}/;
 const reCSS = /^\s*([^:\s]+)\s*:\s*(.+)\s*$/;
-const reLang = /^\[([^\[\]\n]+)\]/;
+const reLang = /^\[([^[\]\n]+)\]/;
 
 const pbaAlignLookup = {
   '<': 'left',
@@ -98,9 +98,9 @@ function parseAttr ( input, element, endToken ) {
     if ( ( m = reClassid.exec( remaining ) ) ) {
       const rm = remaining.slice( m[0].length );
       if (
-          ( !rm && isPhrase ) ||
+        ( !rm && isPhrase ) ||
           ( endToken && ( rm[0] === ' ' || endToken === rm.slice( 0, endToken.length ) ) )
-         ) {
+      ) {
         m = null;
       }
       else {

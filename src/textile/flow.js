@@ -41,7 +41,7 @@ const reBlockExtended = re.compile( /^(.*?)($|\r?\n(?=[:txlisthd:])|\r?\n+(?=[:t
 const reBlockNormalPre = re.compile( /^(.*?)($|\r?\n(?:\s*\n|$)+)/, 's' );
 const reBlockExtendedPre = re.compile( /^(.*?)($|\r?\n+(?=[:txblocks:][:txattr:]\.))/, 's' );
 
-const reRuler = /^(\-\-\-+|\*\*\*+|___+)(\r?\n\s+|$)/;
+const reRuler = /^(---+|\*\*\*+|___+)(\r?\n\s+|$)/;
 const reLinkRef = re.compile( /^\[([^\]]+)\]((?:https?:\/\/|\/)\S+)(?:\s*\n|$)/ );
 const reFootnoteDef = /^fn\d+$/;
 
@@ -75,7 +75,7 @@ function paragraph ( s, tag, pba, linebreak, options ) {
     else {
       if ( linebreak && i ) { out.push( linebreak ); }
       out.push( pba ? [ tag, pba ].concat( parsePhrase( bit, options ) )
-                    : [ tag ].concat( parsePhrase( bit, options ) ) );
+        : [ tag ].concat( parsePhrase( bit, options ) ) );
     }
   });
   return out;
@@ -205,7 +205,7 @@ function parseFlow ( src, options, lineOffset ) {
           pba.class = ( pba['class'] ? pba['class'] + ' ' : '' ) + 'footnote';
           pba.id = 'fn' + fnid;
           list.add( [ 'p', pba, [ 'a', { 'href': '#fnr' + fnid }, [ 'sup', fnid ] ], ' ' ]
-                      .concat( parsePhrase( m[1], options ) ) );
+            .concat( parsePhrase( m[1], options ) ) );
         }
         else { // heading | paragraph
           list.merge( paragraph( m[1], blockType, pba, '\n', options ) );
@@ -308,8 +308,8 @@ function parseFlow ( src, options, lineOffset ) {
                 const innerHTML = inner.replace( /^\n+/, '' ).replace( /\s*$/, '' );
                 const isBlock = /\n\r?\n/.test( innerHTML ) || tag === 'ol' || tag === 'ul';
                 const innerElm = isBlock
-                      ? parseFlow( innerHTML, options )
-                      : parsePhrase( innerHTML, extend({}, options, { breaks: false }) );
+                  ? parseFlow( innerHTML, options )
+                  : parsePhrase( innerHTML, extend({}, options, { breaks: false }) );
                 if ( isBlock || /^\n/.test( inner ) ) {
                   elm.push( '\n' );
                 }

@@ -27,14 +27,14 @@ const phraseConvert = {
   '@': 'code'
 };
 
-const rePhrase = /^([\[\{]?)(__?|\*\*?|\?\?|[\-\+\^~@%])/;
-const reImage = re.compile( /^!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^\.\/]))?)([^!\s]+?) ?(?:\(((?:[^\(\)]|\([^\(\)]+\))+)\))?!(?::([^\s]+?(?=[!-\.:-@\[\\\]-`{-~](?:$|\s)|\s|$)))?/ );
-const reImageFenced = re.compile( /^\[!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^\.\/]))?)([^!\s]+?) ?(?:\(((?:[^\(\)]|\([^\(\)]+\))+)\))?!(?::([^\s]+?(?=[!-\.:-@\[\\\]-`{-~](?:$|\s)|\s|$)))?\]/ );
+const rePhrase = /^([[{]?)(__?|\*\*?|\?\?|[-+^~@%])/;
+const reImage = re.compile( /^!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^./]))?)([^!\s]+?) ?(?:\(((?:[^()]|\([^()]+\))+)\))?!(?::([^\s]+?(?=[!-.:-@[\\\]-`{-~](?:$|\s)|\s|$)))?/ );
+const reImageFenced = re.compile( /^\[!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^./]))?)([^!\s]+?) ?(?:\(((?:[^()]|\([^()]+\))+)\))?!(?::([^\s]+?(?=[!-.:-@[\\\]-`{-~](?:$|\s)|\s|$)))?\]/ );
 // NB: there is an exception in here to prevent matching "TM)"
 const reCaps = re.compile( /^((?!TM\)|tm\))[[:ucaps:]](?:[[:ucaps:]\d]{1,}(?=\()|[[:ucaps:]\d]{2,}))(?:\((.*?)\))?(?=\W|$)/ );
 const reLink = re.compile( /^"(?!\s)((?:[^"]|"(?![\s:])[^\n"]+"(?!:))+)"[:txcite:]/ );
 const reLinkFenced = /^\["([^\n]+?)":((?:\[[a-z0-9]*\]|[^\]])+)\]/;
-const reLinkTitle = /\s*\(((?:\([^\(\)]*\)|[^\(\)])+)\)$/;
+const reLinkTitle = /\s*\(((?:\([^()]*\)|[^()])+)\)$/;
 const reFootnote = /^\[(\d+)(!?)\]/;
 
 function parsePhrase ( src, options ) {
@@ -100,7 +100,7 @@ function parsePhrase ( src, options ) {
       else {
         const t1 = re.escape( tok.charAt( 0 ) );
         mMid = ( code ) ? '^(\\S+|\\S+.*?\\S)'
-                        : `^([^\\s${ t1 }]+|[^\\s${ t1 }].*?\\S(${ t1 }*))`;
+          : `^([^\\s${ t1 }]+|[^\\s${ t1 }].*?\\S(${ t1 }*))`;
         mEnd = '(?=$|[\\s.,"\'!?;:()«»„“”‚‘’<>])';
       }
       const rx = re.compile( `${ mMid }(${ re.escape( tok ) })${ mEnd }` );
@@ -184,9 +184,9 @@ function parsePhrase ( src, options ) {
     if ( ( m = reFootnote.exec( src ) ) && /\S/.test( behind ) ) {
       src.advance( m[0] );
       list.add( [ 'sup', { 'class': 'footnote', 'id': 'fnr' + m[1] },
-                  ( m[2] === '!' ? m[1] // "!" suppresses the link
-                                 : [ 'a', { href: '#fn' + m[1] }, m[1] ] )
-                ] );
+        ( m[2] === '!' ? m[1] // "!" suppresses the link
+          : [ 'a', { href: '#fn' + m[1] }, m[1] ] )
+      ] );
       continue;
     }
 

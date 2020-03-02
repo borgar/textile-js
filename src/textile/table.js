@@ -13,7 +13,7 @@ re.pattern.txattr = txattr;
 
 const reTable = re.compile( /^((?:table[:txattr:]\.(?:\s(.+?))\s*\n)?(?:(?:[:txattr:]\.[^\n\S]*)?\|.*?\|[^\n\S]*(?:\n|$))+)([^\n\S]*\n)?/, 's' );
 const reHead = /^table(_?)([^\n]*?)\.(?:[ \t](.+?))?\s*\n/;
-const reRow = re.compile( /^(?:\|([~\^\-][:txattr:])\.\s*\n)?([:txattr:]\.[^\n\S]*)?\|(.*?)\|[^\n\S]*(\n|$)/, 's' );
+const reRow = re.compile( /^(?:\|([~^-][:txattr:])\.\s*\n)?([:txattr:]\.[^\n\S]*)?\|(.*?)\|[^\n\S]*(\n|$)/, 's' );
 const reCaption = /^\|=([^\n+]*)\n/;
 const reColgroup = /^\|:([^\n+]*)\|[\r\t ]*\n/;
 const reRowgroup = /^\|([\^\-~])([^\n+]*)\.[ \t\r]*\n/;
@@ -27,27 +27,27 @@ const charToTag = {
 function parseColgroup ( src ) {
   const colgroup = [ 'colgroup', {} ];
   src.split( '|' )
-      .forEach( function ( s, isCol ) {
-        const col = ( isCol ) ? {} : colgroup[ 1 ];
-        let d = s.trim();
-        let m;
-        if ( d ) {
-          if ( ( m = /^\\(\d+)/.exec( d ) ) ) {
-            col.span = +m[ 1 ];
-            d = d.slice( m[ 0 ].length );
-          }
-          if ( ( m = parseAttr( d, 'col' ) ) ) {
-            merge( col, m[ 1 ] );
-            d = d.slice( m[ 0 ] );
-          }
-          if ( ( m = /\b\d+\b/.exec( d ) ) ) {
-            col.width = +m[0];
-          }
+    .forEach( function ( s, isCol ) {
+      const col = ( isCol ) ? {} : colgroup[ 1 ];
+      let d = s.trim();
+      let m;
+      if ( d ) {
+        if ( ( m = /^\\(\d+)/.exec( d ) ) ) {
+          col.span = +m[ 1 ];
+          d = d.slice( m[ 0 ].length );
         }
-        if ( isCol ) {
-          colgroup.push( '\n\t\t', [ 'col', col ] );
+        if ( ( m = parseAttr( d, 'col' ) ) ) {
+          merge( col, m[ 1 ] );
+          d = d.slice( m[ 0 ] );
         }
-      });
+        if ( ( m = /\b\d+\b/.exec( d ) ) ) {
+          col.width = +m[0];
+        }
+      }
+      if ( isCol ) {
+        colgroup.push( '\n\t\t', [ 'col', col ] );
+      }
+    });
   return colgroup.concat( [ '\n\t' ] );
 }
 
@@ -170,7 +170,7 @@ function parseTable ( src, options, charOffset, charPosToLine ) {
           }
         }
 
-        const mx = /^(==.*?==|[^\|])*/.exec( inner );
+        const mx = /^(==.*?==|[^|])*/.exec( inner );
         cell = cell.concat( parsePhrase( mx[0], options ) );
         row.push( '\n\t\t\t', cell );
         more = inner.valueOf().charAt( mx[0].length ) === '|';
