@@ -7,7 +7,7 @@
     "build": "webpack && WEBPACK_ENV=min webpack",
     "dev": "webpack --progress --watch",
     "test": "tape test/*js | tap-min",
-    "lint": "eslint src/*js test/*js script/*js",
+    "lint": "eslint src/*js src/textile/*js test/*js scripts/*js",
     "coverage": "nyc --reporter html --reporter text tape test/*js",
     "pub": "node scripts/publish.js",
     "dingus": "node scripts/updatedingus.js"
