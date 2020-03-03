@@ -138,6 +138,12 @@ function parseFlow ( src, options, lineOffset ) {
 
     src.save();
 
+    // Further fix for #52 : Nothing more should be done, if we have reached end of stream.
+    // This removes a useless empty <P> at the end of the generated tree.
+    if ( !src.valueOf() ) {
+      break;
+    }
+
     // link_ref -- this goes first because it shouldn't trigger a linebreak
     if ( ( m = reLinkRef.exec( src ) ) ) {
       if ( !linkRefs ) { linkRefs = {}; }

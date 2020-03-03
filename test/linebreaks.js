@@ -288,6 +288,21 @@ h1. header`;
   t.end();
 });
 
+test( 'Garbage not reduced correctly after a table:3 (bug #52)', function ( t ) {
+  let tx = `|a|b|
+
+
+`;
+  t.is( textile.convert( tx ),
+    `<table>
+\t<tr>
+\t\t<td>a</td>
+\t\t<td>b</td>
+\t</tr>
+</table>`, tx );
+  t.end();
+});
+
 
 test( 'jstextile linebreaks:17', function ( t ) {
   let tx = "line\r\n\
