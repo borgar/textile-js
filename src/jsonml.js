@@ -81,8 +81,24 @@ function toHTML ( jsonml ) {
   }
 }
 
+function applyHooks ( ml, hooks = [] ) {
+  if ( Array.isArray( ml ) && Array.isArray( hooks ) && hooks.length ) {
+    for ( let i = 0, l = hooks.length; i < l; i++ ) {
+      const hook = hooks[i];
+      hook[0]( ml, hook[1] );
+    }
+    for ( let i = 0, l = ml.length; i < l; i++ ) {
+      if ( Array.isArray( ml[i] ) ) {
+        applyHooks( ml[i], hooks );
+      }
+    }
+  }
+  return ml;
+}
+
 module.exports = {
   reIndent: reIndent,
   toHTML: toHTML,
-  escape: escape
+  escape: escape,
+  applyHooks: applyHooks
 };

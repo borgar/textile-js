@@ -27,7 +27,9 @@ textile.defaults = {
   // line number offset of the first char of input text, for showOriginalLineNumber option
   'lineOffset': 0,
   // by default, don't set a special CSS class name to each HTML element mapped to an original line number
-  'cssClassOriginalLineNumber': ''
+  'cssClassOriginalLineNumber': '',
+  // functions to apply to each JsonML node before rendering to HTML
+  'hooks': []
 };
 textile.setOptions = textile.setoptions = function ( opt ) {
   merge( textile.defaults, opt );

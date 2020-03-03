@@ -4,7 +4,8 @@
 const builder = require( '../builder' );
 const ribbon = require( '../ribbon' );
 const re = require( '../re' );
-const fixLinks = require( '../fixlinks' );
+const fixLink = require( '../fixlinks' );
+const jsonml = require( '../jsonml' );
 
 const { parseHtml, tokenize, parseHtmlAttr, singletons, testComment, testOpenTagBlock } = require( '../html' );
 
@@ -369,7 +370,12 @@ function parseFlow ( src, options, lineOffset ) {
     src.advance( m[0] );
   }
 
-  return linkRefs ? fixLinks( list.get(), linkRefs ) : list.get();
+  let hooks = linkRefs ? [ [fixLink, linkRefs] ] : [];
+  if ( options.hooks && Array.isArray( options.hooks ) ) {
+    hooks = hooks.concat( options.hooks );
+  }
+  return jsonml.applyHooks( list.get(), hooks );
+  // return linkRefs ? fixLinks( list.get(), linkRefs ) : list.get();
 }
 
 exports.parseFlow = parseFlow;
