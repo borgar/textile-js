@@ -6,7 +6,7 @@
 */
 
 const merge = require( './merge' );
-const { toHTML } = require( './jsonml' );
+const jsonmlUtils = require( './jsonml' );
 const { parseFlow } = require( './textile/flow' );
 const { parseHtml } = require( './html' );
 
@@ -14,7 +14,7 @@ function textile ( txt, opt ) {
   // get a throw-away copy of options
   opt = merge( merge({}, textile.defaults ), opt || {});
   // run the converter
-  return parseFlow( txt, opt, opt.lineOffset ).map( toHTML ).join( '' );
+  return parseFlow( txt, opt, opt.lineOffset ).map( jsonmlUtils.toHTML ).join( '' );
 };
 module.exports = textile;
 
@@ -49,4 +49,6 @@ textile.jsonml = function ( txt, opt ) {
   // parse and return tree
   return [ 'html' ].concat( textile.tokenize( txt, opt ) );
 };
-textile.serialize = toHTML;
+textile.serialize = jsonmlUtils.toHTML;
+
+textile.jsonmlUtils = jsonmlUtils;
