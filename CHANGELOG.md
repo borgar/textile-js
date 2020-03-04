@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - [DOC] activate live web editor
 - [DOC] describe new features on our repository
-* [LIBRARY] add a configurable hook, to modify JsonML nodes before rendering to HTML.
+- [LIBRARY] add a configurable hook, to modify JsonML nodes before rendering to HTML.
+- [LIBRARY] add some JsonML tools functions, under the exported `jsonmlUtils` property.
 
 
 ## [2.0.103] - 20200227

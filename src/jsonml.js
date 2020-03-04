@@ -96,9 +96,38 @@ function applyHooks ( ml, hooks = [] ) {
   return ml;
 }
 
+function isNode ( ml ) {
+  return Array.isArray( ml ) && typeof ml[0] === 'string';
+};
+
+function isAttributes ( mlPart ) {
+  return typeof mlPart === 'object' && !Array.isArray( mlPart );
+};
+
+function hasAttributes ( ml ) {
+  if ( !isNode( ml ) ) {
+    throw new Error( 'Not a jsonML node' );
+  }
+
+  return isAttributes( ml[1] );
+};
+
+function addAttributes ( ml, newAttr ) {
+  if ( hasAttributes( ml ) ) {
+    return Object.assign( ml[1], newAttr );
+  }
+  else {
+    const attr = Object.assign({}, newAttr );
+    ml.splice( 1, 0, attr );
+
+    return attr;
+  }
+};
+
 module.exports = {
   reIndent: reIndent,
   toHTML: toHTML,
   escape: escape,
-  applyHooks: applyHooks
+  applyHooks: applyHooks,
+  addAttributes: addAttributes
 };
