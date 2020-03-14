@@ -226,8 +226,13 @@ function parseFlow ( src, options, lineOffset ) {
 
     // HTML comment
     if ( ( m = testComment( src ) ) ) {
+      const elm = [ '!' ];
+      if ( options.showOriginalLineNumber ) {
+        elm.push( addLineNumber({}, options, charPosToLine, 0, src.getSlot() ) );
+      }
+      elm.push( m[1] );
+      list.add( elm );
       src.advance( m[0] + ( /(?:\s*\n+)+/.exec( src ) || [] )[0] );
-      list.add( [ '!', m[1] ] );
       continue;
     }
 
