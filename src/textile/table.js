@@ -171,7 +171,7 @@ function parseTable ( src, options, charOffset, charPosToLine ) {
         }
 
         const mx = /^(==.*?==|[^|])*/.exec( inner );
-        cell = cell.concat( parsePhrase( mx[0], options ) );
+        cell = cell.concat( parsePhrase( mx[0], options, charPosToLine ) );
         row.push( '\n\t\t\t', cell );
         more = inner.valueOf().charAt( mx[0].length ) === '|';
         inner.advance( mx[0].length + 1 );
