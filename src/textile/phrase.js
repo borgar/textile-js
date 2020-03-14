@@ -4,7 +4,7 @@ const ribbon = require( '../ribbon' );
 const builder = require( '../builder' );
 const re = require( '../re' );
 
-const { parseAttr } = require( './attr' );
+const { parseAttr, addLineNumber } = require( './attr' );
 const { parseGlyph } = require( './glyph' );
 const { parseHtml, parseHtmlAttr, tokenize, singletons, testComment, testOpenTag } = require( '../html' );
 
@@ -37,7 +37,7 @@ const reLinkFenced = /^\["([^\n]+?)":((?:\[[a-z0-9]*\]|[^\]])+)\]/;
 const reLinkTitle = /\s*\(((?:\([^()]*\)|[^()])+)\)$/;
 const reFootnote = /^\[(\d+)(!?)\]/;
 
-function parsePhrase ( src, options ) {
+function parsePhrase ( src, options, charPosToLine ) {
   src = ribbon( src );
   const list = builder();
   let m;
@@ -110,7 +110,7 @@ function parsePhrase ( src, options ) {
           list.add( [ phraseType, m[1] ] );
         }
         else {
-          list.add( [ phraseType, pba ].concat( parsePhrase( m[1], options ) ) );
+          list.add( [ phraseType, pba ].concat( parsePhrase( m[1], options, charPosToLine ) ) );
         }
         continue;
       }
@@ -138,8 +138,13 @@ function parsePhrase ( src, options ) {
 
     // html comment
     if ( ( m = testComment( src ) ) ) {
+      const elm = [ '!' ];
+      if ( options.showOriginalLineNumber ) {
+        elm.push( addLineNumber({}, options, charPosToLine, 0, src.getSlot() ) );
+      }
+      elm.push( m[1] );
+      list.add( elm );
       src.advance( m[0] );
-      list.add( [ '!', m[1] ] );
       continue;
     }
     // html tag
@@ -170,7 +175,7 @@ function parsePhrase ( src, options ) {
             continue;
           }
           else {
-            element = element.concat( parsePhrase( m[1], options ) );
+            element = element.concat( parsePhrase( m[1], options, charPosToLine ) );
           }
           list.add( element );
           continue;
@@ -221,7 +226,7 @@ function parsePhrase ( src, options ) {
       }
       pba.href = m[2];
       if ( title ) { pba.title = title[1]; }
-      list.add( [ 'a', pba ].concat( parsePhrase( inner.replace( /^(\.?\s*)/, '' ), options ) ) );
+      list.add( [ 'a', pba ].concat( parsePhrase( inner.replace( /^(\.?\s*)/, '' ), options, charPosToLine ) ) );
       continue;
     }
 

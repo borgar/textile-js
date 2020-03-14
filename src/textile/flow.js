@@ -64,19 +64,19 @@ function extend ( target, ...args ) {
 }
 
 
-function paragraph ( s, tag, pba, linebreak, options ) {
+function paragraph ( s, tag, pba, linebreak, options, charPosToLine ) {
   tag = tag || 'p';
   let out = [];
   s.split( /(?:\r?\n){2,}/ ).forEach( function ( bit, i ) {
     if ( tag === 'p' && /^\s/.test( bit ) ) {
       // no-paragraphs
       bit = bit.replace( /\r?\n[\t ]/g, ' ' ).trim();
-      out = out.concat( parsePhrase( bit, options ) );
+      out = out.concat( parsePhrase( bit, options, charPosToLine ) );
     }
     else {
       if ( linebreak && i ) { out.push( linebreak ); }
-      out.push( pba ? [ tag, pba ].concat( parsePhrase( bit, options ) )
-        : [ tag ].concat( parsePhrase( bit, options ) ) );
+      out.push( pba ? [ tag, pba ].concat( parsePhrase( bit, options, charPosToLine ) )
+        : [ tag ].concat( parsePhrase( bit, options, charPosToLine ) ) );
     }
   });
   return out;
@@ -212,10 +212,10 @@ function parseFlow ( src, options, lineOffset ) {
           pba.class = ( pba['class'] ? pba['class'] + ' ' : '' ) + 'footnote';
           pba.id = 'fn' + fnid;
           list.add( [ 'p', pba, [ 'a', { 'href': '#fnr' + fnid }, [ 'sup', fnid ] ], ' ' ]
-            .concat( parsePhrase( m[1], options ) ) );
+            .concat( parsePhrase( m[1], options, charPosToLine ) ) );
         }
         else { // heading | paragraph
-          list.merge( paragraph( m[1], blockType, pba, '\n', options ) );
+          list.merge( paragraph( m[1], blockType, pba, '\n', options, charPosToLine ) );
         }
         continue;
       }
@@ -321,7 +321,7 @@ function parseFlow ( src, options, lineOffset ) {
                 const isBlock = /\n\r?\n/.test( innerHTML ) || tag === 'ol' || tag === 'ul';
                 const innerElm = isBlock
                   ? parseFlow( innerHTML, options )
-                  : parsePhrase( innerHTML, extend({}, options, { breaks: false }) );
+                  : parsePhrase( innerHTML, extend({}, options, { breaks: false }), charPosToLine );
                 if ( isBlock || /^\n/.test( inner ) ) {
                   elm.push( '\n' );
                 }
@@ -371,7 +371,7 @@ function parseFlow ( src, options, lineOffset ) {
 
     // paragraph
     m = reBlockNormal.exec( src );
-    list.merge( paragraph( m[1], 'p', addLineNumber({}, options, charPosToLine, 0, src.getSlot() ), '\n', options ) );
+    list.merge( paragraph( m[1], 'p', addLineNumber({}, options, charPosToLine, 0, src.getSlot() ), '\n', options, charPosToLine ) );
     src.advance( m[0] );
   }
 
