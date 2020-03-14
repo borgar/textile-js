@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 ### Changed
-- [LIBRARY] Keep original line number in the JsonML tree for HTML comments.
+- [LIBRARY] Keep original line number in the JsonML tree for HTML comments. Textile comments will stay ignored, to not change actual behavior.
 
 
 ## [2.0.104] - 20200304
