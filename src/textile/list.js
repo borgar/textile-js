@@ -27,7 +27,7 @@ function parseList ( src, options, charOffset, charPosToLine ) {
   if ( options.showOriginalLineNumber ) {
     const removedSrc = src.match( /(^|\r?\n)[\t ]+/ );
     if ( removedSrc && removedSrc[0] ) {
-      charOffset++;
+      charOffset += removedSrc[0].length;
     }
   }
   src = ribbon( src.replace( /(^|\r?\n)[\t ]+/, '$1' ) );
@@ -128,6 +128,7 @@ function parseList ( src, options, charOffset, charPosToLine ) {
     Array.prototype.push.apply( par.li, parsePhrase( m[2].trim(), options, charPosToLine ) );
 
     src.advance( m[0] );
+//    console.log( item, charPosToLine[ charOffset + src.getPos() ], ':', pba, charOffset );
     currIndex[destLevel] = ( currIndex[destLevel] || 0 ) + 1;
   }
 
