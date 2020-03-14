@@ -128,7 +128,6 @@ function parseList ( src, options, charOffset, charPosToLine ) {
     Array.prototype.push.apply( par.li, parsePhrase( m[2].trim(), options, charPosToLine ) );
 
     src.advance( m[0] );
-//    console.log( item, charPosToLine[ charOffset + src.getPos() ], ':', pba, charOffset );
     currIndex[destLevel] = ( currIndex[destLevel] || 0 ) + 1;
   }
 
