@@ -429,6 +429,6 @@ test( 'LI block, should number short lines correctly', function ( t ) {
 ** c
 * d`;
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
-    "<ul>\n\t<li data-line=\"1\" class=\"code-line\">aaa<br />\nbbb\n\t<ul data-line=\"3\" class=\"code-line\">\n\t\t<li>c</li>\n\t</ul></li>\n\t<li data-line=\"4\" class=\"code-line\">d</li>\n</ul>" );
+    "<ul>\n\t<li data-line=\"1\" class=\"code-line\">aaa<br />\nbbb\n\t<ul>\n\t\t<li data-line=\"3\" class=\"code-line\">c</li>\n\t</ul></li>\n\t<li data-line=\"4\" class=\"code-line\">d</li>\n</ul>" );
   t.end();
 });

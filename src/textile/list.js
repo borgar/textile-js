@@ -64,7 +64,7 @@ function parseList ( src, options, charOffset, charPosToLine ) {
       pba = pba[1];
     }
 
-    pba = addLineNumber( pba, options, charPosToLine, charOffset, src.getPos() );
+    const pbaLineNumber = addLineNumber({}, options, charPosToLine, charOffset, src.getPos() );
 
     // list control
     if ( /^\.\s*$/.test( m[2] ) ) {
@@ -86,7 +86,8 @@ function parseList ( src, options, charOffset, charPosToLine ) {
         ul: lst,
         li: newLi,
         // count attributes's found per list
-        att: 0
+        att: 0,
+        pbaLineNumber: pbaLineNumber
       });
       currIndex[ stack.length ] = 1;
     }
@@ -122,8 +123,11 @@ function parseList ( src, options, charOffset, charPosToLine ) {
       par.li = item;
     }
     if ( pba ) {
-      par.li.push( pba );
+      par.li.push( merge( pba, pbaLineNumber ) );
       par.att++;
+    }
+    else {
+      par.li.push( pbaLineNumber );
     }
     Array.prototype.push.apply( par.li, parsePhrase( m[2].trim(), options, charPosToLine ) );
 
@@ -140,6 +144,13 @@ function parseList ( src, options, charOffset, charPosToLine ) {
     // lists have a predictable structure - move pba from listitem to list
     if ( s.att === 1 && !s.ul[3][1].substr ) {
       merge( s.ul[1], s.ul[3].splice( 1, 1 )[0] );
+    }
+    // line number should stay on listitem
+    if ( typeof ( s.ul[3][1] ) === 'object' ) {
+      merge( s.ul[3][1], s.pbaLineNumber );
+    }
+    else {
+      s.ul[3].splice( 1, 0, s.pbaLineNumber );
     }
   }
 
