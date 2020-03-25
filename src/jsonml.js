@@ -81,15 +81,17 @@ function toHTML ( jsonml ) {
   }
 }
 
-function applyHooks ( ml, hooks = [] ) {
+function applyHooks ( ml, hooks = [], level = undefined ) {
   if ( Array.isArray( ml ) && Array.isArray( hooks ) && hooks.length ) {
+    let realLevel = +level || 0;
     for ( let i = 0, l = hooks.length; i < l; i++ ) {
       const hook = hooks[i];
-      hook[0]( ml, hook[1] );
+      hook[0]( ml, hook[1], realLevel );
     }
+    realLevel++;
     for ( let i = 0, l = ml.length; i < l; i++ ) {
       if ( Array.isArray( ml[i] ) ) {
-        applyHooks( ml[i], hooks );
+        applyHooks( ml[i], hooks, realLevel );
       }
     }
   }

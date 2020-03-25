@@ -38,7 +38,7 @@ Works only when @showOriginalLineNumber@ option is enabled.|
 |lineOffset|@integer@|0|Line number offset of the first char in input text, for @showOriginalLineNumber@ option.|
 |showOriginalLineNumber|@boolean@|false|Maps the elements of HTML output, with the line numbers of input text.
 An HTML attribute @data-line@ is added to the HTML block elements. It's value is the line number in input text, of the first char of text inside that HTML block.|
-|hooks|@[ function(jsonml :any[], param? :any) :any[], param? :any ]@|@[]@|Array of function (and optional initial parameter), applied in the order of the array to each JsonML node before rendering to HTML.
+|hooks|@[ function(jsonml :any[], param :any | undefined, Nodelevel :number) :any[], param? :any ]@|@[]@|Array of function (and optional initial parameter), applied in the order of the array to each JsonML node before rendering to HTML.
 Each function returns the modified JsonML tree.|
 
 h2. Usage
