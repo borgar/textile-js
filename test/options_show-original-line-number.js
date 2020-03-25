@@ -409,6 +409,13 @@ test( 'HR, showing original line number', function ( t ) {
   t.end();
 });
 
+test( 'RULER, showing original line number', function ( t ) {
+  let tx = "----\n\n"; // 2 new lines are necessary ?
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<hr data-line="1" class="code-line" />' );
+  t.end();
+});
+
 test( 'HTML comment, have original line number in JsonML tree', function ( t ) {
   let tx = '<!-- A -->';
   t.deepEqual( textile.tokenize( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),

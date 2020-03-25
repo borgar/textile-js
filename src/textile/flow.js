@@ -343,8 +343,12 @@ function parseFlow ( src, options, lineOffset ) {
 
     // ruler
     if ( ( m = reRuler.exec( src ) ) ) {
+      const elm = [ 'hr' ];
+      if ( options.showOriginalLineNumber ) {
+        elm.push( addLineNumber({}, options, charPosToLine, 0, src.getSlot() ) );
+      }
       src.advance( m[0] );
-      list.add( [ 'hr' ] );
+      list.add( elm );
       continue;
     }
 

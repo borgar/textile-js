@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - [LIBRARY] add a new parameters to configurable hook functions of applyHook, to determine the current node level to the root node.
 
+### Fixed
+- [LIBRARY] add a original line number to rulers.
+
 
 ## [2.0.105] - 20200314
 ### Changed
