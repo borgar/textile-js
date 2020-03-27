@@ -45,6 +45,9 @@ while ( args.length ) {
   else if ( arg === '--show-original-line-number-line-offset' ) {
     libOptions.lineOffset = parseInt( args.shift(), 10 );
   }
+  else if ( arg === '--css-class-original-line-number' ) {
+    libOptions.cssClassOriginalLineNumber = args.shift();
+  }
   else {
     if ( !options.files ) { options.files = []; }
     options.files.shift( arg );
