@@ -64,19 +64,20 @@ function extend ( target, ...args ) {
 }
 
 
-function paragraph ( s, tag, pba, linebreak, options, charPosToLine ) {
+function paragraph ( s, tag, pba, linebreak, options, charPosToLine, charOffset ) {
   tag = tag || 'p';
   let out = [];
+  // FIXME : this may need some work for correct offset computation
   s.split( /(?:\r?\n){2,}/ ).forEach( function ( bit, i ) {
     if ( tag === 'p' && /^\s/.test( bit ) ) {
       // no-paragraphs
       bit = bit.replace( /\r?\n[\t ]/g, ' ' ).trim();
-      out = out.concat( parsePhrase( bit, options, charPosToLine ) );
+      out = out.concat( parsePhrase( bit, options, charPosToLine, charOffset ) );
     }
     else {
       if ( linebreak && i ) { out.push( linebreak ); }
-      out.push( pba ? [ tag, pba ].concat( parsePhrase( bit, options, charPosToLine ) )
-        : [ tag ].concat( parsePhrase( bit, options, charPosToLine ) ) );
+      out.push( pba ? [ tag, pba ].concat( parsePhrase( bit, options, charPosToLine, charOffset ) )
+        : [ tag ].concat( parsePhrase( bit, options, charPosToLine, charOffset ) ) );
     }
   });
   return out;
@@ -186,7 +187,7 @@ function parseFlow ( src, options, lineOffset ) {
             inner = inner.slice( m[0].length );
           }
           // RedCloth adds all attr to both: this is bad because it produces duplicate IDs
-          const par = paragraph( inner, 'p', copyAttr( pba, { 'cite': 1, 'id': 1 }), '\n', options );
+          const par = paragraph( inner, 'p', copyAttr( pba, { 'cite': 1, 'id': 1 }), '\n', options, src.getSlot() );
           list.add( [ 'blockquote', pba, '\n' ].concat( par ).concat( [ '\n' ] ) );
         }
         else if ( blockType === 'bc' ) {
@@ -212,10 +213,10 @@ function parseFlow ( src, options, lineOffset ) {
           pba.class = ( pba['class'] ? pba['class'] + ' ' : '' ) + 'footnote';
           pba.id = 'fn' + fnid;
           list.add( [ 'p', pba, [ 'a', { 'href': '#fnr' + fnid }, [ 'sup', fnid ] ], ' ' ]
-            .concat( parsePhrase( m[1], options, charPosToLine ) ) );
+            .concat( parsePhrase( m[1], options, charPosToLine, src.getSlot() ) ) );
         }
         else { // heading | paragraph
-          list.merge( paragraph( m[1], blockType, pba, '\n', options, charPosToLine ) );
+          list.merge( paragraph( m[1], blockType, pba, '\n', options, charPosToLine, src.getSlot() ) );
         }
         continue;
       }
@@ -321,7 +322,7 @@ function parseFlow ( src, options, lineOffset ) {
                 const isBlock = /\n\r?\n/.test( innerHTML ) || tag === 'ol' || tag === 'ul';
                 const innerElm = isBlock
                   ? parseFlow( innerHTML, options )
-                  : parsePhrase( innerHTML, extend({}, options, { breaks: false }), charPosToLine );
+                  : parsePhrase( innerHTML, extend({}, options, { breaks: false }), charPosToLine, srcSlot );
                 if ( isBlock || /^\n/.test( inner ) ) {
                   elm.push( '\n' );
                 }
@@ -375,7 +376,7 @@ function parseFlow ( src, options, lineOffset ) {
 
     // paragraph
     m = reBlockNormal.exec( src );
-    list.merge( paragraph( m[1], 'p', addLineNumber({}, options, charPosToLine, 0, src.getSlot() ), '\n', options, charPosToLine ) );
+    list.merge( paragraph( m[1], 'p', addLineNumber({}, options, charPosToLine, 0, src.getSlot() ), '\n', options, charPosToLine, src.getSlot() ) );
     src.advance( m[0] );
   }
 

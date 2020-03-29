@@ -129,7 +129,7 @@ function parseList ( src, options, charOffset, charPosToLine ) {
     else {
       par.li.push( pbaLineNumber );
     }
-    Array.prototype.push.apply( par.li, parsePhrase( m[2].trim(), options, charPosToLine ) );
+    Array.prototype.push.apply( par.li, parsePhrase( m[2].trim(), options, charPosToLine, charOffset ) );
 
     src.advance( m[0] );
     currIndex[destLevel] = ( currIndex[destLevel] || 0 ) + 1;

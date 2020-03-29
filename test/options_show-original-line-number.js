@@ -109,7 +109,7 @@ With a second line.</p>
 <p style="text-align:center" data-line="40">centered aligned paragraph</p>
 <p style="text-align:justify" data-line="42">justified text paragraph</p>
 <p data-line="44"><a href="url">linktext</a></p>
-<p data-line="46"><img src="imageurl" alt="" /></p>
+<p data-line="46"><img src="imageurl" data-line="46" alt="" /></p>
 <p data-line="48"><acronym title="Abbreviation"><span class="caps">ABBR</span></acronym></p>` );
   t.end();
 });
@@ -286,7 +286,7 @@ With a second line.</p>
 <p style="text-align:center" data-line="40" class="code-line">centered aligned paragraph</p>
 <p style="text-align:justify" data-line="42" class="code-line">justified text paragraph</p>
 <p data-line="44" class="code-line"><a href="url">linktext</a></p>
-<p data-line="46" class="code-line"><img src="imageurl" alt="" /></p>
+<p data-line="46" class="code-line"><img src="imageurl" data-line="46" class="code-line" alt="" /></p>
 <p data-line="48" class="code-line"><acronym title="Abbreviation"><span class="caps">ABBR</span></acronym></p>` );
   t.end();
 });
@@ -430,5 +430,27 @@ test( 'LI block, should number short lines correctly', function ( t ) {
 * d`;
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
     "<ul>\n\t<li data-line=\"1\" class=\"code-line\">aaa<br />\nbbb\n\t<ul>\n\t\t<li data-line=\"3\" class=\"code-line\">c</li>\n\t</ul></li>\n\t<li data-line=\"4\" class=\"code-line\">d</li>\n</ul>" );
+  t.end();
+});
+
+test( 'HTML block-level elements inside paragraph, should be line-numbered correctly', function ( t ) {
+  let tx = `a
+<pre>
+code
+</pre>`;
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<p data-line="1" class="code-line">a<br />\n<pre data-line="2" class="code-line"><br />\ncode<br />\n</pre></p>' );
+  t.end();
+});
+
+test( 'HTML block-level elements inside table cell, should be line-numbered correctly', function ( t ) {
+  let tx = `|a|(class). b
+c
+<pre>
+code
+</pre>
+d|`;
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<table>\n\t<tr data-line="1" class="code-line">\n\t\t<td>a</td>\n\t\t<td class="class">b<br />\nc<br />\n<pre data-line="3" class="code-line"><br />\ncode<br />\n</pre><br />\nd</td>\n\t</tr>\n</table>' );
   t.end();
 });

@@ -3,6 +3,7 @@
 const ribbon = require( '../ribbon' );
 const builder = require( '../builder' );
 const re = require( '../re' );
+const mergeConcatClassname = require( '../mergeConcatClassname' );
 
 const { parseAttr, addLineNumber } = require( './attr' );
 const { parseGlyph } = require( './glyph' );
@@ -37,7 +38,7 @@ const reLinkFenced = /^\["([^\n]+?)":((?:\[[a-z0-9]*\]|[^\]])+)\]/;
 const reLinkTitle = /\s*\(((?:\([^()]*\)|[^()])+)\)$/;
 const reFootnote = /^\[(\d+)(!?)\]/;
 
-function parsePhrase ( src, options, charPosToLine ) {
+function parsePhrase ( src, options, charPosToLine, charOffset ) {
   src = ribbon( src );
   const list = builder();
   let m;
@@ -69,6 +70,8 @@ function parsePhrase ( src, options, charPosToLine ) {
       list.add( m[1] );
       continue;
     }
+
+    const pbaLineNumber = options.showOriginalLineNumber ? addLineNumber({}, options, charPosToLine, charOffset, src.getPos() ) : undefined;
 
     // lookbehind => /([\s>.,"'?!;:])$/
     const behind = src.lookbehind( 1 );
@@ -104,13 +107,15 @@ function parsePhrase ( src, options, charPosToLine ) {
         mEnd = '(?=$|[\\s.,"\'!?;:()«»„“”‚‘’<>])';
       }
       const rx = re.compile( `${ mMid }(${ re.escape( tok ) })${ mEnd }` );
+      // no line number here: they are not block level elements
       if ( ( m = rx.exec( src ) ) && m[1] ) {
+        const srcPos = src.getPos();
         src.advance( m[0] );
         if ( code ) {
           list.add( [ phraseType, m[1] ] );
         }
         else {
-          list.add( [ phraseType, pba ].concat( parsePhrase( m[1], options, charPosToLine ) ) );
+          list.add( [ phraseType, pba ].concat( parsePhrase( m[1], options, charPosToLine, charOffset + srcPos ) ) );
         }
         continue;
       }
@@ -124,7 +129,7 @@ function parsePhrase ( src, options, charPosToLine ) {
 
       pba = m[1] && parseAttr( m[1], 'img' );
       const attr = pba ? pba[1] : { 'src': '' };
-      let img = [ 'img', attr ];
+      let img = [ 'img', mergeConcatClassname( attr, pbaLineNumber ) ];
       attr.src = m[2];
       attr.alt = m[3] ? ( attr.title = m[3] ) : '';
 
@@ -140,7 +145,7 @@ function parsePhrase ( src, options, charPosToLine ) {
     if ( ( m = testComment( src ) ) ) {
       const elm = [ '!' ];
       if ( options.showOriginalLineNumber ) {
-        elm.push( addLineNumber({}, options, charPosToLine, 0, src.getSlot() ) );
+        elm.push( addLineNumber({}, options, charPosToLine, charOffset, src.getSlot() ) );
       }
       elm.push( m[1] );
       list.add( elm );
@@ -151,11 +156,15 @@ function parsePhrase ( src, options, charPosToLine ) {
     // TODO: this seems to have a lot of overlap with block tags... DRY?
     if ( ( m = testOpenTag( src ) ) ) {
       src.advance( m[0] );
+      const srcPos = src.getPos();
       const tag = m[1];
       const single = m[3] || m[1] in singletons;
       let element = [ tag ];
       if ( m[2] ) {
-        element.push( parseHtmlAttr( m[2] ) );
+        element.push( mergeConcatClassname( parseHtmlAttr( m[2] ) || {}, pbaLineNumber ) );
+      }
+      else if ( pbaLineNumber ) {
+        element.push( pbaLineNumber );
       }
       if ( single ) { // single tag
         list.add( element ).add( src.skipWS() );
@@ -175,7 +184,7 @@ function parsePhrase ( src, options, charPosToLine ) {
             continue;
           }
           else {
-            element = element.concat( parsePhrase( m[1], options, charPosToLine ) );
+            element = element.concat( parsePhrase( m[1], options, charPosToLine, charOffset + srcPos ) );
           }
           list.add( element );
           continue;
@@ -226,7 +235,8 @@ function parsePhrase ( src, options, charPosToLine ) {
       }
       pba.href = m[2];
       if ( title ) { pba.title = title[1]; }
-      list.add( [ 'a', pba ].concat( parsePhrase( inner.replace( /^(\.?\s*)/, '' ), options, charPosToLine ) ) );
+      // FIXME : small shift, because parsePhrase is called with an inexact offset
+      list.add( [ 'a', pba ].concat( parsePhrase( inner.replace( /^(\.?\s*)/, '' ), options, charPosToLine, charOffset + src.getSlot() ) ) );
       continue;
     }
 

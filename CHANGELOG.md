@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [UNRELEASED]
 ### Added
 - [LIBRARY] add a new parameters to configurable hook functions of applyHook, to determine the current node level to the root node.
+- [BINARY] Add `--css-class-original-line-number` option.
 
 ### Fixed
 - [LIBRARY] add a original line number to rulers.
 - [LIBRARY] correct line numbering on nested list items.
+- [LIBRARY] correct line numbering of block-level elements inside paragraphs and table's cells.
 
 
 ## [2.0.105] - 20200314

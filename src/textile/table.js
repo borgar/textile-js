@@ -13,7 +13,7 @@ re.pattern.txattr = txattr;
 
 const reTable = re.compile( /^((?:table[:txattr:]\.(?:\s(.+?))\s*\n)?(?:(?:[:txattr:]\.[^\n\S]*)?\|.*?\|[^\n\S]*(?:\n|$))+)([^\n\S]*\n)?/, 's' );
 const reHead = /^table(_?)([^\n]*?)\.(?:[ \t](.+?))?\s*\n/;
-const reRow = re.compile( /^(?:\|([~^-][:txattr:])\.\s*\n)?([:txattr:]\.[^\n\S]*)?\|(.*?)\|[^\n\S]*(\n|$)/, 's' );
+const reRowCapture = re.compile( /^(\|([~^-][:txattr:])\.\s*\n)?([:txattr:]\.[^\n\S]*)?(\|)(.*?)\|[^\n\S]*(\n|$)/, 's' );
 const reCaption = /^\|=([^\n+]*)\n/;
 const reColgroup = /^\|:([^\n+]*)\|[\r\t ]*\n/;
 const reRowgroup = /^\|([\^\-~])([^\n+]*)\.[ \t\r]*\n/;
@@ -127,12 +127,14 @@ function parseTable ( src, options, charOffset, charPosToLine ) {
       extended++;
     }
     // row
-    else if ( ( m = reRow.exec( src ) ) ) {
+    else if ( ( m = reRowCapture.exec( src ) ) ) {
+      const localCharOffset = 0 + ( m[1] ? m[1].length : 0 ) + ( m[2] ? m[2].length : 0 ) + ( m[3] ? m[3].length : 0 ) + ( m[4] ? m[4].length : 0 );
+
       if ( !tCurr ) { setRowGroup( 'tbody' ); }
 
       row = [ 'tr' ];
 
-      if ( m[2] && ( pba = parseAttr( m[2], 'tr' ) ) ) {
+      if ( m[3] && ( pba = parseAttr( m[3], 'tr' ) ) ) {
         // FIXME: requires "\.\s?" -- else what ?
         row.push( addLineNumber( pba[1], options, charPosToLine, charOffset, src.getPos() ) );
       }
@@ -141,8 +143,7 @@ function parseTable ( src, options, charOffset, charPosToLine ) {
       }
 
       tCurr.push( '\n\t\t', row );
-      inner = ribbon( m[3] );
-
+      inner = ribbon( m[5] );
       do {
         inner.save();
 
@@ -171,7 +172,7 @@ function parseTable ( src, options, charOffset, charPosToLine ) {
         }
 
         const mx = /^(==.*?==|[^|])*/.exec( inner );
-        cell = cell.concat( parsePhrase( mx[0], options, charPosToLine ) );
+        cell = cell.concat( parsePhrase( mx[0], options, charPosToLine, charOffset + src.getPos() + localCharOffset + inner.getPos() ) );
         row.push( '\n\t\t\t', cell );
         more = inner.valueOf().charAt( mx[0].length ) === '|';
         inner.advance( mx[0].length + 1 );
