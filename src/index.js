@@ -14,7 +14,7 @@ function textile ( txt, opt ) {
   // get a throw-away copy of options
   opt = merge( merge({}, textile.defaults ), opt || {});
   // run the converter
-  return parseFlow( txt, opt, opt.lineOffset ).map( jsonmlUtils.toHTML ).join( '' );
+  return parseFlow( txt, opt, opt.lineOffset ).map( ( value ) => jsonmlUtils.toHTML( value, opt.render ) ).join( '' );
 };
 module.exports = textile;
 
@@ -29,7 +29,9 @@ textile.defaults = {
   // by default, don't set a special CSS class name to each HTML element mapped to an original line number
   'cssClassOriginalLineNumber': '',
   // functions to apply to each JsonML node before rendering to HTML
-  'hooks': []
+  'hooks': [],
+  // function called where a JsonML node is rendered to HTML
+  'render': {}
 };
 textile.setOptions = textile.setoptions = function ( opt ) {
   merge( textile.defaults, opt );
@@ -49,6 +51,11 @@ textile.jsonml = function ( txt, opt ) {
   // parse and return tree
   return [ 'html' ].concat( textile.tokenize( txt, opt ) );
 };
-textile.serialize = jsonmlUtils.toHTML;
+textile.serialize = function ( jsonml, opt ) {
+  // get a throw-away copy of options
+  opt = merge( merge({}, textile.defaults ), opt || {});
+  // serialize
+  return jsonmlUtils.toHTML( jsonml, opt.render );
+};
 
 textile.jsonmlUtils = jsonmlUtils;

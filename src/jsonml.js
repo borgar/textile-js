@@ -42,7 +42,7 @@ function escape ( text, escapeQuotes ) {
     .replace( /'/g, escapeQuotes ? '&#39;' : "'" );
 }
 
-function toHTML ( jsonml ) {
+function toHTML ( jsonml, render ) {
   jsonml = jsonml.concat();
 
   // basic case
@@ -60,7 +60,7 @@ function toHTML ( jsonml ) {
   }
 
   while ( jsonml.length ) {
-    content.push( toHTML( jsonml.shift() ) );
+    content.push( toHTML( jsonml.shift(), render ) );
   }
 
   for ( const a in attributes ) {
@@ -69,15 +69,16 @@ function toHTML ( jsonml ) {
       : ` ${ a }="${ escape( String( attributes[a] ), true ) }"`;
   }
 
+  const realContent = ( render && render.content ) ? render.content( tag, attributes, content.join( '' ) ) : content.join( '' );
   // be careful about adding whitespace here for inline elements
   if ( tag === '!' ) {
-    return `<!--${ content.join( '' ) }-->`;
+    return `<!--${ realContent }-->`;
   }
   else if ( tag in singletons || ( tag.indexOf( ':' ) > -1 && !content.length ) ) {
     return `<${ tag }${ tagAttrs } />`;
   }
   else {
-    return `<${ tag }${ tagAttrs }>${ content.join( '' ) }</${ tag }>`;
+    return `<${ tag }${ tagAttrs }>${ realContent }</${ tag }>`;
   }
 }
 

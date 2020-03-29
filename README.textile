@@ -45,6 +45,14 @@ Works only when @showOriginalLineNumber@ option is enabled.|
 ]</code></pre>|@[]@|Array of function (and optional initial parameter), applied in the order of the array to each JsonML node before rendering to HTML.
 The function receives a JsonML node (JsonML sub-tree), and returns it with modifications.|
 |lineOffset|@integer@|@0@|Line number offset of the first char in input text, for @showOriginalLineNumber@ option.|
+|render|<pre><code>{
+    content: function(
+        tag: string,
+        attributes: object OR undefined,
+        content: string
+    ) :string
+}</code></pre>|@{}@|Rendering functions, called with the tagName, the attributes object, and the content string :
+@content@ is called to replace the content string of a tag.|
 |showOriginalLineNumber|@boolean@|@false@|Maps the elements of HTML output, with the line numbers of input text.
 An HTML attribute @data-line@ is added to the HTML block elements = the line number in input text, of the first char of text inside that HTML block.
 For tags inlined inside textile source, a HTML attribute @data-line-end@ is added too = the line number in input text, of the last char of the closing tag of that HTML block.|
