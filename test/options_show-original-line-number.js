@@ -397,7 +397,7 @@ test( 'PRE block, showing original line number', function ( t ) {
 test( 'P block, showing original line number', function ( t ) {
   let tx = "<p>\nbq. This is a blockquote.\n</p>";
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
-    '<p data-line="1" class="code-line">\nbq. This is a blockquote.\n</p>' );
+    '<p data-line="1" data-line-end="3" class="code-line">\nbq. This is a blockquote.\n</p>' );
   t.end();
 });
 
@@ -439,7 +439,7 @@ test( 'HTML block-level elements inside paragraph, should be line-numbered corre
 code
 </pre>`;
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
-    '<p data-line="1" class="code-line">a<br />\n<pre data-line="2" class="code-line"><br />\ncode<br />\n</pre></p>' );
+    '<p data-line="1" class="code-line">a<br />\n<pre data-line="2" data-line-end="4" class="code-line"><br />\ncode<br />\n</pre></p>' );
   t.end();
 });
 
@@ -449,7 +449,7 @@ test( 'HTML block-level elements inside no-paragraph, should be line-numbered co
 code
 </pre>`;
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
-    'a<br />\n<pre data-line="2" class="code-line"><br />\ncode<br />\n</pre>' );
+    'a<br />\n<pre data-line="2" data-line-end="4" class="code-line"><br />\ncode<br />\n</pre>' );
   t.end();
 });
 
@@ -461,7 +461,7 @@ code
 </pre>
 d|`;
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
-    '<table>\n\t<tr data-line="1" class="code-line">\n\t\t<td>a</td>\n\t\t<td class="class">b<br />\nc<br />\n<pre data-line="3" class="code-line"><br />\ncode<br />\n</pre><br />\nd</td>\n\t</tr>\n</table>' );
+    '<table>\n\t<tr data-line="1" class="code-line">\n\t\t<td>a</td>\n\t\t<td class="class">b<br />\nc<br />\n<pre data-line="3" data-line-end="5" class="code-line"><br />\ncode<br />\n</pre><br />\nd</td>\n\t</tr>\n</table>' );
   t.end();
 });
 
@@ -469,7 +469,7 @@ test( 'HTML block-level elements inside definition lists, should be line-numbere
   let tx = `- Word 1 := Definition 1.
   <div>Inside</div>`;
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
-    '<dl>\n\t<dt data-line="1" class="code-line">Word 1</dt>\n\t<dd data-line="1" class="code-line">Definition 1.\n <div data-line="2" class="code-line">Inside</div></dd>\n</dl>' );
+    '<dl>\n\t<dt data-line="1" class="code-line">Word 1</dt>\n\t<dd data-line="1" class="code-line">Definition 1.\n <div data-line="2" data-line-end="2" class="code-line">Inside</div></dd>\n</dl>' );
   t.end();
 });
 
@@ -477,7 +477,7 @@ test( 'HTML block-level elements inside multi-line definition lists, should be l
   let tx = `- Word 1 := Definition 1.
   <div>Inside</div>=:`;
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
-    '<dl>\n\t<dt data-line="1" class="code-line">Word 1</dt>\n\t<dd data-line="1" class="code-line"><p data-line="1" class="code-line">Definition 1.\n <div data-line="2" class="code-line">Inside</div></p></dd>\n</dl>' );
+    '<dl>\n\t<dt data-line="1" class="code-line">Word 1</dt>\n\t<dd data-line="1" class="code-line"><p data-line="1" class="code-line">Definition 1.\n <div data-line="2" data-line-end="2" class="code-line">Inside</div></p></dd>\n</dl>' );
   t.end();
 });
 
@@ -486,6 +486,6 @@ test( 'Special HTML block-level elements, should be line-numbered correctly', fu
   <li>Li</li>
 </ul>`;
   t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
-    '<ul data-line="1" class="code-line">\n<li data-line="2" class="code-line">Li</li>\n</ul>' );
+    '<ul data-line="1" data-line-end="3" class="code-line">\n<li data-line="2" data-line-end="2" class="code-line">Li</li>\n</ul>' );
   t.end();
 });

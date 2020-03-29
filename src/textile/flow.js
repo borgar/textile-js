@@ -314,7 +314,7 @@ function parseFlow ( src, options, lineOffset ) {
             if ( /^\s*(\n|$)/.test( src ) ) {
               let elm = [ tag ];
               if ( options.showOriginalLineNumber ) {
-                elm.push( addLineNumber( m[2] ? parseHtmlAttr( m[2] ) : {}, options, charPosToLine, 0, srcSlot ) );
+                elm.push( addLineNumber( m[2] ? parseHtmlAttr( m[2] ) : {}, options, charPosToLine, 0, srcSlot, src.getPos() - 1 ) );
               }
               else {
                 if ( m[2] ) {

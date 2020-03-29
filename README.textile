@@ -46,7 +46,8 @@ Works only when @showOriginalLineNumber@ option is enabled.|
 The function receives a JsonML node (JsonML sub-tree), and returns it with modifications.|
 |lineOffset|@integer@|@0@|Line number offset of the first char in input text, for @showOriginalLineNumber@ option.|
 |showOriginalLineNumber|@boolean@|@false@|Maps the elements of HTML output, with the line numbers of input text.
-An HTML attribute @data-line@ is added to the HTML block elements. It's value is the line number in input text, of the first char of text inside that HTML block.|
+An HTML attribute @data-line@ is added to the HTML block elements = the line number in input text, of the first char of text inside that HTML block.
+For tags inlined inside textile source, a HTML attribute @data-line-end@ is added too = the line number in input text, of the last char of the closing tag of that HTML block.|
 
 h2. Usage
 

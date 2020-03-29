@@ -71,7 +71,7 @@ function parsePhrase ( src, options, charPosToLine, charOffset ) {
       continue;
     }
 
-    const pbaLineNumber = options.showOriginalLineNumber ? addLineNumber({}, options, charPosToLine, charOffset, src.getPos() ) : undefined;
+    const srcSlot = src.getPos();
 
     // lookbehind => /([\s>.,"'?!;:])$/
     const behind = src.lookbehind( 1 );
@@ -129,7 +129,7 @@ function parsePhrase ( src, options, charPosToLine, charOffset ) {
 
       pba = m[1] && parseAttr( m[1], 'img' );
       const attr = pba ? pba[1] : { 'src': '' };
-      let img = [ 'img', mergeConcatClassname( attr, pbaLineNumber ) ];
+      let img = [ 'img', mergeConcatClassname( attr, options.showOriginalLineNumber ? addLineNumber({}, options, charPosToLine, charOffset, srcSlot ) : undefined ) ];
       attr.src = m[2];
       attr.alt = m[3] ? ( attr.title = m[3] ) : '';
 
@@ -160,13 +160,16 @@ function parsePhrase ( src, options, charPosToLine, charOffset ) {
       const tag = m[1];
       const single = m[3] || m[1] in singletons;
       let element = [ tag ];
-      if ( m[2] ) {
-        element.push( mergeConcatClassname( parseHtmlAttr( m[2] ) || {}, pbaLineNumber ) );
-      }
-      else if ( pbaLineNumber ) {
-        element.push( pbaLineNumber );
-      }
+      const attr = m[2] ? parseHtmlAttr( m[2] ) : undefined;
+
       if ( single ) { // single tag
+        const pbaLineNumber = options.showOriginalLineNumber ? addLineNumber({}, options, charPosToLine, charOffset, srcSlot ) : undefined;
+        if ( attr ) {
+          element.push( mergeConcatClassname( attr, pbaLineNumber ) );
+        }
+        else if ( pbaLineNumber ) {
+          element.push( pbaLineNumber );
+        }
         list.add( element ).add( src.skipWS() );
         continue;
       }
@@ -174,6 +177,14 @@ function parsePhrase ( src, options, charPosToLine, charOffset ) {
         // gulp up the rest of this block...
         const reEndTag = re.compile( `^(.*?)(</${ tag }\\s*>)`, 's' );
         if ( ( m = reEndTag.exec( src ) ) ) {
+          const pbaLineNumber = options.showOriginalLineNumber ? addLineNumber({}, options, charPosToLine, charOffset, srcSlot, srcSlot + ( m[0].length > 0 ? m[0].length - 1 : 0 ) ) : undefined;
+          if ( attr ) {
+            element.push( mergeConcatClassname( attr, pbaLineNumber ) );
+          }
+          else if ( pbaLineNumber ) {
+            element.push( pbaLineNumber );
+          }
+
           src.advance( m[0] );
           if ( tag === 'code' ) {
             element.push( m[1] );
