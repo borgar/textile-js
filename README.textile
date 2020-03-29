@@ -32,8 +32,8 @@ bc. textile( textileString [, options] )
 h3. <a name="options" />Options
 
 |*Member*|*Type*|*Default*|*Notes*|
-|break|@boolean@|true|Convert single-line linebreaks to @<br>@.|
-|cssClassOriginalLineNumber|@string@|''|Add this CSS class name, to each elements of HTML output, mapped to a the line numbers of input text.
+|break|@boolean@|@true@|Convert single-line linebreaks to @<br>@.|
+|cssClassOriginalLineNumber|@string@|@''@|Add this CSS class name, to each elements of HTML output, mapped to a the line numbers of input text.
 Works only when @showOriginalLineNumber@ option is enabled.|
 |hooks|<pre><code>[
   function(
@@ -44,8 +44,8 @@ Works only when @showOriginalLineNumber@ option is enabled.|
   param? :any
 ]</code></pre>|@[]@|Array of function (and optional initial parameter), applied in the order of the array to each JsonML node before rendering to HTML.
 The function receives a JsonML node (JsonML sub-tree), and returns it with modifications.|
-|lineOffset|@integer@|0|Line number offset of the first char in input text, for @showOriginalLineNumber@ option.|
-|showOriginalLineNumber|@boolean@|false|Maps the elements of HTML output, with the line numbers of input text.
+|lineOffset|@integer@|@0@|Line number offset of the first char in input text, for @showOriginalLineNumber@ option.|
+|showOriginalLineNumber|@boolean@|@false@|Maps the elements of HTML output, with the line numbers of input text.
 An HTML attribute @data-line@ is added to the HTML block elements. It's value is the line number in input text, of the first char of text inside that HTML block.|
 
 h2. Usage
