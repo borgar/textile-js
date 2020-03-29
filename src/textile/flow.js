@@ -356,21 +356,21 @@ function parseFlow ( src, options, lineOffset ) {
     // list
     if ( ( m = testList( src ) ) ) {
       src.advance( m[0] );
-      list.add( parseList( m[0], options, src.getSlot(), charPosToLine ) );
+      list.add( parseList( m[0], options, charPosToLine, src.getSlot() ) );
       continue;
     }
 
     // definition list
     if ( ( m = testDefList( src ) ) ) {
       src.advance( m[0] );
-      list.add( parseDefList( m[0], options, src.getSlot(), charPosToLine ) );
+      list.add( parseDefList( m[0], options, charPosToLine, src.getSlot() ) );
       continue;
     }
 
     // table
     if ( ( m = testTable( src ) ) ) {
       src.advance( m[0] );
-      list.add( parseTable( m[1], options, src.getSlot(), charPosToLine ) );
+      list.add( parseTable( m[1], options, charPosToLine, src.getSlot() ) );
       continue;
     }
 

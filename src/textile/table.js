@@ -55,7 +55,7 @@ function testTable ( src ) {
   return reTable.exec( src );
 }
 
-function parseTable ( src, options, charOffset, charPosToLine ) {
+function parseTable ( src, options, charPosToLine, charOffset ) {
   if ( options.showOriginalLineNumber ) {
     const removedSrc = src.match( /^\s+/ );
     if ( removedSrc && removedSrc[0] ) {

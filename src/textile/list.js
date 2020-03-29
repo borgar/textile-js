@@ -23,7 +23,7 @@ function testList ( src ) {
   return reList.exec( src );
 }
 
-function parseList ( src, options, charOffset, charPosToLine ) {
+function parseList ( src, options, charPosToLine, charOffset ) {
   if ( options.showOriginalLineNumber ) {
     const removedSrc = src.match( /(^|\r?\n)[\t ]+/ );
     if ( removedSrc && removedSrc[0] ) {

@@ -11,7 +11,7 @@ function testDefList ( src ) {
   return reDeflist.exec( src );
 }
 
-function parseDefList ( src, options, charOffset, charPosToLine ) {
+function parseDefList ( src, options, charPosToLine, charOffset ) {
   if ( options.showOriginalLineNumber ) {
     const removedSrc = src.match( /^\s+/ );
     if ( removedSrc && removedSrc[0] ) {
