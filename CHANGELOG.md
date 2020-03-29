@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [UNRELEASED]
+## [2.0.106] - 20200329
 ### Added
 - [LIBRARY] add a new parameters to configurable hook functions of applyHook, to determine the current node level to the root node.
 - [BINARY] Add `--css-class-original-line-number` option.
