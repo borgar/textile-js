@@ -480,3 +480,12 @@ test( 'HTML block-level elements inside multi-line definition lists, should be l
     '<dl>\n\t<dt data-line="1" class="code-line">Word 1</dt>\n\t<dd data-line="1" class="code-line"><p data-line="1" class="code-line">Definition 1.\n <div data-line="2" class="code-line">Inside</div></p></dd>\n</dl>' );
   t.end();
 });
+
+test( 'Special HTML block-level elements, should be line-numbered correctly', function ( t ) {
+  let tx = `<ul>
+  <li>Li</li>
+</ul>`;
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<ul data-line="1" class="code-line">\n<li data-line="2" class="code-line">Li</li>\n</ul>' );
+  t.end();
+});

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [LIBRARY] add a original line number to rulers.
 - [LIBRARY] correct line numbering on nested list items.
 - [LIBRARY] correct line numbering of block-level elements inside paragraphs, no-paragraphs, table's cells, definition lists.
+- [LIBRARY] correct line numbering of inlined tags, general case.
 
 
 ## [2.0.105] - 20200314

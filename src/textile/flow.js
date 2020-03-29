@@ -325,11 +325,18 @@ function parseFlow ( src, options, lineOffset ) {
                 elm.push( inner );
               }
               else {
+                let localCharOffset = ( ( t.length > 1 ) ? t[s].pos : 0 );
+                if ( options.showOriginalLineNumber ) {
+                  const removedSrc = inner.match( /^\n+/ );
+                  if ( removedSrc && removedSrc[0] ) {
+                    localCharOffset += removedSrc[0].length;
+                  }
+                }
                 const innerHTML = inner.replace( /^\n+/, '' ).replace( /\s*$/, '' );
                 const isBlock = /\n\r?\n/.test( innerHTML ) || tag === 'ol' || tag === 'ul';
                 const innerElm = isBlock
-                  ? parseFlow( innerHTML, options )
-                  : parsePhrase( innerHTML, extend({}, options, { breaks: false }), charPosToLine, srcSlot );
+                  ? parseFlow( innerHTML, options, charPosToLine ? charPosToLine[ srcSlot + localCharOffset ] : undefined )
+                  : parsePhrase( innerHTML, extend({}, options, { breaks: false }), charPosToLine, srcSlot + localCharOffset );
                 if ( isBlock || /^\n/.test( inner ) ) {
                   elm.push( '\n' );
                 }
