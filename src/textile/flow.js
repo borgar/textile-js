@@ -71,8 +71,15 @@ function paragraph ( s, tag, pba, linebreak, options, charPosToLine, charOffset 
   s.split( /(?:\r?\n){2,}/ ).forEach( function ( bit, i ) {
     if ( tag === 'p' && /^\s/.test( bit ) ) {
       // no-paragraphs
+      let localCharOffset = 0;
+      if ( options.showOriginalLineNumber ) {
+        const removedSrc = bit.match( /^(\r?\n|\t| )*/g );
+        if ( removedSrc && removedSrc[0] ) {
+          localCharOffset += removedSrc[0].length;
+        }
+      }
       bit = bit.replace( /\r?\n[\t ]/g, ' ' ).trim();
-      out = out.concat( parsePhrase( bit, options, charPosToLine, charOffset ) );
+      out = out.concat( parsePhrase( bit, options, charPosToLine, charOffset + localCharOffset ) );
     }
     else {
       if ( linebreak && i ) { out.push( linebreak ); }

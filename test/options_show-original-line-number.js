@@ -443,6 +443,16 @@ code
   t.end();
 });
 
+test( 'HTML block-level elements inside no-paragraph, should be line-numbered correctly', function ( t ) {
+  let tx = ` a
+<pre>
+code
+</pre>`;
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    'a<br />\n<pre data-line="2" class="code-line"><br />\ncode<br />\n</pre>' );
+  t.end();
+});
+
 test( 'HTML block-level elements inside table cell, should be line-numbered correctly', function ( t ) {
   let tx = `|a|(class). b
 c
