@@ -454,3 +454,19 @@ d|`;
     '<table>\n\t<tr data-line="1" class="code-line">\n\t\t<td>a</td>\n\t\t<td class="class">b<br />\nc<br />\n<pre data-line="3" class="code-line"><br />\ncode<br />\n</pre><br />\nd</td>\n\t</tr>\n</table>' );
   t.end();
 });
+
+test( 'HTML block-level elements inside definition lists, should be line-numbered correctly', function ( t ) {
+  let tx = `- Word 1 := Definition 1.
+  <div>Inside</div>`;
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<dl>\n\t<dt data-line="1" class="code-line">Word 1</dt>\n\t<dd data-line="1" class="code-line">Definition 1.\n <div data-line="2" class="code-line">Inside</div></dd>\n</dl>' );
+  t.end();
+});
+
+test( 'HTML block-level elements inside multi-line definition lists, should be line-numbered correctly', function ( t ) {
+  let tx = `- Word 1 := Definition 1.
+  <div>Inside</div>=:`;
+  t.is( textile.convert( tx, { showOriginalLineNumber: true, lineOffset: 1, cssClassOriginalLineNumber: 'code-line' }),
+    '<dl>\n\t<dt data-line="1" class="code-line">Word 1</dt>\n\t<dd data-line="1" class="code-line"><p data-line="1" class="code-line">Definition 1.\n <div data-line="2" class="code-line">Inside</div></p></dd>\n</dl>' );
+  t.end();
+});

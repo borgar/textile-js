@@ -70,7 +70,7 @@ function parseDefList ( src, options, charOffset, charPosToLine ) {
         addLineNumber({}, options, charPosToLine, charOffset, src.getPos() + localCharOffset )
         , ( /=:$/.test( def ) )
           ? parseFlow( def.slice( 0, -2 ).trim(), options, options.showOriginalLineNumber ? charPosToLine[ ( charOffset || 0 ) + localCharOffset + src.getPos() ] : 0 )
-          : parsePhrase( def, options, charPosToLine, charOffset )
+          : parsePhrase( def, options, charPosToLine, ( charOffset || 0 ) + localCharOffset + src.getPos() )
       )
       , '\n'
     );
