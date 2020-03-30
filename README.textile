@@ -5,7 +5,7 @@ Attempt at an implementation of fully featured Textile parser in JavaScript that
 **Please Note :** This is a fork containing some changes and fixes, used for my Visual Studio Code extension "Textile Language Features":https://github.com/GehDoc/vscode-textile-preview :
 * map each HTML output tag, to the corresponding source code line;
 * fix for bug "borgar/textile-js#52":https://github.com/borgar/textile-js/issues/52;
-* add a configurable hook, to modify JsonML nodes before rendering to HTML.
+* add configurable hooks, to modify JsonML nodes before and when rendering to HTML.
 
 Give it a go in "a live textile web editor":https://gehdoc.github.io/textile-js/.
 
@@ -45,14 +45,14 @@ Works only when @showOriginalLineNumber@ option is enabled.|
 ]</code></pre>|@[]@|Array of function (and optional initial parameter), applied in the order of the array to each JsonML node before rendering to HTML.
 The function receives a JsonML node (JsonML sub-tree), and returns it with modifications.|
 |lineOffset|@integer@|@0@|Line number offset of the first char in input text, for @showOriginalLineNumber@ option.|
-|render|<pre><code>{
+|renderers|<pre><code>[
     content: function(
         tag: string,
         attributes: object OR undefined,
         content: string
     ) :string
-}</code></pre>|@{}@|Rendering functions, called with the tagName, the attributes object, and the content string :
-@content@ is called to replace the content string of a tag.|
+]</code></pre>|@[]@|Rendering functions, called with the tagName, the attributes object, and the content string :
+@content@ is returned to replace the content string of a tag.|
 |showOriginalLineNumber|@boolean@|@false@|Maps the elements of HTML output, with the line numbers of input text.
 An HTML attribute @data-line@ is added to the HTML block elements = the line number in input text, of the first char of text inside that HTML block.
 For tags inlined inside textile source, a HTML attribute @data-line-end@ is added too = the line number in input text, of the last char of the closing tag of that HTML block.|

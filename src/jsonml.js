@@ -42,7 +42,7 @@ function escape ( text, escapeQuotes ) {
     .replace( /'/g, escapeQuotes ? '&#39;' : "'" );
 }
 
-function toHTML ( jsonml, render ) {
+function toHTML ( jsonml, renderers ) {
   jsonml = jsonml.concat();
 
   // basic case
@@ -60,7 +60,14 @@ function toHTML ( jsonml, render ) {
   }
 
   while ( jsonml.length ) {
-    content.push( toHTML( jsonml.shift(), render ) );
+    content.push( toHTML( jsonml.shift(), renderers ) );
+  }
+
+  let realContent = content.join( '' );
+  if ( Array.isArray( renderers ) ) {
+    renderers.forEach( render => {
+      realContent = render( tag, attributes, realContent );
+    });
   }
 
   for ( const a in attributes ) {
@@ -69,12 +76,11 @@ function toHTML ( jsonml, render ) {
       : ` ${ a }="${ escape( String( attributes[a] ), true ) }"`;
   }
 
-  const realContent = ( render && render.content ) ? render.content( tag, attributes, content.join( '' ) ) : content.join( '' );
   // be careful about adding whitespace here for inline elements
   if ( tag === '!' ) {
     return `<!--${ realContent }-->`;
   }
-  else if ( tag in singletons || ( tag.indexOf( ':' ) > -1 && !content.length ) ) {
+  else if ( tag in singletons || ( tag.indexOf( ':' ) > -1 && !realContent.length ) ) {
     return `<${ tag }${ tagAttrs } />`;
   }
   else {

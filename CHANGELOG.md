@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 ### Added
-- [LIBRARY] Add rendering hooks 
+- [LIBRARY] Add rendering hooks.
 
 
 ## [2.0.106] - 20200329
