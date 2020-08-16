@@ -1,5 +1,5 @@
 const path = require( 'path' );
-const UglifyJsPlugin = require( 'uglifyjs-webpack-plugin' );
+const TerserPlugin = require('terser-webpack-plugin');
 const WebpackAutoInject = require( 'webpack-auto-inject-version' );
 
 const env = process.env.WEBPACK_ENV;
@@ -7,7 +7,7 @@ const plugins = [];
 let ext = '.js';
 
 if ( env === 'min' ) {
-  plugins.push( new UglifyJsPlugin() );
+  plugins.push( new TerserPlugin() );
   ext = '.min.js';
 }
 plugins.push(
