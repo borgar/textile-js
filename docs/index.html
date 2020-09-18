@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8>
+  <title>Textile live web editor</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="app.css" />
+  <script src="https://unpkg.com/textile-js@2.0.5/lib/textile.js"></script>
+</head>
+<body>
+
+  <h1>Textile live web editor</h1>
+
+  <div class="row">
+    <div id="col_left" class="col">
+      <div class="hd">
+        <label for="tx_input">Textile input</label>
+        <span class="tools">
+          <button class="clear">Clear</button>
+        </span>
+      </div>
+      <textarea id="tx_input" cols="80" rows="20" class="panel"></textarea>
+    </div>
+
+    <div id="col_right" class="col">
+      <ul class="nav tab hd">
+        <li class="current"><a href="#text_preview">Preview</a></li>
+        <li><a href="#html_output">HTML Output</a></li>
+        <li><a href="#syntax_guide">Syntax Guide</a></li>
+      </ul>
+      <div id="text_preview" class="panel"></div>
+      <textarea id="html_output" class="panel" readonly></textarea>
+      <textarea id="syntax_guide" class="panel" readonly></textarea>
+    </div>
+  </div>
+
+  <div id="foot">
+    <a id="credit1" href="https://github.com/borgar/textile-js/">JS-Textile project home.</a>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

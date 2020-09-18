@@ -1,0 +1,224 @@
+html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  font-family: Helvetica, sans-serif;
+  font-size: 13px;
+  background: #ddd;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+
+}
+
+body > * {
+  flex: 0 1 auto;
+  align-self: auto;
+}
+
+body > h1 {
+  padding: 1rem;
+  margin: 0;
+  font-size: 20px;
+  color: #444;
+}
+
+textarea {
+  font-family: "andale mono", "lucida console", monospace;
+  font-size: 12px;
+  display: block;
+  resize: none;
+}
+
+.row {
+  margin: 0 0;
+
+  flex: 1 1 auto;
+  align-self: stretch;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.col {
+  position: relative;
+  box-sizing: border-box;
+  margin: 0 1rem 0 0;
+  padding: 0;
+  width: 50%;
+
+  flex: 1 1 auto;
+  align-self: stretch;
+}
+.col:first-child {
+  margin: 0 1rem 0 1rem;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+}
+
+.col .hd {
+  flex: 0 1 auto;
+  align-self: auto;
+}
+.col > div, .col textarea {
+  flex: 1 1 auto;
+  align-self: stretch;
+}
+
+
+label {
+  display: block;
+  padding: 4px 0;
+  font-weight: bold;
+  color: #777;
+}
+.tools {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0;
+}
+
+
+.panel {
+  background: #fff;
+  border: 1px solid #aaaaaa;
+  outline: none;
+  display: block;
+  margin: 0;
+  padding: 4px;
+  box-sizing: border-box;
+}
+#text_preview {
+  overflow: auto;
+}
+
+#md_input {
+  background: #f6f6f6;
+}
+
+#syntax_guide,
+#html_output {
+  display: none;
+}
+
+
+#credit1 {
+  background: url(http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png) -27px -15px no-repeat;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-indent: -999em;
+  display: block;
+  overflow: hidden;
+  height: 108px;
+  width: 108px;
+  zoom: .8;
+}
+
+#foot {
+  min-height: 1rem;
+}
+
+
+.tab {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.tab li {
+  display: inline-block;
+}
+.tab li a {
+  display: block;
+  padding: 4px 10px;
+  text-decoration: none;
+  color: #999;
+  background: #eee;
+  margin: 0 1px;
+}
+.tab .current a {
+  color: #555;
+  background: #fff;
+  padding-bottom: 5px;
+  margin: -1px 0;
+  border: 1px solid #aaa;
+}
+
+
+
+#text_preview {
+  padding: 0 1em 4px 1em;
+  color: #444;
+  font-size: 13px;
+  line-height: 1.4;
+}
+#text_preview h1 {
+  line-height: 1.1;
+  font-size: 2em;
+}
+#text_preview h2 {
+  line-height: 1.1;
+  font-size: 1.6em;
+}
+#text_preview h3 {
+  line-height: 1.14;
+  font-size: 1.36em;
+}
+#text_preview h4 {
+  line-height: 1.2;
+  font-size: 1.14em;
+}
+#text_preview h5 {
+  line-height: 1.24;
+  font-size: 1em;
+}
+#text_preview h6 {
+  line-height: 1.24;
+  font-size: 1em;
+}
+#text_preview code {
+  background: #f4f4f4;
+}
+#text_preview table {
+  border-collapse : collapse;
+}
+#text_preview table th,
+#text_preview table td {
+  padding : 4px 8px;
+  border : 1px solid #aaa;
+}
+#text_preview ul {
+  margin-left: 0;
+  padding-left: 2em;
+}
+#text_preview acronym {
+  text-decoration : none;
+  border-bottom : 1px dotted #888;
+  cursor: help;
+}
+#text_preview blockquote {
+  margin-left: .6em;
+  padding-left: 1em;
+  border-left: .4em solid #ddd;
+}
+#text_preview pre > code {
+  display: block;
+}
+#text_preview .caps {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: .1em;
+}
