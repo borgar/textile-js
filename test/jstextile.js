@@ -621,6 +621,14 @@ test('notextile should work inline (#49)', function (t) {
 });
 
 
+test('Lists have to start at level 1 (#56)', function (t) {
+  const tx = '*** foo';
+  t.is(textile.convert(tx),
+    '<p>*** foo</p>');
+  t.end();
+});
+
+
 test('inline tag should bound phrase (#57)', function (t) {
   const tx = '*foo*<notextile></notextile>bar';
   t.is(textile.convert(tx),

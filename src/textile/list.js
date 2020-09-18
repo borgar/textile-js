@@ -6,10 +6,11 @@ const merge = require('../merge');
 const { parseAttr } = require('./attr');
 const { parsePhrase } = require('./phrase');
 
-const { txlisthd } = require('./re_ext');
+const { txlisthd, txlisthd2 } = require('./re_ext');
 re.pattern.txlisthd = txlisthd;
+re.pattern.txlisthd2 = txlisthd2;
 const reList = re.compile(/^((?:[:txlisthd:][^\0]*?(?:\r?\n|$))+)(\s*\n|$)/, 's');
-const reItem = re.compile(/^([#*]+)([^\0]+?)(\n(?=[:txlisthd:])|$)/, 's');
+const reItem = re.compile(/^([#*]+)([^\0]+?)(\n(?=[:txlisthd2:])|$)/, 's');
 
 function listPad (n) {
   let s = '\n';
