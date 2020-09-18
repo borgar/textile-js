@@ -1,15 +1,5 @@
-/* globals process */
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
-const env = process.env.WEBPACK_ENV;
-const plugins = [];
-let ext = '.js';
-
-if (env === 'min') {
-  plugins.push(new UglifyJsPlugin());
-  ext = '.min.js';
-}
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -17,14 +7,15 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: path.resolve('./lib'),
-    filename: 'textile' + ext,
+    filename: 'textile.js',
     library: 'textile',
     libraryTarget: 'umd',
     umdNamedDefine: true,
     globalObject: 'this'
   },
   optimization: {
-    minimizer: plugins
+    minimize: true,
+    minimizer: [ new TerserPlugin({ extractComments: false }) ]
   },
   module: {
     rules: [
