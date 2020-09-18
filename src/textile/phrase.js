@@ -72,7 +72,7 @@ function parsePhrase (src, options) {
 
     // lookbehind => /([\s>.,"'?!;:])$/
     const behind = src.lookbehind(1);
-    const boundary = !behind || /^[\s>.,"'?!;:()]$/.test(behind);
+    const boundary = !behind || /^[\s<>.,"'?!;:()[\]%{}]$/.test(behind);
     // FIXME: need to test right boundary for phrases as well
     if ((m = rePhrase.exec(src)) && (boundary || m[1])) {
       src.advance(m[0]);
