@@ -638,6 +638,21 @@ test( 'inline tag should bound phrase [2] (#57)', function ( t ) {
 });
 
 
+test( 'self referencing links (#44)', function ( t ) {
+  t.is( textile.convert( '"$":http://example.com/sw' ),
+    '<p><a href="http://example.com/sw">example.com/sw</a></p>' );
+  t.is( textile.convert( '"$":https://example.com/sw' ),
+    '<p><a href="https://example.com/sw">example.com/sw</a></p>' );
+  t.is( textile.convert( '"$":ftp://example.com/sw' ),
+    '<p><a href="ftp://example.com/sw">example.com/sw</a></p>' );
+  t.is( textile.convert( '"$":mailto:user@example.com' ),
+    '<p><a href="mailto:user@example.com">user@example.com</a></p>' );
+  t.is( textile.convert( '"$ (foo)":http://example.com/sw' ),
+    '<p><a href="http://example.com/sw" title="foo">example.com/sw</a></p>' );
+  t.end();
+});
+
+
 test( 'linebreaks following a table (#52)', function ( t ) {
   const tx1 = '|a|b|\n\n\nh1. header';
   t.is( textile.convert( tx1 ),
