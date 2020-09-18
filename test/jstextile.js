@@ -634,3 +634,15 @@ test( 'inline tag should bound phrase [2] (#57)', function ( t ) {
     '<p><strong>fo<i></i>o</strong><i></i>bar</p>' );
   t.end();
 });
+
+test( 'prefixed links (#60)', function ( t ) {
+  t.is( textile.convert( 'user <"user@example.com":mailto:user@example.com>' ),
+    '<p>user &lt;<a href="mailto:user@example.com">user@example.com</a>&gt;</p>' );
+  t.is( textile.convert( 'user ["user@example.com":mailto:user@example.com' ),
+    '<p>user [<a href="mailto:user@example.com">user@example.com</a></p>' );
+  t.is( textile.convert( 'user ["user@example.com":mailto:user@example.com]' ),
+    '<p>user <a href="mailto:user@example.com">user@example.com</a></p>' );
+  t.is( textile.convert( 'user %"user@example.com":mailto:user@example.com' ),
+    '<p>user %<a href="mailto:user@example.com">user@example.com</a></p>' );
+  t.end();
+});
