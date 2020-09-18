@@ -636,6 +636,21 @@ test('inline tag should bound phrase [2] (#57)', function (t) {
 });
 
 
+test( 'linebreaks following a table (#52)', function ( t ) {
+  const tx1 = '|a|b|\n\n\nh1. header';
+  t.is( textile.convert( tx1 ),
+    '<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>b</td>\n\t</tr>\n</table>\n' +
+    '<h1>header</h1>'
+  );
+  const tx2 = '|a|b|\n\n\n\n\n\n\n\n\nh1. header';
+  t.is( textile.convert( tx2 ),
+    '<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>b</td>\n\t</tr>\n</table>\n' +
+    '<h1>header</h1>'
+  );
+  t.end();
+});
+
+
 test( 'prefixed links (#60)', function ( t ) {
   t.is( textile.convert( 'user <"user@example.com":mailto:user@example.com>' ),
     '<p>user &lt;<a href="mailto:user@example.com">user@example.com</a>&gt;</p>' );
