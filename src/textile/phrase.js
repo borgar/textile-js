@@ -221,6 +221,10 @@ function parsePhrase (src, options) {
       }
       pba.href = m[2];
       if (title) { pba.title = title[1]; }
+      // links may self-reference their url via $
+      if (inner === '$') {
+        inner = pba.href.replace(/^(https?:\/\/|ftps?:\/\/|mailto:)/, '');
+      }
       list.add([ 'a', pba ].concat(parsePhrase(inner.replace(/^(\.?\s*)/, ''), options)));
       continue;
     }
