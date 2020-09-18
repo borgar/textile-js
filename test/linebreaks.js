@@ -253,57 +253,6 @@ test( 'tables', function ( t ) {
 });
 
 
-test( 'Garbage not reduced correctly after a table:1 (bug #52)', function ( t ) {
-  // note : PHP output one '\n' per '\n' line between table and header.
-  let tx = `|a|b|
-
-
-h1. header`;
-  t.is( textile.convert( tx ),
-    `<table>
-\t<tr>
-\t\t<td>a</td>
-\t\t<td>b</td>
-\t</tr>
-</table>
-<h1>header</h1>`, tx );
-  t.end();
-});
-
-test( 'Garbage not reduced correctly after a table:2 (bug #52)', function ( t ) {
-  // note : PHP output one '\n' per '\n' line between table and header. Maybe we should only ouput 1 '\n'.
-  let tx = `|a|b|
-
-
-
-h1. header`;
-  t.is( textile.convert( tx ),
-    `<table>
-\t<tr>
-\t\t<td>a</td>
-\t\t<td>b</td>
-\t</tr>
-</table>
-<h1>header</h1>`, tx );
-  t.end();
-});
-
-test( 'Garbage not reduced correctly after a table:3 (bug #52)', function ( t ) {
-  let tx = `|a|b|
-
-
-`;
-  t.is( textile.convert( tx ),
-    `<table>
-\t<tr>
-\t\t<td>a</td>
-\t\t<td>b</td>
-\t</tr>
-</table>`, tx );
-  t.end();
-});
-
-
 test( 'jstextile linebreaks:17', function ( t ) {
   let tx = "line\r\n\
 <!-- line -->\r\n\

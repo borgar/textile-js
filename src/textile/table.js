@@ -11,7 +11,7 @@ const { reIndent } = require( '../jsonml' );
 const { txattr } = require( './re_ext' );
 re.pattern.txattr = txattr;
 
-const reTable = re.compile( /^((?:table[:txattr:]\.(?:\s(.+?))\s*\n)?(?:(?:[:txattr:]\.[^\n\S]*)?\|.*?\|[^\n\S]*(?:\n|$))+)([^\n\S]*\n)?/, 's' );
+const reTable = re.compile( /^((?:table[:txattr:]\.(?:\s(.+?))\s*\n)?(?:(?:[:txattr:]\.[^\n\S]*)?\|.*?\|[^\n\S]*(?:\n|$))+)([^\n\S]*\n+)?/, 's' );
 const reHead = /^table(_?)([^\n]*?)\.(?:[ \t](.+?))?\s*\n/;
 const reRowCapture = re.compile( /^(\|([~^-][:txattr:])\.\s*\n)?([:txattr:]\.[^\n\S]*)?(\|)(.*?)\|[^\n\S]*(\n|$)/, 's' );
 const reCaption = /^\|=([^\n+]*)\n/;

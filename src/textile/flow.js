@@ -139,19 +139,7 @@ function parseFlow ( src, options, lineOffset ) {
 
   // loop
   while ( src.valueOf() ) {
-    // Fix for #52
-    const garbage = reCleanBegin.exec( src );
-    if ( garbage && garbage[0] ) {
-      src.advance( garbage[0].length );
-    }
-
     src.save();
-
-    // Further fix for #52 : Nothing more should be done, if we have reached end of stream.
-    // This removes a useless empty <P> at the end of the generated tree.
-    if ( !src.valueOf() ) {
-      break;
-    }
 
     // link_ref -- this goes first because it shouldn't trigger a linebreak
     if ( ( m = reLinkRef.exec( src ) ) ) {
