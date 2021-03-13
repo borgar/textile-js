@@ -26,6 +26,8 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: [ [ '@babel/preset-env', {
+              loose: true,
+              // useBuiltIns: 'usage',
               targets: {
                 browsers: [
                   '>0.25%', 'not op_mini all'

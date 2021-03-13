@@ -56,9 +56,9 @@ function testBlock (name) {
   out there in the real world. So this attempts to emulate the other libraries.
 */
 function parseAttr (input, element, endToken) {
-  input = String(input);
+  input = String(input || '');
   if (!input || element === 'notextile') {
-    return undefined;
+    return [ 0, {} ];
   }
 
   let m;
@@ -175,7 +175,7 @@ function parseAttr (input, element, endToken) {
     delete o.style;
   }
 
-  return (remaining === input) ? undefined : [ input.length - remaining.length, o ];
+  return (remaining === input) ? [ 0, {} ] : [ input.length - remaining.length, o ];
 }
 
 module.exports = {
