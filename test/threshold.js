@@ -137,7 +137,7 @@ test('trademark register copyright', function (t) {
 test('acronyms', function (t) {
   const tx = 'ABC(Always Be Closing)';
   t.is(textile.convert(tx),
-    '<p><acronym title="Always Be Closing"><span class="caps">ABC</span></acronym></p>', tx);
+    '<p><abbr title="Always Be Closing"><span class="caps">ABC</span></abbr></p>', tx);
   t.end();
 });
 

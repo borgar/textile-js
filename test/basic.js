@@ -760,7 +760,7 @@ machine and paid it to sing to them.</p>', tx);
 test('acronym definitions', function (t) {
   const tx = 'We use CSS(Cascading Style Sheets).';
   t.is(textile.convert(tx),
-    '<p>We use <acronym title="Cascading Style Sheets"><span class="caps">CSS</span></acronym>.</p>', tx);
+    '<p>We use <abbr title="Cascading Style Sheets"><span class="caps">CSS</span></abbr>.</p>', tx);
   t.end();
 });
 
@@ -768,7 +768,7 @@ test('acronym definitions', function (t) {
 test('two-letter acronyms', function (t) {
   const tx = 'It employs AI(artificial intelligence) processing.';
   t.is(textile.convert(tx),
-    '<p>It employs <acronym title="artificial intelligence"><span class="caps">AI</span></acronym> processing.</p>', tx);
+    '<p>It employs <abbr title="artificial intelligence"><span class="caps">AI</span></abbr> processing.</p>', tx);
   t.end();
 });
 

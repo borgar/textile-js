@@ -216,9 +216,8 @@ function parsePhrase (src, options) {
       const caps = new Element('span', { class: 'caps' }).setPos(src.offset);
       caps.appendChild(new TextNode(m[1]));
       if (m[2]) {
-        // FIXME: use <abbr>, not acronym!
         root
-          .appendChild(new Element('acronym', { title: m[2] }).setPos(src.offset))
+          .appendChild(new Element('abbr', { title: m[2] }).setPos(src.offset))
           .appendChild(caps);
       }
       else {
