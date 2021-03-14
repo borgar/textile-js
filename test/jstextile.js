@@ -685,3 +685,17 @@ test('prefixed links (#60)', function (t) {
     '<p>user %<a href="mailto:user@example.com">user@example.com</a></p>');
   t.end();
 });
+
+
+test('link alias work in HTML tags', function (t) {
+  t.is(textile.convert('<a href="foo">link1</a> "link2":foo\n\n[foo]http://example.com'),
+    '<p><a href="http://example.com">link1</a> <a href="http://example.com">link2</a></p>');
+  t.end();
+});
+
+
+test('correct glyph convertion', function (t) {
+  t.is(textile.convert('p. foo -- bar _foo ==foo -- bar== bar_ @foo -- bar@\n\nnotextile. foo -- bar'),
+    '<p>foo &#8212; bar <em>foo foo -- bar bar</em> <code>foo -- bar</code></p>\nfoo -- bar');
+  t.end();
+});
