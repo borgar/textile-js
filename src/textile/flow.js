@@ -2,7 +2,7 @@
 ** textile flow content parser
 */
 import Ribbon from '../Ribbon.js';
-import { Element, TextNode, RawNode, CommentNode } from '../Node.js';
+import { Element, TextNode, RawNode, CommentNode } from '../VDOM.js';
 import re from '../re.js';
 
 import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
@@ -69,7 +69,7 @@ function paragraph (src, { tag = 'p', attr = {}, linebreak = '\n', options }) {
     }
   });
   return out;
-};
+}
 
 export function parseFlow (src, options) {
   const root = new Element('root');

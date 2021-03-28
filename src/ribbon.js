@@ -28,7 +28,6 @@ export default class Ribbon {
   advance (n) {
     this.index += (typeof n === 'string') ? n.length : n;
     this._feed = this._org.slice(this.index);
-    // return this._feed;
   }
 
   charAt (n) {

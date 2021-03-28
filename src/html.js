@@ -1,6 +1,6 @@
 import re from './re.js';
 import Ribbon from './Ribbon.js';
-import { Element, TextNode, CommentNode } from './Node.js';
+import { Element, TextNode, CommentNode } from './VDOM.js';
 import { singletons } from './constants.js';
 
 re.pattern.html_id = '[a-zA-Z][a-zA-Z\\d:]*';

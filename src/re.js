@@ -7,6 +7,7 @@
 */
 
 const _cache = {};
+const toString = Object.prototype.toString;
 
 const re = {
 
@@ -15,18 +16,19 @@ const re = {
     space: '\\s'
   },
 
-  escape: function (src) {
-    return src.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  escape: src => {
+    return src
+      .replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
   },
 
-  collapse: function (src) {
+  collapse: src => {
     return src.replace(/(?:#.*?(?:\n|$))/g, '')
       .replace(/\s+/g, '');
   },
 
-  expandPatterns: function (src) {
+  expandPatterns: src => {
     // TODO: provide escape for patterns: \[:pattern:] ?
-    return src.replace(/\[:\s*(\w+)\s*:\]/g, function (m, k) {
+    return src.replace(/\[:\s*(\w+)\s*:\]/g, (m, k) => {
       const ex = re.pattern[k];
       if (ex) {
         return re.expandPatterns(ex);
@@ -37,8 +39,8 @@ const re = {
     });
   },
 
-  isRegExp: function (r) {
-    return Object.prototype.toString.call(r) === '[object RegExp]';
+  isRegExp: r => {
+    return toString.call(r) === '[object RegExp]';
   },
 
   compile: function (src, flags) {
@@ -65,7 +67,6 @@ const re = {
     if (flags && /s/.test(flags)) {
       rx = rx.replace(/([^\\])\./g, '$1[^\\0]');
     }
-    // TODO: test if MSIE and add replace \s with [\s\u00a0] if it is?
     // clean flags and output new regexp
     flags = (flags || '').replace(/[^gim]/g, '');
     return (_cache[ckey] = new RegExp(rx, flags));

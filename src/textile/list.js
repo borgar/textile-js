@@ -1,13 +1,13 @@
 /* textile list parser */
 import re from '../re.js';
-import { Element, TextNode } from '../Node.js';
-
+import { Element, TextNode } from '../VDOM.js';
 import { parseAttr } from './attr.js';
 import { parsePhrase } from './phrase.js';
-
 import { txlisthd, txlisthd2 } from './re_ext.js';
+
 re.pattern.txlisthd = txlisthd;
 re.pattern.txlisthd2 = txlisthd2;
+
 const reList = re.compile(/^((?:[:txlisthd:][^\0]*?(?:\r?\n|$))+)(\s*\n|$)/, 's');
 const reItem = re.compile(/^([#*]+)([^\0]+?)(\n(?=[:txlisthd2:])|$) */, 's');
 
@@ -23,10 +23,8 @@ export function parseList (src, options) {
   const maybeMoveAttr = node => {
     if (node.attrCount === 1) {
       const firstChild = node.ul.children.find(d => d.tagName === 'li');
-      // const attr = Object.assign(node.ul.attr, firstChild.attr);
       Object.assign(node.ul.attr, firstChild.attr);
       firstChild.attr = {};
-      // firstChild.attr = { _offset: attr._offset };
     }
   };
 
@@ -53,12 +51,10 @@ export function parseList (src, options) {
         ? parseInt(n[1], 10)
         : lastIndex[destLevel] || currIndex[destLevel] || 1;
       inner.advance(n[1].length);
-      // inner = inner.slice(n[1].length);
     }
 
     const [ step, attr ] = parseAttr(inner, 'li');
     if (step) {
-      // inner = inner.slice(step);
       inner.advance(step);
       pba = attr;
     }

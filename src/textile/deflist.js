@@ -1,5 +1,5 @@
 /* definitions list parser */
-import { Element, TextNode } from '../Node.js';
+import { Element, TextNode } from '../VDOM.js';
 import { parsePhrase } from './phrase.js';
 import { parseFlow } from './flow.js';
 

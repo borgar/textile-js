@@ -7,7 +7,7 @@
 
 import { parseFlow } from './textile/flow.js';
 export { parseHtml } from './html.js';
-import { Document, Element, RawNode, TextNode, CommentNode } from './Node.js';
+import { Document, Element, RawNode, TextNode, CommentNode } from './VDOM.js';
 
 function parseTextile (tx, opt) {
   const root = new Document();

@@ -46,4 +46,4 @@ export function parseGlyph (src) {
     .replace(/[([]3\/4[\])]/, '&#190;')
     .replace(/[([]o[\])]/, '&#176;')
     .replace(/[([]\+\/-[\])]/, '&#177;');
-};
+}

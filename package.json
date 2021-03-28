@@ -8,7 +8,7 @@
     "start": "webpack --mode development --watch",
     "dev": "nodemon -w test -w src -x 'tape -r @babel/register 'test/*.js'|tap-min'",
     "test": "tape -r @babel/register 'test/*js' | tap-min",
-    "lint": "eslint src/*js test/*js",
+    "lint": "eslint src/ test/",
     "coverage": "nyc --reporter html --reporter text tape -r @babel/register test/*js",
     "pub": "node scripts/publish.js",
     "dingus": "node scripts/updatedingus.js"

@@ -24,7 +24,9 @@ const pbaVAlignLookup = {
 };
 
 export function copyAttr (s, blacklist) {
-  if (!s) { return undefined; }
+  if (!s) {
+    return;
+  }
   const d = {};
   for (const k in s) {
     if (k in s && (!blacklist || !(k in blacklist))) {

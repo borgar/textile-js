@@ -1,7 +1,7 @@
 /* textile table parser */
 
 import re from '../re.js';
-import { Element, TextNode } from '../Node.js';
+import { Element, TextNode } from '../VDOM.js';
 import { parseAttr } from './attr.js';
 import { parsePhrase } from './phrase.js';
 import { txattr } from './re_ext.js';
@@ -27,9 +27,8 @@ export function parseColgroup (src) {
     const col = isCol ? {} : colgroup.attr;
     const pos = bit.offset;
     let d = String(bit).trim();
-    let m;
     if (d) {
-      const m1 = m = /^\\(\d+)/.exec(d);
+      const m1 = /^\\(\d+)/.exec(d);
       if (m1) {
         col.span = +m1[1];
         d = d.slice(m1[0].length);
@@ -41,9 +40,9 @@ export function parseColgroup (src) {
         d = d.slice(step);
       }
 
-      const m2 = m = /\b\d+\b/.exec(d);
+      const m2 = /\b\d+\b/.exec(d);
       if (m2) {
-        col.width = +m[0];
+        col.width = +m2[0];
       }
     }
     if (isCol) {
@@ -93,9 +92,9 @@ export function parseTable (src, options) {
     }
     if (/\./.test(innerCaption)) { // mandatory "."
       // FIXME: possible bug: missing glyph transforms?
-      const captionText = innerCaption.slice(1).replace(/\|\s*$/, '').trim();
+      const captionText = innerCaption.slice(1).replace(/\|\s*$/, '');
       caption = new Element('caption', attr, src.offset);
-      caption.appendChild(new TextNode(captionText));
+      caption.appendChild(new TextNode(captionText.trim()));
       extended++;
       src.advance(m[0]);
     }

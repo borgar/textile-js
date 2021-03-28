@@ -1,6 +1,6 @@
 /* textile inline parser */
 import Ribbon from '../Ribbon.js';
-import { Element, TextNode, RawNode, CommentNode } from '../Node.js';
+import { Element, TextNode, RawNode, CommentNode } from '../VDOM.js';
 import re from '../re.js';
 
 import { parseAttr } from './attr.js';
@@ -62,7 +62,6 @@ export function parsePhrase (src, options) {
   // FIXME: remove this
   if (!(src instanceof Ribbon)) {
     src = new Ribbon(src);
-    // console.error([src]);
   }
 
   const root = new Element('root');
