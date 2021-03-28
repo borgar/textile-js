@@ -2,7 +2,7 @@
 ** textile flow content parser
 */
 import Ribbon from '../Ribbon.js';
-import { Element, TextNode, RawNode, CommentNode } from '../VDOM.js';
+import { Element, TextNode, RawNode, HiddenNode, CommentNode } from '../VDOM.js';
 import re from '../re.js';
 
 import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
@@ -75,6 +75,7 @@ export function parseFlow (src, options) {
   const root = new Element('root');
 
   let linkRefs;
+  let hasHidden = false;
   let m;
 
   if (!(src instanceof Ribbon)) {
@@ -96,7 +97,10 @@ export function parseFlow (src, options) {
     }
 
     // add linebreak
-    if (root.children.length) {
+    const isNotFirst = hasHidden
+      ? root.children.filter(d => !(d instanceof HiddenNode)).length
+      : root.children.length;
+    if (isNotFirst) {
       root.appendChild(new TextNode('\n'));
     }
 
@@ -148,8 +152,8 @@ export function parseFlow (src, options) {
 
         else if (blockType === '###') {
           // ignore the insides
-          // FIXME: consider adding an option to expose these as HTML comments?
-          // FIXME: consider adding these to the parse tree and block on render?
+          hasHidden = true;
+          root.appendChild(new HiddenNode(inner));
         }
 
         else if (blockType === 'pre') {

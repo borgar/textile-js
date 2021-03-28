@@ -3,6 +3,7 @@ import { singletons } from './constants.js';
 const NODE = 0;
 const ELEMENT_NODE = 1;
 const RAW_NODE = -1;
+const HIDDEN_NODE = -2;
 const TEXT_NODE = 3;
 const DOCUMENT_NODE = 9;
 const COMMENT_NODE =  8;
@@ -104,6 +105,18 @@ export class RawNode extends Node {
 
   toHTML () {
     return escape(this.data);
+  }
+}
+
+export class HiddenNode extends Node {
+  constructor (data) {
+    super();
+    this.nodeType = HIDDEN_NODE;
+    this.data = String(data);
+  }
+
+  toHTML () {
+    return '';
   }
 }
 
