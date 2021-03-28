@@ -23,18 +23,7 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [ [ '@babel/preset-env', {
-              loose: true,
-              // useBuiltIns: 'usage',
-              targets: {
-                browsers: [
-                  '>0.25%', 'not op_mini all'
-                ]
-              }
-            } ] ]
-          }
+          loader: 'babel-loader'
         }
       }
     ]

@@ -1,6 +1,5 @@
 /* textile glyph parser */
-
-const re = require('../re');
+import re from '../re.js';
 
 const reApostrophe = /(\w)'(\w)/g;
 const reArrow = /([^-]|^)->/;
@@ -18,7 +17,7 @@ const reRegistered = /(\b ?|\s|^)(?:\(R\)|\[R\])/gi;
 const reSinglePrime = re.compile(/(\d*[.,]?\d+)'(?=\s|$|[:punct:])/g);
 const reTrademark = /(\b ?|\s|^)(?:\((?:TM|tm)\)|\[(?:TM|tm)\])/g;
 
-exports.parseGlyph = function parseGlyph (src) {
+export function parseGlyph (src) {
   if (typeof src !== 'string') {
     return src;
   }

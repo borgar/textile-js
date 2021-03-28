@@ -1,5 +1,5 @@
-const test = require('tape');
-const textile = require('../src');
+import test from 'tape';
+import textile from '../src/index.js';
 
 /*
 
@@ -22,7 +22,7 @@ A</p>`;
 });
 
 
-test('An auto-paragraph', function (t) {
+test('An auto-paragraph', t => {
   const tx = `A paragraph.
 
 Another paragraph.`;
@@ -32,7 +32,7 @@ Another paragraph.`;
 });
 
 
-test('Intra-block line breaks', function (t) {
+test('Intra-block line breaks', t => {
   const tx = `A paragraph with
 a line break.`;
   const op = `<p>A paragraph with<br />

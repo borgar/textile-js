@@ -5,12 +5,11 @@
 **
 */
 
-const merge = require('./merge');
-const { parseFlow } = require('./textile/flow');
-const { parseHtml } = require('./html');
-const { Document, Element, RawNode, TextNode, CommentNode } = require('./Node');
+import { parseFlow } from './textile/flow.js';
+export { parseHtml } from './html.js';
+import { Document, Element, RawNode, TextNode, CommentNode } from './Node.js';
 
-function parse (tx, opt) {
+function parseTextile (tx, opt) {
   const root = new Document();
   root.pos.offset = 0;
   root.appendChild(parseFlow(tx, opt));
@@ -40,11 +39,11 @@ function addLines (rootNode, sourceTx) {
   return rootNode;
 }
 
-function textile (sourceTx, opt) {
+export default function textile (sourceTx, opt) {
   // get a throw-away copy of options
   opt = Object.assign({}, textile.defaults, opt);
   // run the converter
-  return parse(sourceTx, opt).toHTML();
+  return parseTextile(sourceTx, opt).toHTML();
 };
 
 textile.CommentNode = CommentNode;
@@ -59,17 +58,16 @@ textile.defaults = {
   breaks: true
 };
 
-textile.setOptions = textile.setoptions = opt => {
-  merge(textile.defaults, opt);
+textile.setOptions = opt => {
+  Object.assign(textile.defaults, opt);
   return this;
 };
 
-textile.parse = textile.convert = textile;
-textile.parseHtml = parseHtml;
-
+textile.convert = textile;
+textile.parse = textile;
 textile.parseTree = function (sourceTx, opt) {
   opt = Object.assign({}, textile.defaults, opt);
-  return addLines(parse(sourceTx, opt), sourceTx);
+  return addLines(parseTextile(sourceTx, opt), sourceTx);
 };
 
-module.exports = textile;
+export const parseTree = textile.parseTree;

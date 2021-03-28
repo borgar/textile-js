@@ -1,7 +1,7 @@
-const re = require('./re');
-const Ribbon = require('./Ribbon');
-const { Element, TextNode, CommentNode } = require('./Node');
-const { singletons } = require('./constants');
+import re from './re.js';
+import Ribbon from './Ribbon.js';
+import { Element, TextNode, CommentNode } from './Node.js';
+import { singletons } from './constants.js';
 
 re.pattern.html_id = '[a-zA-Z][a-zA-Z\\d:]*';
 re.pattern.html_attr = '(?:"[^"]+"|\'[^\']+\'|[^>\\s]+)';
@@ -12,23 +12,23 @@ const reEndTag = re.compile(/^<\/([:html_id:])([^>]*)>/);
 const reTag = re.compile(/^<([:html_id:])((?:\s[^=\s/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>/);
 const reHtmlTagBlock = re.compile(/^\s*<([:html_id:](?::[a-zA-Z\d]+)*)((?:\s[^=\s/]+(?:\s*=\s*[:html_attr:])?)+)?\s*(\/?)>/);
 
-function testComment (src) {
+export function testComment (src) {
   return reComment.exec(src);
 }
 
-function testOpenTagBlock (src) {
+export function testOpenTagBlock (src) {
   return reHtmlTagBlock.exec(src);
 }
 
-function testOpenTag (src) {
+export function testOpenTag (src) {
   return reTag.exec(src);
 }
 
-function testCloseTag (src) {
+export function testCloseTag (src) {
   return reEndTag.exec(src);
 }
 
-function parseHtmlAttr (attrSrc) {
+export function parseHtmlAttr (attrSrc) {
   // parse ATTR and add to element
   const attr = {};
   let m;
@@ -48,7 +48,7 @@ const TEXT = 'TEXT';
 const COMMENT = 'COMMENT';
 const WS = 'WS';
 
-function tokenize (src, whitelistTags, lazy, offset) {
+export function tokenize (src, whitelistTags, lazy, offset) {
   const tokens = [];
   let textMode = false;
   const oktag = tag => {
@@ -148,7 +148,7 @@ function tokenize (src, whitelistTags, lazy, offset) {
 
 // This "indesciminately" parses HTML text into a list of JSON-ML element
 // No steps are taken however to prevent things like <table><p><td> - user can still create nonsensical but "well-formed" markup
-function parse (tokens, lazy) {
+export function parseHtml (tokens, lazy) {
   const root = new Element('root');
   const stack = [];
   let curr = root;
@@ -196,13 +196,3 @@ function parse (tokens, lazy) {
   root.children.sourceLength = token ? token.pos + token.src.length : 0;
   return root.children;
 }
-
-module.exports = {
-  tokenize: tokenize,
-  parseHtml: parse,
-  parseHtmlAttr: parseHtmlAttr,
-  testCloseTag: testCloseTag,
-  testOpenTagBlock: testOpenTagBlock,
-  testOpenTag: testOpenTag,
-  testComment: testComment
-};

@@ -1,10 +1,10 @@
 /* textile table parser */
 
-const re = require('../re');
-const { Element, TextNode } = require('../Node');
-const { parseAttr } = require('./attr');
-const { parsePhrase } = require('./phrase');
-const { txattr } = require('./re_ext');
+import re from '../re.js';
+import { Element, TextNode } from '../Node.js';
+import { parseAttr } from './attr.js';
+import { parsePhrase } from './phrase.js';
+import { txattr } from './re_ext.js';
 
 re.pattern.txattr = txattr;
 
@@ -21,7 +21,7 @@ const charToTag = {
   '-': 'tbody'
 };
 
-function parseColgroup (src) {
+export function parseColgroup (src) {
   const colgroup = new Element('colgroup', {}, src.offset);
   src.splitBy(/\|/, (bit, isCol) => {
     const col = isCol ? {} : colgroup.attr;
@@ -56,11 +56,11 @@ function parseColgroup (src) {
   return colgroup;
 }
 
-function testTable (src) {
+export function testTable (src) {
   return reTable.exec(src);
 }
 
-function parseTable (src, options) {
+export function parseTable (src, options) {
   const rowgroups = [];
   let colgroup;
   let caption;
@@ -206,9 +206,3 @@ function parseTable (src, options) {
   table.appendChild(new TextNode('\n'));
   return table;
 }
-
-module.exports = {
-  parseColgroup: parseColgroup,
-  parseTable: parseTable,
-  testTable: testTable
-};

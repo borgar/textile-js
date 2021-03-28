@@ -1,4 +1,4 @@
-module.exports = class Ribbon {
+export default class Ribbon {
   constructor (feed, skew = 0) {
     this._org = String(feed);
     this._feed = this._org;

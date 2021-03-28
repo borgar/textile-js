@@ -1,8 +1,8 @@
 /* eslint camelcase: 0 */
 
-exports.txblocks = '(?:b[qc]|div|notextile|pre|h[1-6]|fn\\d+|p|###)';
+export const txblocks = '(?:b[qc]|div|notextile|pre|h[1-6]|fn\\d+|p|###)';
 
-exports.ucaps = 'A-Z' +
+export const ucaps = 'A-Z' +
     // Latin extended À-Þ
     '\u00c0-\u00d6\u00d8-\u00de' +
     // Latin caps with embelishments and ligatures...
@@ -21,15 +21,16 @@ exports.ucaps = 'A-Z' +
     '\ua740\ua742\ua744\ua746\ua748\ua74a\ua74c\ua74e\ua750\ua752\ua754\ua756\ua758\ua75a\ua75c\ua75e\ua760\ua762\ua764\ua766\ua768\ua76a\ua76c\ua76e\ua779\ua77b\ua77d\ua77e' +
     '\ua780\ua782\ua784\ua786\ua78b\ua78d\ua790\ua792\ua7a0\ua7a2\ua7a4\ua7a6\ua7a8\ua7aa';
 
-exports.txcite = ':((?:[^\\s()]|\\([^\\s()]+\\)|[()])+?)(?=[!-\\.:-@\\[\\\\\\]-`{-~]+(?:$|\\s)|$|\\s)';
+export const txcite = ':((?:[^\\s()]|\\([^\\s()]+\\)|[()])+?)(?=[!-\\.:-@\\[\\\\\\]-`{-~]+(?:$|\\s)|$|\\s)';
 
-const attr_class = exports.attr_class = '\\([^\\)]+\\)';
-const attr_style = exports.attr_style = '\\{[^\\}]+\\}';
-const attr_lang = exports.attr_lang = '\\[[^\\[\\]]+\\]';
-const attr_align = exports.attr_align = '(?:<>|<|>|=)';
-const attr_pad = exports.attr_pad = '[\\(\\)]+';
+export const attr_class = '\\([^\\)]+\\)';
+export const attr_style = '\\{[^\\}]+\\}';
+export const attr_lang = '\\[[^\\[\\]]+\\]';
+export const attr_align = '(?:<>|<|>|=)';
+export const attr_pad = '[\\(\\)]+';
 
-const txattr = exports.txattr = `(?:${attr_class}|${attr_style}|${attr_lang}|${attr_align}|${attr_pad})*`;
+export const txattr = `(?:${attr_class}|${attr_style}|${attr_lang}|${attr_align}|${attr_pad})*`;
 
-exports.txlisthd = `[\\t ]*(\\*|\\#(?:_|\\d+)?)${txattr}(?: +\\S|\\.\\s*(?=\\S|\\n))`;
-exports.txlisthd2 = `[\\t ]*[\\#\\*]*(\\*|\\#(?:_|\\d+)?)${txattr}(?: +\\S|\\.\\s*(?=\\S|\\n))`;
+export const txlisthd = `[\\t ]*(\\*|\\#(?:_|\\d+)?)${txattr}(?: +\\S|\\.\\s*(?=\\S|\\n))`;
+export const txlisthd2 = `[\\t ]*[\\#\\*]*(\\*|\\#(?:_|\\d+)?)${txattr}(?: +\\S|\\.\\s*(?=\\S|\\n))`;
+

@@ -1,9 +1,8 @@
-const test = require('tape');
-const textile = require('../src');
+import test from 'tape';
+import textile from '../src/index.js';
 
 function parse (tx) {
-  return textile
-    .parseTree(tx)
+  return textile.parseTree(tx)
     .visit(node => {
       if (node.nodeType === 1) {
         node.setAttribute('data-line', node.pos.line + 1);

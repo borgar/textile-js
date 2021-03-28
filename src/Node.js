@@ -1,4 +1,4 @@
-const { singletons } = require('./constants');
+import { singletons } from './constants.js';
 
 const NODE = 0;
 const ELEMENT_NODE = 1;
@@ -46,7 +46,7 @@ function appendTo (parent, child) {
   return child;
 }
 
-class Node {
+export class Node {
   constructor (tagName) {
     this.nodeType = NODE;
     this.pos = { offset: null };
@@ -81,7 +81,7 @@ class Node {
   }
 };
 
-class TextNode extends Node {
+export class TextNode extends Node {
   constructor (data) {
     super();
     this.nodeType = TEXT_NODE;
@@ -95,7 +95,7 @@ class TextNode extends Node {
 
 // Essentially this is the same as a textnode except it should not
 // merge with textnodes, and should not be post-processed.
-class RawNode extends Node {
+export class RawNode extends Node {
   constructor (data) {
     super();
     this.nodeType = RAW_NODE;
@@ -107,7 +107,7 @@ class RawNode extends Node {
   }
 }
 
-class CommentNode extends Node {
+export class CommentNode extends Node {
   constructor (data) {
     super();
     this.nodeType = COMMENT_NODE;
@@ -119,7 +119,7 @@ class CommentNode extends Node {
   }
 }
 
-class Element extends Node {
+export class Element extends Node {
   constructor (tagName, attr, offsetPos) {
     super();
     this.tagName = tagName;
@@ -180,7 +180,7 @@ class Element extends Node {
   }
 }
 
-class Document extends Node {
+export class Document extends Node {
   constructor (data) {
     super();
     this.nodeType = DOCUMENT_NODE;
@@ -210,10 +210,3 @@ class Document extends Node {
   d.DOCUMENT_NODE = DOCUMENT_NODE;
   d.COMMENT_NODE = COMMENT_NODE;
 });
-
-exports.Node = Node;
-exports.RawNode = RawNode;
-exports.TextNode = TextNode;
-exports.CommentNode = CommentNode;
-exports.Element = Element;
-exports.Document = Document;

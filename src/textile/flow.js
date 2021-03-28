@@ -1,20 +1,20 @@
 /*
 ** textile flow content parser
 */
-const Ribbon = require('../Ribbon');
-const { Element, TextNode, RawNode, CommentNode } = require('../Node');
-const re = require('../re');
+import Ribbon from '../Ribbon.js';
+import { Element, TextNode, RawNode, CommentNode } from '../Node.js';
+import re from '../re.js';
 
-const { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } = require('../html');
-const { singletons } = require('../constants');
+import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
+import { singletons } from '../constants.js';
 
-const { parsePhrase } = require('./phrase');
-const { copyAttr, parseAttr } = require('./attr');
-const { testList, parseList } = require('./list');
-const { testDefList, parseDefList } = require('./deflist');
-const { testTable, parseTable } = require('./table');
+import { parsePhrase } from './phrase.js';
+import { copyAttr, parseAttr } from './attr.js';
+import { testList, parseList } from './list.js';
+import { testDefList, parseDefList } from './deflist.js';
+import { testTable, parseTable } from './table.js';
 
-const { txblocks, txlisthd, txattr } = require('./re_ext');
+import { txblocks, txlisthd, txattr } from './re_ext.js';
 re.pattern.txblocks = txblocks;
 re.pattern.txlisthd = txlisthd;
 re.pattern.txattr = txattr;
@@ -71,7 +71,7 @@ function paragraph (src, { tag = 'p', attr = {}, linebreak = '\n', options }) {
   return out;
 };
 
-function parseFlow (src, options) {
+export function parseFlow (src, options) {
   const root = new Element('root');
 
   let linkRefs;
@@ -339,5 +339,3 @@ function parseFlow (src, options) {
 
   return root.children;
 }
-
-exports.parseFlow = parseFlow;

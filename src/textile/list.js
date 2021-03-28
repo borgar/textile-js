@@ -1,11 +1,11 @@
 /* textile list parser */
-const re = require('../re');
-const { Element, TextNode } = require('../Node');
+import re from '../re.js';
+import { Element, TextNode } from '../Node.js';
 
-const { parseAttr } = require('./attr');
-const { parsePhrase } = require('./phrase');
+import { parseAttr } from './attr.js';
+import { parsePhrase } from './phrase.js';
 
-const { txlisthd, txlisthd2 } = require('./re_ext');
+import { txlisthd, txlisthd2 } from './re_ext.js';
 re.pattern.txlisthd = txlisthd;
 re.pattern.txlisthd2 = txlisthd2;
 const reList = re.compile(/^((?:[:txlisthd:][^\0]*?(?:\r?\n|$))+)(\s*\n|$)/, 's');
@@ -15,12 +15,11 @@ const listPad = n => {
   return '\n' + '\t'.repeat(n);
 };
 
-function testList (src) {
+export function testList (src) {
   return reList.exec(src);
 }
 
-function parseList (src, options) {
-
+export function parseList (src, options) {
   const maybeMoveAttr = node => {
     if (node.attrCount === 1) {
       const firstChild = node.ul.children.find(d => d.tagName === 'li');
@@ -146,8 +145,3 @@ function parseList (src, options) {
 
   return s.ul;
 }
-
-module.exports = {
-  testList: testList,
-  parseList: parseList
-};

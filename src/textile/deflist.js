@@ -1,18 +1,16 @@
 /* definitions list parser */
-const { Element, TextNode } = require('../Node');
+import { Element, TextNode } from '../Node.js';
+import { parsePhrase } from './phrase.js';
+import { parseFlow } from './flow.js';
 
 const reDeflist = /^((?:- (?:[^\n]\n?)+?)+(:=)(?: *\n[^\0]+?=:(?:\n|$)|(?:[^\0]+?(?:$|\n(?=\n|- )))))+/;
 const reItem = /^((?:- (?:[^\n]\n?)+?)+)(:=)( *\n[^\0]+?=:\s*(?:\n|$)|(?:[^\0]+?(?:$|\n(?=\n|- ))))/;
 
-function testDefList (src) {
+export function testDefList (src) {
   return reDeflist.exec(src);
 }
 
-function parseDefList (src, options) {
-  // late loading to get around the lack of non-circular-dependency support in RequireJS
-  const parsePhrase = require('./phrase').parsePhrase;
-  const parseFlow = require('./flow').parseFlow;
-
+export function parseDefList (src, options) {
   const deflist = new Element('dl').setPos(src.offset);
   deflist.appendChild(new TextNode('\n'));
 
@@ -55,6 +53,3 @@ function parseDefList (src, options) {
 
   return deflist;
 }
-
-exports.testDefList = testDefList;
-exports.parseDefList = parseDefList;

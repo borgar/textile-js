@@ -1,5 +1,5 @@
-const test = require('tape');
-const textile = require('../src');
+import test from 'tape';
+import { parseTree } from '../src/index.js';
 
 function simplify (node) {
   const tag = node.tagName || 'ROOT';
@@ -12,7 +12,7 @@ function simplify (node) {
 }
 
 function parse (tx) {
-  const tree = textile.parseTree(tx);
+  const tree = parseTree(tx);
   return simplify(tree);
 }
 

@@ -1,4 +1,4 @@
-exports.singletons = {
+export const singletons = {
   area: 1,
   base: 1,
   br: 1,

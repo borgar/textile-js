@@ -23,7 +23,7 @@ const pbaVAlignLookup = {
   '-': 'middle'
 };
 
-function copyAttr (s, blacklist) {
+export function copyAttr (s, blacklist) {
   if (!s) { return undefined; }
   const d = {};
   for (const k in s) {
@@ -55,7 +55,7 @@ function testBlock (name) {
   only accepts valid BCP 47 language tags, but who knows what atrocities are being preformed
   out there in the real world. So this attempts to emulate the other libraries.
 */
-function parseAttr (input, element, endToken) {
+export function parseAttr (input, element, endToken) {
   input = String(input || '');
   if (!input || element === 'notextile') {
     return [ 0, {} ];
@@ -177,8 +177,3 @@ function parseAttr (input, element, endToken) {
 
   return (remaining === input) ? [ 0, {} ] : [ input.length - remaining.length, o ];
 }
-
-module.exports = {
-  copyAttr: copyAttr,
-  parseAttr: parseAttr
-};

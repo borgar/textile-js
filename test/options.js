@@ -1,7 +1,7 @@
-const test = require('tape');
-const textile = require('../src');
+import test from 'tape';
+import textile from '../src/index.js';
 
-test('jstextile options', function (t) {
+test('jstextile options', t => {
   const paragraph = 'Some paragraph\nwith a linebreak.';
   // By default, inline linebreaks will be converted to html linebreaks
   t.is(textile.convert(paragraph),
@@ -11,7 +11,7 @@ test('jstextile options', function (t) {
   t.end();
 });
 
-test('jstextile options', function (t) {
+test('jstextile options', t => {
   // linebreak option works in tables
   t.is(textile.convert('|a|b\nc|d|\n|a|b|c|\n'),
     '<table>\n' +
@@ -42,7 +42,7 @@ test('jstextile options', function (t) {
   t.end();
 });
 
-test('jstextile options', function (t) {
+test('jstextile options', t => {
   const paragraph = 'Some paragraph\nwith a linebreak.';
   const savedOptions = {};
   for (const k in textile.defaults) {

@@ -8,7 +8,7 @@
 
 const _cache = {};
 
-const re = module.exports = {
+const re = {
 
   pattern: {
     punct: '[!-/:-@\\[\\\\\\]-`{-~]',
@@ -72,3 +72,5 @@ const re = module.exports = {
   }
 
 };
+
+export default re;

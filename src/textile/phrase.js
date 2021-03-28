@@ -1,14 +1,14 @@
 /* textile inline parser */
-const Ribbon = require('../Ribbon');
-const { Element, TextNode, RawNode, CommentNode } = require('../Node');
-const re = require('../re');
+import Ribbon from '../Ribbon.js';
+import { Element, TextNode, RawNode, CommentNode } from '../Node.js';
+import re from '../re.js';
 
-const { parseAttr } = require('./attr');
-const { parseGlyph } = require('./glyph');
-const { parseHtml, parseHtmlAttr, tokenize, testComment, testOpenTag } = require('../html');
-const { singletons } = require('../constants');
+import { parseAttr } from './attr.js';
+import { parseGlyph } from './glyph.js';
+import { parseHtml, parseHtmlAttr, tokenize, testComment, testOpenTag } from '../html.js';
+import { singletons } from '../constants.js';
 
-const { ucaps, txattr, txcite } = require('./re_ext');
+import { ucaps, txattr, txcite } from './re_ext.js';
 re.pattern.txattr = txattr;
 re.pattern.txcite = txcite;
 re.pattern.ucaps = ucaps;
@@ -58,7 +58,7 @@ const getMatchRe = (tok, fence, code) => {
   return re.compile(`${mMid}(?:${re.escape(tok)})${mEnd}`);
 };
 
-function parsePhrase (src, options) {
+export function parsePhrase (src, options) {
   // FIXME: remove this
   if (!(src instanceof Ribbon)) {
     src = new Ribbon(src);
@@ -278,5 +278,3 @@ function parsePhrase (src, options) {
   });
   return root.children;
 }
-
-exports.parsePhrase = parsePhrase;

@@ -1,40 +1,41 @@
-const test = require('tape');
-const textile = require('../src');
+import test from 'tape';
+import textile from '../src/index.js';
 // basic.yml
 
-test('paragraphs', function (t) {
-  const tx = 'A single paragraph.\n\n\
-Followed by another.';
+test('paragraphs', t => {
+  const tx = `A single paragraph.
+
+Followed by another.`;
   t.is(textile.convert(tx),
-    '<p>A single paragraph.</p>\n\
-<p>Followed by another.</p>', tx);
+    `<p>A single paragraph.</p>
+<p>Followed by another.</p>`, tx);
   t.end();
 });
 
 
-test('blocks with spaces on the blank line in between', function (t) {
-  const tx = 'This is line one\n\
- \n\
-This is line two';
+test('blocks with spaces on the blank line in between', t => {
+  const tx = `This is line one
+ 
+This is line two`;
   t.is(textile.convert(tx),
-    '<p>This is line one</p>\n\
-<p>This is line two</p>', tx);
+    `<p>This is line one</p>
+<p>This is line two</p>`, tx);
   t.end();
 });
 
 
-test('blocks with tabl on the blank line in between', function (t) {
-  const tx = 'This is line one\n\
-\t\n\
-This is line two';
+test('blocks with tabl on the blank line in between', t => {
+  const tx = `This is line one
+\t
+This is line two`;
   t.is(textile.convert(tx),
-    '<p>This is line one</p>\n\
-<p>This is line two</p>', tx);
+    `<p>This is line one</p>
+<p>This is line two</p>`, tx);
   t.end();
 });
 
 
-test('block containing block start', function (t) {
+test('block containing block start', t => {
   const tx = 'I saw a ship. It ate my elephant.';
   t.is(textile.convert(tx),
     '<p>I saw a ship. It ate my elephant.</p>', tx);
@@ -42,57 +43,61 @@ test('block containing block start', function (t) {
 });
 
 
-test('extended block containing block start', function (t) {
-  const tx = 'p.. I saw a ship. It ate my elephant.\n\n\
-When the elephant comes to take a p. you...';
+test('extended block containing block start', t => {
+  const tx = `p.. I saw a ship. It ate my elephant.
+
+When the elephant comes to take a p. you...`;
   t.is(textile.convert(tx),
-    '<p>I saw a ship. It ate my elephant.</p>\n\
-<p>When the elephant comes to take a p. you&#8230;</p>', tx);
+    `<p>I saw a ship. It ate my elephant.</p>
+<p>When the elephant comes to take a p. you&#8230;</p>`, tx);
   t.end();
 });
 
 
-test('blockquote containing block start', function (t) {
+test('blockquote containing block start', t => {
   const tx = 'bq. I saw a ship. It ate my elephant.';
   t.is(textile.convert(tx),
-    '<blockquote>\n\
-<p>I saw a ship. It ate my elephant.</p>\n\
-</blockquote>', tx);
+    `<blockquote>
+<p>I saw a ship. It ate my elephant.</p>
+</blockquote>`, tx);
   t.end();
 });
 
 
-test('extended blockquote containing block start', function (t) {
-  const tx = 'bq.. I saw a ship. It ate my elephant.\n\n\
-When the elephant comes to take a p. you...';
+test('extended blockquote containing block start', t => {
+  const tx = `bq.. I saw a ship. It ate my elephant.
+
+When the elephant comes to take a p. you...`;
   t.is(textile.convert(tx),
-    '<blockquote>\n\
-<p>I saw a ship. It ate my elephant.</p>\n\
-<p>When the elephant comes to take a p. you&#8230;</p>\n\
-</blockquote>', tx);
+    `<blockquote>
+<p>I saw a ship. It ate my elephant.</p>
+<p>When the elephant comes to take a p. you&#8230;</p>
+</blockquote>`, tx);
   t.end();
 });
 
 
-test('notextile block', function (t) {
-  const tx = 'Some text:\n\n\
-<notextile>\n\
-<div class="example"><pre>\n\
-Some code\n\
-</pre></div>\n\
-</notextile>\n\n\
-Some more text.';
+test('notextile block', t => {
+  const tx = `Some text:
+
+<notextile>
+<div class="example"><pre>
+Some code
+</pre></div>
+</notextile>
+
+Some more text.`;
   t.is(textile.convert(tx),
-    '<p>Some text:</p>\n\
-<div class="example"><pre>\n\
-Some code\n\
-</pre></div>\n\
-<p>Some more text.</p>', tx);
+    `<p>Some text:</p>
+<div class="example"><pre>
+Some code
+</pre></div>
+<p>Some more text.</p>`, tx);
   t.end();
 });
 
 
-test('notextile block containing block start', function (t) {
+test('notextile block containing block start', t => {
   const tx = 'notextile. I saw a ship. It ate my elephant.';
   t.is(textile.convert(tx),
     'I saw a ship. It ate my elephant.', tx);
@@ -100,17 +105,19 @@ test('notextile block containing block start', function (t) {
 });
 
 
-test('extended notextile block containing block start', function (t) {
-  const tx = 'notextile.. I saw a ship. It ate my elephant.\n\n\
-When the elephant comes to take a p. you...';
+test('extended notextile block containing block start', t => {
+  const tx = `notextile.. I saw a ship. It ate my elephant.
+
+When the elephant comes to take a p. you...`;
   t.is(textile.convert(tx),
-    'I saw a ship. It ate my elephant.\n\n\
-When the elephant comes to take a p. you...', tx);
+    `I saw a ship. It ate my elephant.
+
+When the elephant comes to take a p. you...`, tx);
   t.end();
 });
 
 
-test('pre block containing block start', function (t) {
+test('pre block containing block start', t => {
   const tx = 'pre. I saw a ship. It ate my elephant.';
   t.is(textile.convert(tx),
     '<pre>I saw a ship. It ate my elephant.</pre>', tx);
@@ -118,41 +125,44 @@ test('pre block containing block start', function (t) {
 });
 
 
-test('extended pre block containing block start', function (t) {
-  const tx = 'pre.. I saw a ship. It ate my elephant.\n\n\
-When the elephant comes to take a p. you...';
+test('extended pre block containing block start', t => {
+  const tx = `pre.. I saw a ship. It ate my elephant.
+
+When the elephant comes to take a p. you...`;
   t.is(textile.convert(tx),
-    '<pre>I saw a ship. It ate my elephant.\n\n\
-When the elephant comes to take a p. you...</pre>', tx);
+    `<pre>I saw a ship. It ate my elephant.
+
+When the elephant comes to take a p. you...</pre>`, tx);
   t.end();
 });
 
 
-test('html tags', function (t) {
-  const tx = 'I am <b>very</b> serious.\n\n\
-<pre>\n\
-  I am <b>very</b> serious.\n\
-</pre>';
+test('html tags', t => {
+  const tx = `I am <b>very</b> serious.
+
+<pre>
+  I am <b>very</b> serious.
+</pre>`;
   t.is(textile.convert(tx),
-    '<p>I am <b>very</b> serious.</p>\n\
-<pre>\n\
-  I am &lt;b&gt;very&lt;/b&gt; serious.\n\
-</pre>', tx);
+    `<p>I am <b>very</b> serious.</p>
+<pre>
+  I am &lt;b&gt;very&lt;/b&gt; serious.
+</pre>`, tx);
   t.end();
 });
 
 
-test('line breaks', function (t) {
-  const tx = 'I spoke.\n\
-And none replied.';
+test('line breaks', t => {
+  const tx = `I spoke.
+And none replied.`;
   t.is(textile.convert(tx),
-    '<p>I spoke.<br />\n\
-And none replied.</p>', tx);
+    `<p>I spoke.<br />
+And none replied.</p>`, tx);
   t.end();
 });
 
 
-test('curly quotes', function (t) {
+test('curly quotes', t => {
   const tx = '"Observe!"';
   t.is(textile.convert(tx),
     '<p>&#8220;Observe!&#8221;</p>', tx);
@@ -160,17 +170,18 @@ test('curly quotes', function (t) {
 });
 
 
-test('quotes contained in multi-paragraph quotes', function (t) {
-  const tx = "\"I first learned about this thing called \"Redcloth\" several years ago.\n\n\
-\"It's wonderful.\"";
+test('quotes contained in multi-paragraph quotes', t => {
+  const tx = `"I first learned about this thing called "Redcloth" several years ago.
+
+"It's wonderful."`;
   t.is(textile.convert(tx),
-    '<p>&#8220;I first learned about this thing called &#8220;Redcloth&#8221; several years ago.</p>\n\
-<p>&#8220;It&#8217;s wonderful.&#8221;</p>', tx);
+    `<p>&#8220;I first learned about this thing called &#8220;Redcloth&#8221; several years ago.</p>
+<p>&#8220;It&#8217;s wonderful.&#8221;</p>`, tx);
   t.end();
 });
 
 
-test('double hyphens', function (t) {
+test('double hyphens', t => {
   const tx = 'Observe--very nice!';
   t.is(textile.convert(tx),
     '<p>Observe&#8212;very nice!</p>', tx);
@@ -178,7 +189,7 @@ test('double hyphens', function (t) {
 });
 
 
-test('double hyphens with spaces', function (t) {
+test('double hyphens with spaces', t => {
   const tx = 'Observe -- very nice!';
   t.is(textile.convert(tx),
     '<p>Observe &#8212; very nice!</p>', tx);
@@ -186,7 +197,7 @@ test('double hyphens with spaces', function (t) {
 });
 
 
-test('parenthetical phrase set off with em dashes', function (t) {
+test('parenthetical phrase set off with em dashes', t => {
   const tx = 'An emdash indicates a parenthetical thought--like this one--which is set apart from the rest of a sentence.';
   t.is(textile.convert(tx),
     '<p>An emdash indicates a parenthetical thought&#8212;like this one&#8212;which is set apart from the rest of a sentence.</p>', tx);
@@ -194,7 +205,7 @@ test('parenthetical phrase set off with em dashes', function (t) {
 });
 
 
-test('parenthetical phrase set off with em dashes surrounded by spaces', function (t) {
+test('parenthetical phrase set off with em dashes surrounded by spaces', t => {
   const tx = 'An emdash indicates a parenthetical thought -- like this one -- which is set apart from the rest of a sentence.';
   t.is(textile.convert(tx),
     '<p>An emdash indicates a parenthetical thought &#8212; like this one &#8212; which is set apart from the rest of a sentence.</p>', tx);
@@ -202,7 +213,7 @@ test('parenthetical phrase set off with em dashes surrounded by spaces', functio
 });
 
 
-test('single hyphens with spaces', function (t) {
+test('single hyphens with spaces', t => {
   const tx = 'Observe - tiny and brief.';
   t.is(textile.convert(tx),
     '<p>Observe &#8211; tiny and brief.</p>', tx);
@@ -210,7 +221,7 @@ test('single hyphens with spaces', function (t) {
 });
 
 
-test('midword hyphens ', function (t) {
+test('midword hyphens ', t => {
   const tx = 'Observe the nicely-done hyphen.';
   t.is(textile.convert(tx),
     '<p>Observe the nicely-done hyphen.</p>', tx);
@@ -218,7 +229,7 @@ test('midword hyphens ', function (t) {
 });
 
 
-test('ellipses', function (t) {
+test('ellipses', t => {
   const tx = 'Observe...';
   t.is(textile.convert(tx),
     '<p>Observe&#8230;</p>', tx);
@@ -226,7 +237,7 @@ test('ellipses', function (t) {
 });
 
 
-test('dimension sign', function (t) {
+test('dimension sign', t => {
   const tx = 'Observe: 2x3.';
   t.is(textile.convert(tx),
     '<p>Observe: 2&#215;3.</p>', tx);
@@ -234,7 +245,7 @@ test('dimension sign', function (t) {
 });
 
 
-test('dimension sign with space after', function (t) {
+test('dimension sign with space after', t => {
   const tx = 'The room is 2x3 inches big.';
   t.is(textile.convert(tx),
     '<p>The room is 2&#215;3 inches big.</p>', tx);
@@ -242,7 +253,7 @@ test('dimension sign with space after', function (t) {
 });
 
 
-test('dimension sign with spaces', function (t) {
+test('dimension sign with spaces', t => {
   const tx = 'Observe: 2 x 4.';
   t.is(textile.convert(tx),
     '<p>Observe: 2 &#215; 4.</p>', tx);
@@ -250,7 +261,7 @@ test('dimension sign with spaces', function (t) {
 });
 
 
-test('dimension signs chained', function (t) {
+test('dimension signs chained', t => {
   const tx = 'Observe: 2x3x4.';
   t.is(textile.convert(tx),
     '<p>Observe: 2&#215;3&#215;4.</p>', tx);
@@ -258,7 +269,7 @@ test('dimension signs chained', function (t) {
 });
 
 
-test('dimension signs with double primes', function (t) {
+test('dimension signs with double primes', t => {
   const tx = 'My mouse: 2.5" x 4".';
   t.is(textile.convert(tx),
     '<p>My mouse: 2.5&#8243; &#215; 4&#8243;.</p>', tx);
@@ -266,7 +277,7 @@ test('dimension signs with double primes', function (t) {
 });
 
 
-test('dimension signs with single primes', function (t) {
+test('dimension signs with single primes', t => {
   const tx = "My office: 5' x 4.5'.";
   t.is(textile.convert(tx),
     '<p>My office: 5&#8242; &#215; 4.5&#8242;.</p>', tx);
@@ -274,7 +285,7 @@ test('dimension signs with single primes', function (t) {
 });
 
 
-test('trademark and copyright', function (t) {
+test('trademark and copyright', t => {
   const tx = 'one(TM), two(R), three(C).';
   t.is(textile.convert(tx),
     '<p>one&#8482;, two&#174;, three&#169;.</p>', tx);
@@ -282,7 +293,7 @@ test('trademark and copyright', function (t) {
 });
 
 
-test('headers', function (t) {
+test('headers', t => {
   const tx = 'h3. Header 3';
   t.is(textile.convert(tx),
     '<h3>Header 3</h3>', tx);
@@ -290,21 +301,23 @@ test('headers', function (t) {
 });
 
 
-test('blockquote', function (t) {
-  const tx = 'Any old text\n\n\
-bq. A block quotation.\n\n\
-Any old text';
+test('blockquote', t => {
+  const tx = `Any old text
+
+bq. A block quotation.
+
+Any old text`;
   t.is(textile.convert(tx),
-    '<p>Any old text</p>\n\
-<blockquote>\n\
-<p>A block quotation.</p>\n\
-</blockquote>\n\
-<p>Any old text</p>', tx);
+    `<p>Any old text</p>
+<blockquote>
+<p>A block quotation.</p>
+</blockquote>
+<p>Any old text</p>`, tx);
   t.end();
 });
 
 
-test('footnote reference', function (t) {
+test('footnote reference', t => {
   const tx = 'This is covered elsewhere[1].';
   t.is(textile.convert(tx),
     '<p>This is covered elsewhere<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>.</p>', tx);
@@ -312,7 +325,7 @@ test('footnote reference', function (t) {
 });
 
 
-test('footnote', function (t) {
+test('footnote', t => {
   const tx = 'fn1. Down here, in fact.';
   t.is(textile.convert(tx),
     '<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> Down here, in fact.</p>', tx);
@@ -320,7 +333,7 @@ test('footnote', function (t) {
 });
 
 
-test('em', function (t) {
+test('em', t => {
   const tx = 'I _believe_ every word.';
   t.is(textile.convert(tx),
     '<p>I <em>believe</em> every word.</p>', tx);
@@ -328,7 +341,7 @@ test('em', function (t) {
 });
 
 
-test('strong', function (t) {
+test('strong', t => {
   const tx = 'And then? She *fell*!';
   t.is(textile.convert(tx),
     '<p>And then? She <strong>fell</strong>!</p>', tx);
@@ -336,7 +349,7 @@ test('strong', function (t) {
 });
 
 
-test('strong phrase beginning with a number', function (t) {
+test('strong phrase beginning with a number', t => {
   const tx = '*10 times as many*';
   t.is(textile.convert(tx),
     '<p><strong>10 times as many</strong></p>', tx);
@@ -344,17 +357,17 @@ test('strong phrase beginning with a number', function (t) {
 });
 
 
-test('force bold italics', function (t) {
-  const tx = 'I __know__.\n\
-I **really** __know__.';
+test('force bold italics', t => {
+  const tx = `I __know__.
+I **really** __know__.`;
   t.is(textile.convert(tx),
-    '<p>I <i>know</i>.<br />\n\
-I <b>really</b> <i>know</i>.</p>', tx);
+    `<p>I <i>know</i>.<br />
+I <b>really</b> <i>know</i>.</p>`, tx);
   t.end();
 });
 
 
-test('citation', function (t) {
+test('citation', t => {
   const tx = "??Cat's Cradle?? by Vonnegut";
   t.is(textile.convert(tx),
     '<p><cite>Cat&#8217;s Cradle</cite> by Vonnegut</p>', tx);
@@ -362,7 +375,7 @@ test('citation', function (t) {
 });
 
 
-test('code phrases', function (t) {
+test('code phrases', t => {
   const tx = 'Convert with @r.to_html@';
   t.is(textile.convert(tx),
     '<p>Convert with <code>r.to_html</code></p>', tx);
@@ -370,7 +383,7 @@ test('code phrases', function (t) {
 });
 
 
-test('code phrases not created with multiple email addresses', function (t) {
+test('code phrases not created with multiple email addresses', t => {
   const tx = 'Please email why@domain.com or jason@domain.com.';
   t.is(textile.convert(tx),
     '<p>Please email why@domain.com or jason@domain.com.</p>', tx);
@@ -378,7 +391,7 @@ test('code phrases not created with multiple email addresses', function (t) {
 });
 
 
-test('del', function (t) {
+test('del', t => {
   const tx = "I'm -sure- not sure.";
   t.is(textile.convert(tx),
     '<p>I&#8217;m <del>sure</del> not sure.</p>', tx);
@@ -386,7 +399,7 @@ test('del', function (t) {
 });
 
 
-test('del beginning a phrase', function (t) {
+test('del beginning a phrase', t => {
   const tx = '-delete-';
   t.is(textile.convert(tx),
     '<p><del>delete</del></p>', tx);
@@ -394,7 +407,7 @@ test('del beginning a phrase', function (t) {
 });
 
 
-test('ins', function (t) {
+test('ins', t => {
   const tx = 'You are a +pleasant+ child.';
   t.is(textile.convert(tx),
     '<p>You are a <ins>pleasant</ins> child.</p>', tx);
@@ -402,7 +415,7 @@ test('ins', function (t) {
 });
 
 
-test('superscript', function (t) {
+test('superscript', t => {
   const tx = 'a ^2^ + b ^2^ = c ^2^';
   t.is(textile.convert(tx),
     '<p>a <sup>2</sup> + b <sup>2</sup> = c <sup>2</sup></p>', tx);
@@ -410,7 +423,7 @@ test('superscript', function (t) {
 });
 
 
-test('parenthetical superscript phrase', function (t) {
+test('parenthetical superscript phrase', t => {
   const tx = '^(image courtesy NASA)^';
   t.is(textile.convert(tx),
     '<p><sup>(image courtesy <span class="caps">NASA</span>)</sup></p>', tx);
@@ -418,7 +431,7 @@ test('parenthetical superscript phrase', function (t) {
 });
 
 
-test('subscript', function (t) {
+test('subscript', t => {
   const tx = 'log ~2~ x';
   t.is(textile.convert(tx),
     '<p>log <sub>2</sub> x</p>', tx);
@@ -426,7 +439,7 @@ test('subscript', function (t) {
 });
 
 
-test('parenthetical subscript phrase', function (t) {
+test('parenthetical subscript phrase', t => {
   const tx = '~(image courtesy NASA)~';
   t.is(textile.convert(tx),
     '<p><sub>(image courtesy <span class="caps">NASA</span>)</sub></p>', tx);
@@ -434,7 +447,7 @@ test('parenthetical subscript phrase', function (t) {
 });
 
 
-test('tight superscript and subscript', function (t) {
+test('tight superscript and subscript', t => {
   const tx = 'f(x, n) = log[~4~]x[^n^]';
   t.is(textile.convert(tx),
     '<p>f(x, n) = log<sub>4</sub>x<sup>n</sup></p>', tx);
@@ -442,7 +455,7 @@ test('tight superscript and subscript', function (t) {
 });
 
 
-test('span', function (t) {
+test('span', t => {
   const tx = "I'm %unaware% of most soft drinks.";
   t.is(textile.convert(tx),
     '<p>I&#8217;m <span>unaware</span> of most soft drinks.</p>', tx);
@@ -450,27 +463,27 @@ test('span', function (t) {
 });
 
 
-test('style span', function (t) {
-  const tx = "I'm %{color:red}unaware%\n\
-of most %{font-size:0.5em;}soft drinks%.";
+test('style span', t => {
+  const tx = `I'm %{color:red}unaware%
+of most %{font-size:0.5em;}soft drinks%.`;
   t.is(textile.convert(tx),
-    '<p>I&#8217;m <span style="color:red">unaware</span><br />\n\
-of most <span style="font-size:0.5em">soft drinks</span>.</p>', tx);
+    `<p>I&#8217;m <span style="color:red">unaware</span><br />
+of most <span style="font-size:0.5em">soft drinks</span>.</p>`, tx);
   t.end();
 });
 
 
-test('percent sign', function (t) {
-  const tx = 'http://blah.com/one%20two%20three\n\
-(min)5%-95%(max)';
+test('percent sign', t => {
+  const tx = `http://blah.com/one%20two%20three
+(min)5%-95%(max)`;
   t.is(textile.convert(tx),
-    '<p>http://blah.com/one%20two%20three<br />\n\
-(min)5%-95%(max)</p>', tx);
+    `<p>http://blah.com/one%20two%20three<br />
+(min)5%-95%(max)</p>`, tx);
   t.end();
 });
 
 
-test('css class', function (t) {
+test('css class', t => {
   const tx = 'p(example1). An example';
   t.is(textile.convert(tx),
     '<p class="example1">An example</p>', tx);
@@ -478,7 +491,7 @@ test('css class', function (t) {
 });
 
 
-test('css id', function (t) {
+test('css id', t => {
   const tx = 'p(#big-red). Red here';
   t.is(textile.convert(tx),
     '<p id="big-red">Red here</p>', tx);
@@ -486,7 +499,7 @@ test('css id', function (t) {
 });
 
 
-test('css id with initial uppercase', function (t) {
+test('css id with initial uppercase', t => {
   const tx = 'p(#Foo). bar';
   t.is(textile.convert(tx),
     '<p id="Foo">bar</p>', tx);
@@ -494,7 +507,7 @@ test('css id with initial uppercase', function (t) {
 });
 
 
-test('css class uppercase', function (t) {
+test('css class uppercase', t => {
   const tx = 'p(fooBar). baz';
   t.is(textile.convert(tx),
     '<p class="fooBar">baz</p>', tx);
@@ -502,7 +515,7 @@ test('css class uppercase', function (t) {
 });
 
 
-test('class and id combined', function (t) {
+test('class and id combined', t => {
   const tx = 'p(example1#big-red2). Red here';
   t.is(textile.convert(tx),
     '<p class="example1" id="big-red2">Red here</p>', tx);
@@ -510,7 +523,7 @@ test('class and id combined', function (t) {
 });
 
 
-test('css style', function (t) {
+test('css style', t => {
   const tx = "p{color:blue;margin:30px;font-size:120%;font-family:'Comic Sans'}. Spacey blue";
   t.is(textile.convert(tx),
     '<p style="color:blue;margin:30px;font-size:120%;font-family:&#39;Comic Sans&#39;">Spacey blue</p>', tx);
@@ -518,7 +531,7 @@ test('css style', function (t) {
 });
 
 
-test('language designations', function (t) {
+test('language designations', t => {
   const tx = 'p[fr]. rouge';
   t.is(textile.convert(tx),
     '<p lang="fr">rouge</p>', tx);
@@ -526,35 +539,35 @@ test('language designations', function (t) {
 });
 
 
-test('block attributes on phrase modifiers', function (t) {
-  const tx = 'I seriously *{color:red}blushed*\n\
-when I _(big)sprouted_ that\n\
-corn stalk from my\n\
-%[es]cabeza%.';
+test('block attributes on phrase modifiers', t => {
+  const tx = `I seriously *{color:red}blushed*
+when I _(big)sprouted_ that
+corn stalk from my
+%[es]cabeza%.`;
   t.is(textile.convert(tx),
-    '<p>I seriously <strong style="color:red">blushed</strong><br />\n\
-when I <em class="big">sprouted</em> that<br />\n\
-corn stalk from my<br />\n\
-<span lang="es">cabeza</span>.</p>', tx);
+    `<p>I seriously <strong style="color:red">blushed</strong><br />
+when I <em class="big">sprouted</em> that<br />
+corn stalk from my<br />
+<span lang="es">cabeza</span>.</p>`, tx);
   t.end();
 });
 
 
-test('inline attributes preceded by text are treated as literal', function (t) {
-  const tx = 'I *seriously {color:red}blushed*\n\
-when I _first (big)sprouted_ that\n\
-corn stalk from my\n\
-%grande [es]cabeza%.';
+test('inline attributes preceded by text are treated as literal', t => {
+  const tx = `I *seriously {color:red}blushed*
+when I _first (big)sprouted_ that
+corn stalk from my
+%grande [es]cabeza%.`;
   t.is(textile.convert(tx),
-    '<p>I <strong>seriously {color:red}blushed</strong><br />\n\
-when I <em>first (big)sprouted</em> that<br />\n\
-corn stalk from my<br />\n\
-<span>grande [es]cabeza</span>.</p>', tx);
+    `<p>I <strong>seriously {color:red}blushed</strong><br />
+when I <em>first (big)sprouted</em> that<br />
+corn stalk from my<br />
+<span>grande [es]cabeza</span>.</p>`, tx);
   t.end();
 });
 
 
-test('align justified', function (t) {
+test('align justified', t => {
   const tx = 'p<>. justified';
   t.is(textile.convert(tx),
     '<p style="text-align:justify">justified</p>', tx);
@@ -562,7 +575,7 @@ test('align justified', function (t) {
 });
 
 
-test('indentation', function (t) {
+test('indentation', t => {
   const tx = 'p))). right ident 3em';
   t.is(textile.convert(tx),
     '<p style="padding-right:3em">right ident 3em</p>', tx);
@@ -570,7 +583,7 @@ test('indentation', function (t) {
 });
 
 
-test('indentation and alignment', function (t) {
+test('indentation and alignment', t => {
   const tx = 'h2()>. Bingo.';
   t.is(textile.convert(tx),
     '<h2 style="padding-left:1em;padding-right:1em;text-align:right">Bingo.</h2>', tx);
@@ -578,7 +591,7 @@ test('indentation and alignment', function (t) {
 });
 
 
-test('many modifiers combined', function (t) {
+test('many modifiers combined', t => {
   const tx = 'h3()>[no]{color:red}. Bingo';
   t.is(textile.convert(tx),
     '<h3 style="padding-left:1em;padding-right:1em;text-align:right;color:red" lang="no">Bingo</h3>', tx);
@@ -586,121 +599,125 @@ test('many modifiers combined', function (t) {
 });
 
 
-test('code blocks', function (t) {
-  const tx = "<pre>\n\
-<code>\n\
-  a.gsub!( /</, '' )\n\
-</code>\n\
-</pre>";
+test('code blocks', t => {
+  const tx = `<pre>
+<code>
+  a.gsub!( /</, '' )
+</code>
+</pre>`;
   t.is(textile.convert(tx),
-    "<pre>\n\
-<code>\n\
-  a.gsub!( /&lt;/, '' )\n\
-</code>\n\
-</pre>", tx);
+    `<pre>
+<code>
+  a.gsub!( /&lt;/, '' )
+</code>
+</pre>`, tx);
   t.end();
 });
 
 
-test('div tags', function (t) {
-  const tx = '<div style="float:right;">\n\n\
-h3. Sidebar\n\n\
-"Hobix":http://hobix.com/\n\
-"Ruby":http://ruby-lang.org/\n\n\
-</div>\n\n\
-The main text of the page goes here and will stay to the left of the sidebar.';
+test('div tags', t => {
+  const tx = `<div style="float:right;">
+
+h3. Sidebar
+
+"Hobix":http://hobix.com/
+"Ruby":http://ruby-lang.org/
+
+</div>
+
+The main text of the page goes here and will stay to the left of the sidebar.`;
   t.is(textile.convert(tx),
-    '<div style="float:right;">\n\
-<h3>Sidebar</h3>\n\
-<p><a href="http://hobix.com/">Hobix</a><br />\n\
-<a href="http://ruby-lang.org/">Ruby</a></p>\n\
-</div>\n\
-<p>The main text of the page goes here and will stay to the left of the sidebar.</p>', tx);
+    `<div style="float:right;">
+<h3>Sidebar</h3>
+<p><a href="http://hobix.com/">Hobix</a><br />
+<a href="http://ruby-lang.org/">Ruby</a></p>
+</div>
+<p>The main text of the page goes here and will stay to the left of the sidebar.</p>`, tx);
   t.end();
 });
 
 
-test('numbered list', function (t) {
-  const tx = '# A first item\n\
-# A second item\n\
-# A third';
+test('numbered list', t => {
+  const tx = `# A first item
+# A second item
+# A third`;
   t.is(textile.convert(tx),
-    '<ol>\n\
-\t<li>A first item</li>\n\
-\t<li>A second item</li>\n\
-\t<li>A third</li>\n\
-</ol>', tx);
+    `<ol>
+\t<li>A first item</li>
+\t<li>A second item</li>
+\t<li>A third</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('nested numbered lists', function (t) {
-  const tx = '# Fuel could be:\n\
-## Coal\n\
-## Gasoline\n\
-## Electricity\n\
-# Humans need only:\n\
-## Water\n\
-## Protein';
+test('nested numbered lists', t => {
+  const tx = `# Fuel could be:
+## Coal
+## Gasoline
+## Electricity
+# Humans need only:
+## Water
+## Protein`;
   t.is(textile.convert(tx),
-    '<ol>\n\
-\t<li>Fuel could be:\n\
-\t<ol>\n\
-\t\t<li>Coal</li>\n\
-\t\t<li>Gasoline</li>\n\
-\t\t<li>Electricity</li>\n\
-\t</ol></li>\n\
-\t<li>Humans need only:\n\
-\t<ol>\n\
-\t\t<li>Water</li>\n\
-\t\t<li>Protein</li>\n\
-\t</ol></li>\n\
-</ol>', tx);
+    `<ol>
+\t<li>Fuel could be:
+\t<ol>
+\t\t<li>Coal</li>
+\t\t<li>Gasoline</li>
+\t\t<li>Electricity</li>
+\t</ol></li>
+\t<li>Humans need only:
+\t<ol>
+\t\t<li>Water</li>
+\t\t<li>Protein</li>
+\t</ol></li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('bulleted list', function (t) {
-  const tx = '* A first item\n\
-* A second item\n\
-* A third';
+test('bulleted list', t => {
+  const tx = `* A first item
+* A second item
+* A third`;
   t.is(textile.convert(tx),
-    '<ul>\n\
-\t<li>A first item</li>\n\
-\t<li>A second item</li>\n\
-\t<li>A third</li>\n\
-</ul>', tx);
+    `<ul>
+\t<li>A first item</li>
+\t<li>A second item</li>
+\t<li>A third</li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('nested bulleted lists', function (t) {
-  const tx = '* Fuel could be:\n\
-** Coal\n\
-** Gasoline\n\
-** Electricity\n\
-* Humans need only:\n\
-** Water\n\
-** Protein';
+test('nested bulleted lists', t => {
+  const tx = `* Fuel could be:
+** Coal
+** Gasoline
+** Electricity
+* Humans need only:
+** Water
+** Protein`;
   t.is(textile.convert(tx),
-    '<ul>\n\
-\t<li>Fuel could be:\n\
-\t<ul>\n\
-\t\t<li>Coal</li>\n\
-\t\t<li>Gasoline</li>\n\
-\t\t<li>Electricity</li>\n\
-\t</ul></li>\n\
-\t<li>Humans need only:\n\
-\t<ul>\n\
-\t\t<li>Water</li>\n\
-\t\t<li>Protein</li>\n\
-\t</ul></li>\n\
-</ul>', tx);
+    `<ul>
+\t<li>Fuel could be:
+\t<ul>
+\t\t<li>Coal</li>
+\t\t<li>Gasoline</li>
+\t\t<li>Electricity</li>
+\t</ul></li>
+\t<li>Humans need only:
+\t<ul>
+\t\t<li>Water</li>
+\t\t<li>Protein</li>
+\t</ul></li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('links', function (t) {
+test('links', t => {
   const tx = 'I searched "Google":http://google.com.';
   t.is(textile.convert(tx),
     '<p>I searched <a href="http://google.com">Google</a>.</p>', tx);
@@ -708,20 +725,21 @@ test('links', function (t) {
 });
 
 
-test('link aliases', function (t) {
-  const tx = "I am crazy about \"Hobix\":hobix\n\
-and \"it's\":hobix \"all\":hobix I ever\n\
-\"link to\":hobix!\n\n\
-[hobix]http://hobix.com";
+test('link aliases', t => {
+  const tx = `I am crazy about "Hobix":hobix
+and "it's":hobix "all":hobix I ever
+"link to":hobix!
+
+[hobix]http://hobix.com`;
   t.is(textile.convert(tx),
-    '<p>I am crazy about <a href="http://hobix.com">Hobix</a><br />\n\
-and <a href="http://hobix.com">it&#8217;s</a> <a href="http://hobix.com">all</a> I ever<br />\n\
-<a href="http://hobix.com">link to</a>!</p>', tx);
+    `<p>I am crazy about <a href="http://hobix.com">Hobix</a><br />
+and <a href="http://hobix.com">it&#8217;s</a> <a href="http://hobix.com">all</a> I ever<br />
+<a href="http://hobix.com">link to</a>!</p>`, tx);
   t.end();
 });
 
 
-test('image', function (t) {
+test('image', t => {
   const tx = '!http://hobix.com/sample.jpg!';
   t.is(textile.convert(tx),
     '<p><img src="http://hobix.com/sample.jpg" alt="" /></p>', tx);
@@ -729,7 +747,7 @@ test('image', function (t) {
 });
 
 
-test('image title', function (t) {
+test('image title', t => {
   const tx = '!openwindow1.gif(Bunny.)!';
   t.is(textile.convert(tx),
     '<p><img src="openwindow1.gif" title="Bunny." alt="Bunny." /></p>', tx);
@@ -737,7 +755,7 @@ test('image title', function (t) {
 });
 
 
-test('image links', function (t) {
+test('image links', t => {
   const tx = '!openwindow1.gif!:http://hobix.com/';
   t.is(textile.convert(tx),
     '<p><a href="http://hobix.com/"><img src="openwindow1.gif" alt="" /></a></p>', tx);
@@ -745,19 +763,20 @@ test('image links', function (t) {
 });
 
 
-test('image alignments', function (t) {
-  const tx = '!>obake.gif!\n\n\
-And others sat all round the small\n\
-machine and paid it to sing to them.';
+test('image alignments', t => {
+  const tx = `!>obake.gif!
+
+And others sat all round the small
+machine and paid it to sing to them.`;
   t.is(textile.convert(tx),
-    '<p><img align="right" src="obake.gif" alt="" /></p>\n\
-<p>And others sat all round the small<br />\n\
-machine and paid it to sing to them.</p>', tx);
+    `<p><img align="right" src="obake.gif" alt="" /></p>
+<p>And others sat all round the small<br />
+machine and paid it to sing to them.</p>`, tx);
   t.end();
 });
 
 
-test('acronym definitions', function (t) {
+test('acronym definitions', t => {
   const tx = 'We use CSS(Cascading Style Sheets).';
   t.is(textile.convert(tx),
     '<p>We use <abbr title="Cascading Style Sheets"><span class="caps">CSS</span></abbr>.</p>', tx);
@@ -765,7 +784,7 @@ test('acronym definitions', function (t) {
 });
 
 
-test('two-letter acronyms', function (t) {
+test('two-letter acronyms', t => {
   const tx = 'It employs AI(artificial intelligence) processing.';
   t.is(textile.convert(tx),
     '<p>It employs <abbr title="artificial intelligence"><span class="caps">AI</span></abbr> processing.</p>', tx);
@@ -773,252 +792,260 @@ test('two-letter acronyms', function (t) {
 });
 
 
-test('tables', function (t) {
-  const tx = '| name | age | sex |\n\
-| joan | 24 | f |\n\
-| archie | 29 | m |\n\
-| bella | 45 | f |';
+test('tables', t => {
+  const tx = `| name | age | sex |
+| joan | 24 | f |
+| archie | 29 | m |
+| bella | 45 | f |`;
   t.is(textile.convert(tx),
-    '<table>\n\
-\t<tr>\n\
-\t\t<td> name </td>\n\
-\t\t<td> age </td>\n\
-\t\t<td> sex </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> joan </td>\n\
-\t\t<td> 24 </td>\n\
-\t\t<td> f </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> archie </td>\n\
-\t\t<td> 29 </td>\n\
-\t\t<td> m </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> bella </td>\n\
-\t\t<td> 45 </td>\n\
-\t\t<td> f </td>\n\
-\t</tr>\n\
-</table>', tx);
+    `<table>
+\t<tr>
+\t\t<td> name </td>
+\t\t<td> age </td>
+\t\t<td> sex </td>
+\t</tr>
+\t<tr>
+\t\t<td> joan </td>
+\t\t<td> 24 </td>
+\t\t<td> f </td>
+\t</tr>
+\t<tr>
+\t\t<td> archie </td>
+\t\t<td> 29 </td>
+\t\t<td> m </td>
+\t</tr>
+\t<tr>
+\t\t<td> bella </td>
+\t\t<td> 45 </td>
+\t\t<td> f </td>
+\t</tr>
+</table>`, tx);
   t.end();
 });
 
 
-test('table headers', function (t) {
-  const tx = '|_. name |_. age |_. sex |\n\
-| joan | 24 | f |\n\
-| archie | 29 | m |\n\
-| bella | 45 | f |';
+test('table headers', t => {
+  const tx = `|_. name |_. age |_. sex |
+| joan | 24 | f |
+| archie | 29 | m |
+| bella | 45 | f |`;
   t.is(textile.convert(tx),
-    '<table>\n\
-\t<tr>\n\
-\t\t<th>name </th>\n\
-\t\t<th>age </th>\n\
-\t\t<th>sex </th>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> joan </td>\n\
-\t\t<td> 24 </td>\n\
-\t\t<td> f </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> archie </td>\n\
-\t\t<td> 29 </td>\n\
-\t\t<td> m </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> bella </td>\n\
-\t\t<td> 45 </td>\n\
-\t\t<td> f </td>\n\
-\t</tr>\n\
-</table>', tx);
+    `<table>
+\t<tr>
+\t\t<th>name </th>
+\t\t<th>age </th>
+\t\t<th>sex </th>
+\t</tr>
+\t<tr>
+\t\t<td> joan </td>
+\t\t<td> 24 </td>
+\t\t<td> f </td>
+\t</tr>
+\t<tr>
+\t\t<td> archie </td>
+\t\t<td> 29 </td>
+\t\t<td> m </td>
+\t</tr>
+\t<tr>
+\t\t<td> bella </td>
+\t\t<td> 45 </td>
+\t\t<td> f </td>
+\t</tr>
+</table>`, tx);
   t.end();
 });
 
 
-test('table cell attributes', function (t) {
-  const tx = '|_. attribute list |\n\
-|<. align left |\n\
-|>. align right|\n\
-|=. center |\n\
-|<>. justify |\n\
-|^. valign top |\n\
-|~. bottom |';
+test('table cell attributes', t => {
+  const tx = `|_. attribute list |
+|<. align left |
+|>. align right|
+|=. center |
+|<>. justify |
+|^. valign top |
+|~. bottom |`;
   t.is(textile.convert(tx),
-    '<table>\n\
-\t<tr>\n\
-\t\t<th>attribute list </th>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td style="text-align:left">align left </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td style="text-align:right">align right</td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td style="text-align:center">center </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td style="text-align:justify">justify </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td style="vertical-align:top">valign top </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td style="vertical-align:bottom">bottom </td>\n\
-\t</tr>\n\
-</table>', tx);
+    `<table>
+\t<tr>
+\t\t<th>attribute list </th>
+\t</tr>
+\t<tr>
+\t\t<td style="text-align:left">align left </td>
+\t</tr>
+\t<tr>
+\t\t<td style="text-align:right">align right</td>
+\t</tr>
+\t<tr>
+\t\t<td style="text-align:center">center </td>
+\t</tr>
+\t<tr>
+\t\t<td style="text-align:justify">justify </td>
+\t</tr>
+\t<tr>
+\t\t<td style="vertical-align:top">valign top </td>
+\t</tr>
+\t<tr>
+\t\t<td style="vertical-align:bottom">bottom </td>
+\t</tr>
+</table>`, tx);
   t.end();
 });
 
 
-test('table colspan', function (t) {
-  const tx = '|\\2. spans two cols |\n\
-| col 1 | col 2 |';
+test('table colspan', t => {
+  const tx = `|\\2. spans two cols |
+| col 1 | col 2 |`;
   t.is(textile.convert(tx),
-    '<table>\n\
-\t<tr>\n\
-\t\t<td colspan="2">spans two cols </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> col 1 </td>\n\
-\t\t<td> col 2 </td>\n\
-\t</tr>\n\
-</table>', tx);
+    `<table>
+\t<tr>
+\t\t<td colspan="2">spans two cols </td>
+\t</tr>
+\t<tr>
+\t\t<td> col 1 </td>
+\t\t<td> col 2 </td>
+\t</tr>
+</table>`, tx);
   t.end();
 });
 
 
-test('table rowspan', function (t) {
-  const tx = '|/3. spans 3 rows | a |\n\
-| b |\n\
-| c |';
+test('table rowspan', t => {
+  const tx = `|/3. spans 3 rows | a |
+| b |
+| c |`;
   t.is(textile.convert(tx),
-    '<table>\n\
-\t<tr>\n\
-\t\t<td rowspan="3">spans 3 rows </td>\n\
-\t\t<td> a </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> b </td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td> c </td>\n\
-\t</tr>\n\
-</table>', tx);
+    `<table>
+\t<tr>
+\t\t<td rowspan="3">spans 3 rows </td>
+\t\t<td> a </td>
+\t</tr>
+\t<tr>
+\t\t<td> b </td>
+\t</tr>
+\t<tr>
+\t\t<td> c </td>
+\t</tr>
+</table>`, tx);
   t.end();
 });
 
 
-test('block attributes applied to table cells', function (t) {
+test('block attributes applied to table cells', t => {
   const tx = '|{background:#ddd}. Grey cell|';
   t.is(textile.convert(tx),
-    '<table>\n\
-\t<tr>\n\
-\t\t<td style="background:#ddd">Grey cell</td>\n\
-\t</tr>\n\
-</table>', tx);
+    `<table>
+\t<tr>
+\t\t<td style="background:#ddd">Grey cell</td>
+\t</tr>
+</table>`, tx);
   t.end();
 });
 
 
-test('block attributes applied to a table', function (t) {
-  const tx = 'table{border:1px solid black}.\n\
-|This|is|a|row|\n\
-|This|is|a|row|';
+test('block attributes applied to a table', t => {
+  const tx = `table{border:1px solid black}.
+|This|is|a|row|
+|This|is|a|row|`;
   t.is(textile.convert(tx),
-    '<table style="border:1px solid black">\n\
-\t<tr>\n\
-\t\t<td>This</td>\n\
-\t\t<td>is</td>\n\
-\t\t<td>a</td>\n\
-\t\t<td>row</td>\n\
-\t</tr>\n\
-\t<tr>\n\
-\t\t<td>This</td>\n\
-\t\t<td>is</td>\n\
-\t\t<td>a</td>\n\
-\t\t<td>row</td>\n\
-\t</tr>\n\
-</table>', tx);
+    `<table style="border:1px solid black">
+\t<tr>
+\t\t<td>This</td>
+\t\t<td>is</td>
+\t\t<td>a</td>
+\t\t<td>row</td>
+\t</tr>
+\t<tr>
+\t\t<td>This</td>
+\t\t<td>is</td>
+\t\t<td>a</td>
+\t\t<td>row</td>
+\t</tr>
+</table>`, tx);
   t.end();
 });
 
 
-test('block attributes applied to a table row', function (t) {
-  const tx = '|This|is|a|row|\n\
-{background:#ddd}. |This|is|grey|row|';
+test('block attributes applied to a table row', t => {
+  const tx = `|This|is|a|row|
+{background:#ddd}. |This|is|grey|row|`;
   t.is(textile.convert(tx),
-    '<table>\n\
-\t<tr>\n\
-\t\t<td>This</td>\n\
-\t\t<td>is</td>\n\
-\t\t<td>a</td>\n\
-\t\t<td>row</td>\n\
-\t</tr>\n\
-\t<tr style="background:#ddd">\n\
-\t\t<td>This</td>\n\
-\t\t<td>is</td>\n\
-\t\t<td>grey</td>\n\
-\t\t<td>row</td>\n\
-\t</tr>\n\
-</table>', tx);
+    `<table>
+\t<tr>
+\t\t<td>This</td>
+\t\t<td>is</td>
+\t\t<td>a</td>
+\t\t<td>row</td>
+\t</tr>
+\t<tr style="background:#ddd">
+\t\t<td>This</td>
+\t\t<td>is</td>
+\t\t<td>grey</td>
+\t\t<td>row</td>
+\t</tr>
+</table>`, tx);
   t.end();
 });
 
 
-test('extended block followed by pre block', function (t) {
-  const tx = 'div.. Just a test.\n\n\
-Second div.\n\n\
-pre. A pre block ends it.';
+test('extended block followed by pre block', t => {
+  const tx = `div.. Just a test.
+
+Second div.
+
+pre. A pre block ends it.`;
   t.is(textile.convert(tx),
-    '<div>Just a test.</div>\n\
-<div>Second div.</div>\n\
-<pre>A pre block ends it.</pre>', tx);
+    `<div>Just a test.</div>
+<div>Second div.</div>
+<pre>A pre block ends it.</pre>`, tx);
   t.end();
 });
 
 
-test('extended block followed by blockquote', function (t) {
-  const tx = 'div.. Just a test.\n\n\
-Second div.\n\n\
-bq. A blockquote ends it.';
+test('extended block followed by blockquote', t => {
+  const tx = `div.. Just a test.
+
+Second div.
+
+bq. A blockquote ends it.`;
   t.is(textile.convert(tx),
-    '<div>Just a test.</div>\n\
-<div>Second div.</div>\n\
-<blockquote>\n\
-<p>A blockquote ends it.</p>\n\
-</blockquote>', tx);
+    `<div>Just a test.</div>
+<div>Second div.</div>
+<blockquote>
+<p>A blockquote ends it.</p>
+</blockquote>`, tx);
   t.end();
 });
 
 
-test('extended block followed by block code', function (t) {
-  const tx = 'div.. Just a test.\n\n\
-Second div.\n\n\
-bc. A blockcode ends it.';
+test('extended block followed by block code', t => {
+  const tx = `div.. Just a test.
+
+Second div.
+
+bc. A blockcode ends it.`;
   t.is(textile.convert(tx),
-    '<div>Just a test.</div>\n\
-<div>Second div.</div>\n\
-<pre><code>A blockcode ends it.</code></pre>', tx);
+    `<div>Just a test.</div>
+<div>Second div.</div>
+<pre><code>A blockcode ends it.</code></pre>`, tx);
   t.end();
 });
 
 
-test('extended block followed by notextile block', function (t) {
-  const tx = 'div.. Just a test.\n\n\
-Second div.\n\n\
-notextile. A notextile block ends it.';
+test('extended block followed by notextile block', t => {
+  const tx = `div.. Just a test.
+
+Second div.
+
+notextile. A notextile block ends it.`;
   t.is(textile.convert(tx),
-    '<div>Just a test.</div>\n\
-<div>Second div.</div>\n\
-A notextile block ends it.', tx);
+    `<div>Just a test.</div>
+<div>Second div.</div>
+A notextile block ends it.`, tx);
   t.end();
 });
 
 
-test('simple parentheses', function (t) {
+test('simple parentheses', t => {
   const tx = 'before (in parens) after';
   t.is(textile.convert(tx),
     '<p>before (in parens) after</p>', tx);
@@ -1026,7 +1053,7 @@ test('simple parentheses', function (t) {
 });
 
 
-test('parentheses in underscores', function (t) {
+test('parentheses in underscores', t => {
   const tx = 'before _(in parens)_ after';
   t.is(textile.convert(tx),
     '<p>before <em>(in parens)</em> after</p>', tx);
@@ -1034,7 +1061,7 @@ test('parentheses in underscores', function (t) {
 });
 
 
-test('parentheses in asterisks', function (t) {
+test('parentheses in asterisks', t => {
   const tx = 'before *(in parens)* after';
   t.is(textile.convert(tx),
     '<p>before <strong>(in parens)</strong> after</p>', tx);
@@ -1042,7 +1069,7 @@ test('parentheses in asterisks', function (t) {
 });
 
 
-test('parentheses in underscores in quotes', function (t) {
+test('parentheses in underscores in quotes', t => {
   const tx = '"before _(in parens)_ after"';
   t.is(textile.convert(tx),
     '<p>&#8220;before <em>(in parens)</em> after&#8221;</p>', tx);
@@ -1050,7 +1077,7 @@ test('parentheses in underscores in quotes', function (t) {
 });
 
 
-test('underscores in parentheses', function (t) {
+test('underscores in parentheses', t => {
   const tx = 'one _two three_ (four _five six_) seven';
   t.is(textile.convert(tx),
     '<p>one <em>two three</em> (four <em>five six</em>) seven</p>', tx);
@@ -1058,7 +1085,7 @@ test('underscores in parentheses', function (t) {
 });
 
 
-test('underscores in parentheses in quotes', function (t) {
+test('underscores in parentheses in quotes', t => {
   const tx = '"one _two three_ (four _five six_) seven"';
   t.is(textile.convert(tx),
     '<p>&#8220;one <em>two three</em> (four <em>five six</em>) seven&#8221;</p>', tx);
@@ -1066,7 +1093,7 @@ test('underscores in parentheses in quotes', function (t) {
 });
 
 
-test('underscores in parentheses 2', function (t) {
+test('underscores in parentheses 2', t => {
   const tx = 'one (two _three four_) five';
   t.is(textile.convert(tx),
     '<p>one (two <em>three four</em>) five</p>', tx);
@@ -1074,7 +1101,7 @@ test('underscores in parentheses 2', function (t) {
 });
 
 
-test('underscores in parentheses in quotes 2', function (t) {
+test('underscores in parentheses in quotes 2', t => {
   const tx = '"one (two _three four_) five"';
   t.is(textile.convert(tx),
     '<p>&#8220;one (two <em>three four</em>) five&#8221;</p>', tx);
@@ -1082,7 +1109,7 @@ test('underscores in parentheses in quotes 2', function (t) {
 });
 
 
-test('caps in parentheses', function (t) {
+test('caps in parentheses', t => {
   const tx = 'IBM or (HAL)';
   t.is(textile.convert(tx),
     '<p><span class="caps">IBM</span> or (<span class="caps">HAL</span>)</p>', tx);
@@ -1090,77 +1117,85 @@ test('caps in parentheses', function (t) {
 });
 
 
-test('phrase modifiers in parentheses', function (t) {
-  const tx = '__Amanita__s are mushrooms.\n\
-Lungworts (__Lobaria__) are lichens.\n\
-Blah blah (normal text **bold**) blah.';
+test('phrase modifiers in parentheses', t => {
+  const tx = `__Amanita__s are mushrooms.
+Lungworts (__Lobaria__) are lichens.
+Blah blah (normal text **bold**) blah.`;
   t.is(textile.convert(tx),
-    '<p>__Amanita__s are mushrooms.<br />\n\
-Lungworts (<i>Lobaria</i>) are lichens.<br />\n\
-Blah blah (normal text <b>bold</b>) blah.</p>', tx);
+    `<p>__Amanita__s are mushrooms.<br />
+Lungworts (<i>Lobaria</i>) are lichens.<br />
+Blah blah (normal text <b>bold</b>) blah.</p>`, tx);
   t.end();
 });
 
 
-test('square brackets are preserved', function (t) {
-  const tx = 'citation ["(Berk.) Hilton"], see\n\
-[Papers "blah blah."]';
+test('square brackets are preserved', t => {
+  const tx = `citation ["(Berk.) Hilton"], see
+[Papers "blah blah."]`;
   t.is(textile.convert(tx),
-    '<p>citation [&#8220;(Berk.) Hilton&#8221;], see<br />\n\
-[Papers &#8220;blah blah.&#8221;]</p>', tx);
+    `<p>citation [&#8220;(Berk.) Hilton&#8221;], see<br />
+[Papers &#8220;blah blah.&#8221;]</p>`, tx);
   t.end();
 });
 
 
-test('horizontal rule using asterisks', function (t) {
-  const tx = 'Just some *** text\n\n\
-***\n\n\
-Some more text.';
+test('horizontal rule using asterisks', t => {
+  const tx = `Just some *** text
+
+***
+
+Some more text.`;
   t.is(textile.convert(tx),
-    '<p>Just some *** text</p>\n\
-<hr />\n\
-<p>Some more text.</p>', tx);
+    `<p>Just some *** text</p>
+<hr />
+<p>Some more text.</p>`, tx);
   t.end();
 });
 
 
-test('horizontal rule using more than three asterisks', function (t) {
-  const tx = 'Just some **** text\n\n\
-****\n\n\
-Some more text.';
+test('horizontal rule using more than three asterisks', t => {
+  const tx = `Just some **** text
+
+****
+
+Some more text.`;
   t.is(textile.convert(tx),
-    '<p>Just some **** text</p>\n\
-<hr />\n\
-<p>Some more text.</p>', tx);
+    `<p>Just some **** text</p>
+<hr />
+<p>Some more text.</p>`, tx);
   t.end();
 });
 
 
-test('horizontal rule using dashes', function (t) {
-  const tx = 'Just some --- text\n\n\
----\n\n\
-Some more text.';
+test('horizontal rule using dashes', t => {
+  const tx = `Just some --- text
+
+---
+
+Some more text.`;
   t.is(textile.convert(tx),
-    '<p>Just some --- text</p>\n\
-<hr />\n\
-<p>Some more text.</p>', tx);
+    `<p>Just some --- text</p>
+<hr />
+<p>Some more text.</p>`, tx);
   t.end();
 });
 
 
-test('horizontal rule using underscores', function (t) {
-  const tx = 'Just some ___ text\n\n\
-___\n\n\
-Some more text.';
+test('horizontal rule using underscores', t => {
+  const tx = `Just some ___ text
+
+___
+
+Some more text.`;
   t.is(textile.convert(tx),
-    '<p>Just some ___ text</p>\n\
-<hr />\n\
-<p>Some more text.</p>', tx);
+    `<p>Just some ___ text</p>
+<hr />
+<p>Some more text.</p>`, tx);
   t.end();
 });
 
 
-test('lang attribute cannot contain square brackets', function (t) {
+test('lang attribute cannot contain square brackets', t => {
   const tx = 'some @[[code]]@';
   t.is(textile.convert(tx),
     '<p>some <code>[[code]]</code></p>', tx);
@@ -1168,33 +1203,33 @@ test('lang attribute cannot contain square brackets', function (t) {
 });
 
 
-test('pre blocks preserve leading whitespace', function (t) {
-  const tx = 'pre.      Text in a pre block\n\
-is displayed in a fixed-width\n\
-     font. It preserves\n\
-  s p a c e s, line breaks\n\
-     and ascii bunnies.';
+test('pre blocks preserve leading whitespace', t => {
+  const tx = `pre.      Text in a pre block
+is displayed in a fixed-width
+     font. It preserves
+  s p a c e s, line breaks
+     and ascii bunnies.`;
   t.is(textile.convert(tx),
-    '<pre>     Text in a pre block\n\
-is displayed in a fixed-width\n\
-     font. It preserves\n\
-  s p a c e s, line breaks\n\
-     and ascii bunnies.</pre>', tx);
+    `<pre>     Text in a pre block
+is displayed in a fixed-width
+     font. It preserves
+  s p a c e s, line breaks
+     and ascii bunnies.</pre>`, tx);
   t.end();
 });
 
 
-test('code blocks preserve leading whitespace', function (t) {
-  const tx = 'bc.   false\n\
-} else {';
+test('code blocks preserve leading whitespace', t => {
+  const tx = `bc.   false
+} else {`;
   t.is(textile.convert(tx),
-    '<pre><code>  false\n\
-} else {</code></pre>', tx);
+    `<pre><code>  false
+} else {</code></pre>`, tx);
   t.end();
 });
 
 
-test('citation ending with question mark', function (t) {
+test('citation ending with question mark', t => {
   const tx = '??What the Story Morning Glory???';
   t.is(textile.convert(tx),
     '<p><cite>What the Story Morning Glory?</cite></p>', tx);
@@ -1202,7 +1237,7 @@ test('citation ending with question mark', function (t) {
 });
 
 
-test('citation including question mark', function (t) {
+test('citation including question mark', t => {
   const tx = "??What's the Matter with Kansas? How Conservatives Won the Heart of America?? is a great book!";
   t.is(textile.convert(tx),
     '<p><cite>What&#8217;s the Matter with Kansas? How Conservatives Won the Heart of America</cite> is a great book!</p>', tx);
@@ -1210,17 +1245,17 @@ test('citation including question mark', function (t) {
 });
 
 
-test('emphasized word including underscore', function (t) {
-  const tx = '_trythis_ it will keep the empahsis.\n\
-_and_this_too_ it should keep the emphasis but does not with redcloth.';
+test('emphasized word including underscore', t => {
+  const tx = `_trythis_ it will keep the empahsis.
+_and_this_too_ it should keep the emphasis but does not with redcloth.`;
   t.is(textile.convert(tx),
-    '<p><em>trythis</em> it will keep the empahsis.<br />\n\
-<em>and_this_too</em> it should keep the emphasis but does not with redcloth.</p>', tx);
+    `<p><em>trythis</em> it will keep the empahsis.<br />
+<em>and_this_too</em> it should keep the emphasis but does not with redcloth.</p>`, tx);
   t.end();
 });
 
 
-test('code captures spaces when made explicit with square brackets', function (t) {
+test('code captures spaces when made explicit with square brackets', t => {
   const tx = "Start a paragraph with [@p. @] (that's p, a period, and a space).";
   t.is(textile.convert(tx),
     '<p>Start a paragraph with <code>p. </code> (that&#8217;s p, a period, and a space).</p>', tx);
@@ -1228,7 +1263,7 @@ test('code captures spaces when made explicit with square brackets', function (t
 });
 
 
-test('unrecognized block starting with t not eaten', function (t) {
+test('unrecognized block starting with t not eaten', t => {
   const tx = 'tel. 0 700 123 123';
   t.is(textile.convert(tx),
     '<p>tel. 0 700 123 123</p>', tx);
@@ -1236,7 +1271,7 @@ test('unrecognized block starting with t not eaten', function (t) {
 });
 
 
-test('bolded number at start of phrase', function (t) {
+test('bolded number at start of phrase', t => {
   const tx = '*22 watermelons* is my limit';
   t.is(textile.convert(tx),
     '<p><strong>22 watermelons</strong> is my limit</p>', tx);
@@ -1244,7 +1279,7 @@ test('bolded number at start of phrase', function (t) {
 });
 
 
-test('bolded paragraph', function (t) {
+test('bolded paragraph', t => {
   const tx = '*- I would expect it to be a bolded paragraph.*';
   t.is(textile.convert(tx),
     '<p><strong>- I would expect it to be a bolded paragraph.</strong></p>', tx);
