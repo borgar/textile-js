@@ -208,7 +208,6 @@ export class Document extends Node {
     return this.children[0];
   }
 
-  // FIXME: this is the same a
   appendChild (node) {
     return appendTo(this, node);
   }
