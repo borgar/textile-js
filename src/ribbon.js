@@ -86,7 +86,7 @@ export default class Ribbon {
     return this._feed.slice(0, s.length) === s;
   }
 
-  sub (start = 0, len) {
+  sub (start = 0, len = null) {
     if (len == null) {
       len = this._feed.length - start;
     }
@@ -102,4 +102,4 @@ export default class Ribbon {
   toString () {
     return this._feed;
   }
-};
+}

@@ -10,14 +10,12 @@ test('header one', t => {
 });
 
 
-
 test('header two', t => {
   const tx = 'h2. Header 2';
   t.is(textile.convert(tx),
     '<h2>Header 2</h2>', tx);
   t.end();
 });
-
 
 
 test('header three', t => {
@@ -28,14 +26,12 @@ test('header three', t => {
 });
 
 
-
 test('header four', t => {
   const tx = 'h4. Header 4';
   t.is(textile.convert(tx),
     '<h4>Header 4</h4>', tx);
   t.end();
 });
-
 
 
 test('header five', t => {
@@ -46,14 +42,12 @@ test('header five', t => {
 });
 
 
-
 test('header six', t => {
   const tx = 'h6. Header 6';
   t.is(textile.convert(tx),
     '<h6>Header 6</h6>', tx);
   t.end();
 });
-
 
 
 test('blockquote', t => {
@@ -73,7 +67,6 @@ Any old text.
 });
 
 
-
 test('textism:8', t => {
   const tx = `# A first item
 # A second item
@@ -88,7 +81,6 @@ test('textism:8', t => {
 </ol>`, tx);
   t.end();
 });
-
 
 
 test('textism:9', t => {
@@ -108,14 +100,12 @@ test('textism:9', t => {
 });
 
 
-
 test('textism:10', t => {
   const tx = '_a phrase_';
   t.is(textile.convert(tx),
     '<p><em>a phrase</em></p>', tx);
   t.end();
 });
-
 
 
 test('textism:11', t => {
@@ -126,14 +116,12 @@ test('textism:11', t => {
 });
 
 
-
 test('textism:12', t => {
   const tx = '*a phrase*';
   t.is(textile.convert(tx),
     '<p><strong>a phrase</strong></p>', tx);
   t.end();
 });
-
 
 
 test('textism:13', t => {
@@ -144,14 +132,12 @@ test('textism:13', t => {
 });
 
 
-
 test('textism:14', t => {
   const tx = "Nabokov's ??Pnin??";
   t.is(textile.convert(tx),
     '<p>Nabokov&#8217;s <cite>Pnin</cite></p>', tx);
   t.end();
 });
-
 
 
 test('del part of word', t => {
@@ -162,14 +148,12 @@ test('del part of word', t => {
 });
 
 
-
 test('del part of word that contains a hyphen', t => {
   const tx = 'An [-extra-extra-]ordinary day.';
   t.is(textile.convert(tx),
     '<p>An <del>extra-extra</del>ordinary day.</p>', tx);
   t.end();
 });
-
 
 
 test('del a phrase', t => {
@@ -180,14 +164,12 @@ test('del a phrase', t => {
 });
 
 
-
 test('del a phrase that contains hyphens', t => {
   const tx = 'Delete -a no-nonsense phrase- this way.';
   t.is(textile.convert(tx),
     '<p>Delete <del>a no-nonsense phrase</del> this way.</p>', tx);
   t.end();
 });
-
 
 
 test('textism:19', t => {
@@ -198,14 +180,12 @@ test('textism:19', t => {
 });
 
 
-
 test('textism:20', t => {
   const tx = '^a phrase^';
   t.is(textile.convert(tx),
     '<p><sup>a phrase</sup></p>', tx);
   t.end();
 });
-
 
 
 test('textism:21', t => {
@@ -216,14 +196,12 @@ test('textism:21', t => {
 });
 
 
-
 test('textism:22', t => {
   const tx = '%(myclass)SPAN%';
   t.is(textile.convert(tx),
     '<p><span class="myclass"><span class="caps">SPAN</span></span></p>', tx);
   t.end();
 });
-
 
 
 test('textism:23', t => {
@@ -234,14 +212,12 @@ test('textism:23', t => {
 });
 
 
-
 test('textism:24', t => {
   const tx = '%[fr]rouge%';
   t.is(textile.convert(tx),
     '<p><span lang="fr">rouge</span></p>', tx);
   t.end();
 });
-
 
 
 test('textism:25', t => {
@@ -252,14 +228,12 @@ test('textism:25', t => {
 });
 
 
-
 test('textism:26', t => {
   const tx = 'p=. A centered paragraph.';
   t.is(textile.convert(tx),
     '<p style="text-align:center">A centered paragraph.</p>', tx);
   t.end();
 });
-
 
 
 test('textism:27', t => {
@@ -270,14 +244,12 @@ test('textism:27', t => {
 });
 
 
-
 test('textism:28', t => {
   const tx = 'p{color:#ddd}. A paragraph';
   t.is(textile.convert(tx),
     '<p style="color:#ddd">A paragraph</p>', tx);
   t.end();
 });
-
 
 
 test('textism:29', t => {
@@ -288,14 +260,12 @@ test('textism:29', t => {
 });
 
 
-
 test('textism:30', t => {
   const tx = 'h2()>. right-aligned header2, indented 1em both side';
   t.is(textile.convert(tx),
     '<h2 style="padding-left:1em;padding-right:1em;text-align:right">right-aligned header2, indented 1em both side</h2>', tx);
   t.end();
 });
-
 
 
 test('textism:31', t => {
@@ -306,7 +276,6 @@ test('textism:31', t => {
 });
 
 
-
 test('textism:32', t => {
   const tx = '!>/image.gif! right-aligned image';
   t.is(textile.convert(tx),
@@ -315,14 +284,12 @@ test('textism:32', t => {
 });
 
 
-
 test('textism:33', t => {
   const tx = 'p[no]{color:red}. A Norse of a different colour.';
   t.is(textile.convert(tx),
     '<p style="color:red" lang="no">A Norse of a different colour.</p>', tx);
   t.end();
 });
-
 
 
 test('textism:34', t => {
@@ -349,7 +316,6 @@ test('textism:34', t => {
 });
 
 
-
 test('textism:35', t => {
   const tx = `table{border:1px solid black}.
 |This|is|a|row|
@@ -373,7 +339,6 @@ test('textism:35', t => {
 });
 
 
-
 test('textism:36', t => {
   const tx = '{background:#ddd}. |This|is|a|row|';
   t.is(textile.convert(tx),
@@ -387,7 +352,6 @@ test('textism:36', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('textism:37', t => {
@@ -412,7 +376,6 @@ test('textism:37', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('basics', t => {
@@ -471,5 +434,4 @@ Multi-level list:
 </ol>`, tx);
   t.end();
 });
-
 

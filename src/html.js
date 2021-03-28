@@ -147,7 +147,8 @@ export function tokenize (src, whitelistTags, lazy, offset) {
 }
 
 // This "indesciminately" parses HTML text into a list of JSON-ML element
-// No steps are taken however to prevent things like <table><p><td> - user can still create nonsensical but "well-formed" markup
+// No steps are taken however to prevent things like <table><p><td>,
+// a user can still create nonsensical but "well-formed" markup
 export function parseHtml (tokens, lazy) {
   const root = new Element('root');
   const stack = [];

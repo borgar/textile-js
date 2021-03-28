@@ -46,4 +46,3 @@ h1. Header`;
 <h1>Header</h1>`, tx);
   t.end();
 });
-

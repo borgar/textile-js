@@ -79,7 +79,7 @@ export class Node {
     this.pos.offset = offset;
     return this;
   }
-};
+}
 
 export class TextNode extends Node {
   constructor (data) {

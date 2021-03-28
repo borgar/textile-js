@@ -86,7 +86,6 @@ test('Simple table with tailing space', t => {
 });
 
 
-
 test('clean trademarks #1', t => {
   t.is(textile.convert('(TM) and (tm), but not (Tm) or (tM)'),
     '<p>&#8482; and &#8482;, but not (Tm) or (tM)</p>');
@@ -94,13 +93,11 @@ test('clean trademarks #1', t => {
 });
 
 
-
 test('clean trademarks #3', t => {
   t.is(textile.convert('(TM) and [TM], but not (TM] or [TM)'),
     '<p>&#8482; and &#8482;, but not (TM] or [TM)</p>');
   t.end();
 });
-
 
 
 test('clean trademarks #3', t => {
@@ -118,7 +115,6 @@ test('clean trademarks #3', t => {
     '</table>');
   t.end();
 });
-
 
 
 // Don't know about this. This doesn't work in RC or some other implementations.
@@ -156,7 +152,6 @@ test('Strange list', t => {
 });
 
 
-
 // RedCloth deviates from PHP in that it only allows [] fences.
 // This is good as the design gets less messy. But it causes problems as fencing links
 // then fails with PHP-style array links.
@@ -181,7 +176,6 @@ test('Fenced PHP-style array link (3)', t => {
 });
 
 
-
 test('HTML comment (1)', t => {
   t.is(textile.convert('line\n<!-- line -->\nline'),
     '<p>line<br />\n' +
@@ -200,13 +194,11 @@ test('HTML comment (2)', t => {
 });
 
 
-
 test('ALL CAPS', t => {
   t.is(textile.convert('REYKJAVÍK'),
     '<p><span class="caps">REYKJAVÍK</span></p>');
   t.end();
 });
-
 
 
 test('Multiple classes', t => {
@@ -453,7 +445,6 @@ test('strict list matching (2)', t => {
 });
 
 
-
 test('image parsing speed bug', t => {
   const t1 = Date.now();
   textile.convert('!a()aaaaaaaaaaaaaaaaaaaaaaaaaa');
@@ -463,7 +454,6 @@ test('image parsing speed bug', t => {
 });
 
 
-
 test('image parsing speed bug 2 (issue #40)', t => {
   const t1 = Date.now();
   textile.convert('!@((. tset Sûpp0rt ticket onññly... !@((. tset Sûpp0rt ticket onññly... !@((.');
@@ -471,7 +461,6 @@ test('image parsing speed bug 2 (issue #40)', t => {
   t.true((t2 - t1 < 10));
   t.end();
 });
-
 
 
 test('parse inline textile in footnotes', t => {
@@ -493,13 +482,11 @@ test('block parser bug (#21)', t => {
 });
 
 
-
 test('trailing space linebreak bug (#26)', t => {
   t.is(textile.convert('Line 1 \nLine 2\nLine 3'),
     '<p>Line 1 <br />\nLine 2<br />\nLine 3</p>');
   t.end();
 });
-
 
 
 test('support unicode symbols (#27)', t => {
@@ -524,13 +511,11 @@ test('support unicode symbols (#27)', t => {
 });
 
 
-
 test('footnotes should not appear directly inside tags (#26)', t => {
   t.is(textile.convert('*[1234]* _[1234]_'),
     '<p><strong>[1234]</strong> <em>[1234]</em></p>');
   t.end();
 });
-
 
 
 test('footnotes have to directly follow text (#26)', t => {
@@ -539,13 +524,11 @@ test('footnotes have to directly follow text (#26)', t => {
 });
 
 
-
 test('footnote links can be disabled with !', t => {
   t.is(textile.convert('foobar[1234!]'),
     '<p>foobar<sup class="footnote" id="fnr1234">1234</sup></p>');
   t.end();
 });
-
 
 
 test('bc blocks should not be terminated by lists (#45)', t => {

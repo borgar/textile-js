@@ -10,14 +10,12 @@ test('links:1', t => {
 });
 
 
-
 test('links:2', t => {
   const tx = '"link text":#a';
   t.is(textile.convert(tx),
     '<p><a href="#a">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:3', t => {
@@ -28,14 +26,12 @@ test('links:3', t => {
 });
 
 
-
 test('links:4', t => {
   const tx = '"link text":#a10';
   t.is(textile.convert(tx),
     '<p><a href="#a10">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:5', t => {
@@ -46,14 +42,12 @@ test('links:5', t => {
 });
 
 
-
 test('links:6', t => {
   const tx = '"link text":index.html#1';
   t.is(textile.convert(tx),
     '<p><a href="index.html#1">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:7', t => {
@@ -64,14 +58,12 @@ test('links:7', t => {
 });
 
 
-
 test('links:8', t => {
   const tx = '"link text":index.html#a1';
   t.is(textile.convert(tx),
     '<p><a href="index.html#a1">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:9', t => {
@@ -82,14 +74,12 @@ test('links:9', t => {
 });
 
 
-
 test('links:10', t => {
   const tx = '"link text":http://example.com/';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:11', t => {
@@ -100,14 +90,12 @@ test('links:11', t => {
 });
 
 
-
 test('links:12', t => {
   const tx = '"link text":http://example.com/#a';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/#a">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:13', t => {
@@ -118,14 +106,12 @@ test('links:13', t => {
 });
 
 
-
 test('links:14', t => {
   const tx = '"link text":http://example.com/#a10';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/#a10">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:15', t => {
@@ -136,14 +122,12 @@ test('links:15', t => {
 });
 
 
-
 test('links:16', t => {
   const tx = '"link text":http://example.com/index.html#a';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/index.html#a">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:17', t => {
@@ -154,14 +138,12 @@ test('links:17', t => {
 });
 
 
-
 test('links:18', t => {
   const tx = '"link text":http://example.com/index.html#a1';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/index.html#a1">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:19', t => {
@@ -172,14 +154,12 @@ test('links:19', t => {
 });
 
 
-
 test('links:20', t => {
   const tx = '"link text":http://example.com/?foo=bar';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/?foo=bar">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:21', t => {
@@ -190,14 +170,12 @@ test('links:21', t => {
 });
 
 
-
 test('links:22', t => {
   const tx = '"link & text":http://example.com/?foo=bar#a';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/?foo=bar#a">link &amp; text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:23', t => {
@@ -208,14 +186,12 @@ test('links:23', t => {
 });
 
 
-
 test('links:24', t => {
   const tx = '"link text":http://example.com/?foo=bar#a1';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/?foo=bar#a1">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:25', t => {
@@ -226,14 +202,12 @@ test('links:25', t => {
 });
 
 
-
 test('links:26', t => {
   const tx = '"link text":http://example.com/?foo=bar&a=b';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/?foo=bar&amp;a=b">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:27', t => {
@@ -244,14 +218,12 @@ test('links:27', t => {
 });
 
 
-
 test('links:28', t => {
   const tx = '"link text":http://example.com/?foo=bar&a=b#a';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/?foo=bar&amp;a=b#a">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:29', t => {
@@ -262,14 +234,12 @@ test('links:29', t => {
 });
 
 
-
 test('links:30', t => {
   const tx = '"link text":http://example.com/?foo=bar&a=b#a10';
   t.is(textile.convert(tx),
     '<p><a href="http://example.com/?foo=bar&amp;a=b#a10">link text</a></p>', tx);
   t.end();
 });
-
 
 
 test('links:31', t => {
@@ -280,14 +250,12 @@ test('links:31', t => {
 });
 
 
-
 test('links:32', t => {
   const tx = 'This is a "link":http://example.com/.';
   t.is(textile.convert(tx),
     '<p>This is a <a href="http://example.com/">link</a>.</p>', tx);
   t.end();
 });
-
 
 
 test('links:33', t => {
@@ -298,14 +266,12 @@ test('links:33', t => {
 });
 
 
-
 test('links:34', t => {
   const tx = 'This is a "link":http://example.com/index.html#a.';
   t.is(textile.convert(tx),
     '<p>This is a <a href="http://example.com/index.html#a">link</a>.</p>', tx);
   t.end();
 });
-
 
 
 test('links:35', t => {
@@ -316,14 +282,12 @@ test('links:35', t => {
 });
 
 
-
 test('links:36', t => {
   const tx = 'This is a "link":http://example.com/index.html#a1.';
   t.is(textile.convert(tx),
     '<p>This is a <a href="http://example.com/index.html#a1">link</a>.</p>', tx);
   t.end();
 });
-
 
 
 test('links:37', t => {
@@ -334,14 +298,12 @@ test('links:37', t => {
 });
 
 
-
 test('links:38', t => {
   const tx = 'This is a "link":http://example.com/?foo=bar.';
   t.is(textile.convert(tx),
     '<p>This is a <a href="http://example.com/?foo=bar">link</a>.</p>', tx);
   t.end();
 });
-
 
 
 test('links:39', t => {
@@ -352,14 +314,12 @@ test('links:39', t => {
 });
 
 
-
 test('links:40', t => {
   const tx = 'This is a "link":http://example.com/?foo=bar#a.';
   t.is(textile.convert(tx),
     '<p>This is a <a href="http://example.com/?foo=bar#a">link</a>.</p>', tx);
   t.end();
 });
-
 
 
 test('links:41', t => {
@@ -370,14 +330,12 @@ test('links:41', t => {
 });
 
 
-
 test('links:42', t => {
   const tx = 'This is a "link":http://example.com/?foo=bar#a10.';
   t.is(textile.convert(tx),
     '<p>This is a <a href="http://example.com/?foo=bar#a10">link</a>.</p>', tx);
   t.end();
 });
-
 
 
 test('links:43', t => {
@@ -388,14 +346,12 @@ test('links:43', t => {
 });
 
 
-
 test('links:44', t => {
   const tx = '(This is a "link":http://example.com/?foo=bar#a10) but this is not.';
   t.is(textile.convert(tx),
     '<p>(This is a <a href="http://example.com/?foo=bar#a10">link</a>) but this is not.</p>', tx);
   t.end();
 });
-
 
 
 test('links:45', t => {
@@ -406,14 +362,12 @@ test('links:45', t => {
 });
 
 
-
 test('link with title attribute', t => {
   const tx = '"(link) text(link title)":http://example.com/';
   t.is(textile.convert(tx),
     '<p><a class="link" href="http://example.com/" title="link title">text</a></p>', tx);
   t.end();
 });
-
 
 
 test('link with space between link text and title attribute', t => {
@@ -424,14 +378,12 @@ test('link with space between link text and title attribute', t => {
 });
 
 
-
 test('links:48', t => {
   const tx = '"Dive Into XML":http://www.xml.com/pub/au/164';
   t.is(textile.convert(tx),
     '<p><a href="http://www.xml.com/pub/au/164">Dive Into <span class="caps">XML</span></a></p>', tx);
   t.end();
 });
-
 
 
 test('links:49', t => {
@@ -442,14 +394,12 @@ test('links:49', t => {
 });
 
 
-
 test('links:50', t => {
   const tx = 'Go to "discuss":http://www.dreammoods.com/cgibin/cutecast/cutecast.pl?forum=1&thread=26627 to discuss.';
   t.is(textile.convert(tx),
     '<p>Go to <a href="http://www.dreammoods.com/cgibin/cutecast/cutecast.pl?forum=1&amp;thread=26627">discuss</a> to discuss.</p>', tx);
   t.end();
 });
-
 
 
 test('links:51', t => {
@@ -462,14 +412,12 @@ test('links:51', t => {
 });
 
 
-
 test('links:52', t => {
   const tx = 'The ION coding style document found at "IONCodingStyleGuide.doc":http://perforce:8081/@md=d&cd=//&c=82E@//depot/systest/system/main/pub/doc/IONCodingStyleGuide.doc?ac=22 codifies a couple of rules to ensure reasonably consistent code and documentation of libraries in ION. Test text';
   t.is(textile.convert(tx),
     '<p>The <span class="caps">ION</span> coding style document found at <a href="http://perforce:8081/@md=d&amp;cd=//&amp;c=82E@//depot/systest/system/main/pub/doc/IONCodingStyleGuide.doc?ac=22">IONCodingStyleGuide.doc</a> codifies a couple of rules to ensure reasonably consistent code and documentation of libraries in <span class="caps">ION</span>. Test text</p>', tx);
   t.end();
 });
-
 
 
 test('links:53', t => {
@@ -480,14 +428,12 @@ test('links:53', t => {
 });
 
 
-
 test('trailing space not absorbed by link', t => {
   const tx = '"Link":/foo.html me';
   t.is(textile.convert(tx),
     '<p><a href="/foo.html">Link</a> me</p>', tx);
   t.end();
 });
-
 
 
 test('trailing comma stays outside link', t => {
@@ -498,14 +444,12 @@ test('trailing comma stays outside link', t => {
 });
 
 
-
 test('trailing exclamation stays outside link', t => {
   const tx = '"Link":/foo.html! me';
   t.is(textile.convert(tx),
     '<p><a href="/foo.html">Link</a>! me</p>', tx);
   t.end();
 });
-
 
 
 test('trailing semicolon stays outside link', t => {
@@ -516,14 +460,12 @@ test('trailing semicolon stays outside link', t => {
 });
 
 
-
 test('trailing period stays outside link', t => {
   const tx = '"Link":/foo.html.';
   t.is(textile.convert(tx),
     '<p><a href="/foo.html">Link</a>.</p>', tx);
   t.end();
 });
-
 
 
 test('whose text is a parenthetical statement', t => {
@@ -534,14 +476,12 @@ test('whose text is a parenthetical statement', t => {
 });
 
 
-
 test('that has a class and whose text is a parenthetical statement', t => {
   const tx = '"(myclass) (just in case you were wondering)":http://slashdot.org/';
   t.is(textile.convert(tx),
     '<p><a class="myclass" href="http://slashdot.org/">(just in case you were wondering)</a></p>', tx);
   t.end();
 });
-
 
 
 test('link containing parentheses', t => {
@@ -552,14 +492,12 @@ test('link containing parentheses', t => {
 });
 
 
-
 test('link containing quotes', t => {
   const tx = '"He said it is "very unlikely" this works":http://slashdot.org/';
   t.is(textile.convert(tx),
     '<p><a href="http://slashdot.org/">He said it is &#8220;very unlikely&#8221; this works</a></p>', tx);
   t.end();
 });
-
 
 
 test('link containing multiple quotes', t => {
@@ -570,14 +508,12 @@ test('link containing multiple quotes', t => {
 });
 
 
-
 test('linked quoted phrase', t => {
   const tx = '""Open the pod bay doors please, HAL."":http://www.youtube.com/watch?v=npN9l2Bd06s';
   t.is(textile.convert(tx),
     '<p><a href="http://www.youtube.com/watch?v=npN9l2Bd06s">&#8220;Open the pod bay doors please, <span class="caps">HAL</span>.&#8221;</a></p>', tx);
   t.end();
 });
-
 
 
 test('link following quoted phrase', t => {
@@ -588,14 +524,12 @@ test('link following quoted phrase', t => {
 });
 
 
-
 test('links containing underscores', t => {
   const tx = 'This is a link to a "Wikipedia article about Barack":http://en.wikipedia.org/wiki/Barack_Obama';
   t.is(textile.convert(tx),
     '<p>This is a link to a <a href="http://en.wikipedia.org/wiki/Barack_Obama">Wikipedia article about Barack</a></p>', tx);
   t.end();
 });
-
 
 
 test('links containing parentheses', t => {
@@ -606,14 +540,12 @@ test('links containing parentheses', t => {
 });
 
 
-
 test('links contained in parentheses', t => {
   const tx = 'This is a regular link (but in parentheses: "Google":http://www.google.com)';
   t.is(textile.convert(tx),
     '<p>This is a regular link (but in parentheses: <a href="http://www.google.com">Google</a>)</p>', tx);
   t.end();
 });
-
 
 
 test('links containing parentheses without brackets', t => {
@@ -624,14 +556,12 @@ test('links containing parentheses without brackets', t => {
 });
 
 
-
 test('links containing parentheses period at end without brackets', t => {
   const tx = 'This is a link to a "Wikipedia article about Textile":http://en.wikipedia.org/wiki/Textile_(markup_language).';
   t.is(textile.convert(tx),
     '<p>This is a link to a <a href="http://en.wikipedia.org/wiki/Textile_(markup_language)">Wikipedia article about Textile</a>.</p>', tx);
   t.end();
 });
-
 
 
 test('broken links containing parentheses without brackets', t => {
@@ -642,14 +572,12 @@ test('broken links containing parentheses without brackets', t => {
 });
 
 
-
 test('links containing parentheses without brackets inside a parenthesis', t => {
   const tx = 'Textile is awesome! (Check out the "Wikipedia article about Textile":http://en.wikipedia.org/wiki/Textile_(markup_language))';
   t.is(textile.convert(tx),
     '<p>Textile is awesome! (Check out the <a href="http://en.wikipedia.org/wiki/Textile_(markup_language)">Wikipedia article about Textile</a>)</p>', tx);
   t.end();
 });
-
 
 
 test('quotes and follow link', t => {
@@ -660,7 +588,6 @@ test('quotes and follow link', t => {
 });
 
 
-
 test('link alias containing dashes', t => {
   const tx = `"link":google-rocks
 
@@ -669,7 +596,6 @@ test('link alias containing dashes', t => {
     '<p><a href="http://google.com">link</a></p>', tx);
   t.end();
 });
-
 
 
 test('contained in multi-paragraph quotes', t => {
@@ -683,7 +609,6 @@ test('contained in multi-paragraph quotes', t => {
 });
 
 
-
 test('as html in notextile contained in multi-paragraph quotes', t => {
   const tx = `"Here is a <notextile><a href="http://redcloth.org/">link</a></notextile>.
 
@@ -695,14 +620,12 @@ test('as html in notextile contained in multi-paragraph quotes', t => {
 });
 
 
-
 test('contained in para with multiple quotes', t => {
   const tx = '"My wife, Tipper, and I will donate 100% of the proceeds of the award to the "Alliance For Climate Protection":http://www.looktothestars.org/charity/638-alliance-for-climate-protection," said Gore in an email. "I am deeply honored to receive the Nobel Peace Prize."';
   t.is(textile.convert(tx),
     '<p>&#8220;My wife, Tipper, and I will donate 100% of the proceeds of the award to the <a href="http://www.looktothestars.org/charity/638-alliance-for-climate-protection">Alliance For Climate Protection</a>,&#8221; said Gore in an email. &#8220;I am deeply honored to receive the Nobel Peace Prize.&#8221;</p>', tx);
   t.end();
 });
-
 
 
 test('with caps in the title', t => {
@@ -713,12 +636,10 @@ test('with caps in the title', t => {
 });
 
 
-
 test('containing HTML tags with quotes', t => {
   const tx = '"<img name="checkmark.gif" alt="Apply online" />*apply online*":/admissions/apply/';
   t.is(textile.convert(tx),
     '<p><a href="/admissions/apply/"><img name="checkmark.gif" alt="Apply online" /><strong>apply online</strong></a></p>', tx);
   t.end();
 });
-
 

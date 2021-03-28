@@ -15,4 +15,3 @@ test('correct application of single quote entity when using styles', t => {
     '<p style="background:#white url(&#39;../chunky_bacon.jpg&#39;)">The quick brown &#8216;cartoon&#8217; fox jumps over the lazy dog</p>', tx);
   t.end();
 });
-

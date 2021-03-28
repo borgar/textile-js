@@ -44,7 +44,7 @@ export default function textile (sourceTx, opt) {
   opt = Object.assign({}, textile.defaults, opt);
   // run the converter
   return parseTextile(sourceTx, opt).toHTML();
-};
+}
 
 textile.CommentNode = CommentNode;
 textile.Document = Document;

@@ -11,6 +11,7 @@ test('jstextile options', t => {
   t.end();
 });
 
+
 test('jstextile options', t => {
   // linebreak option works in tables
   t.is(textile.convert('|a|b\nc|d|\n|a|b|c|\n'),
@@ -41,6 +42,7 @@ test('jstextile options', t => {
     '</table>');
   t.end();
 });
+
 
 test('jstextile options', t => {
   const paragraph = 'Some paragraph\nwith a linebreak.';

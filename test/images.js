@@ -592,5 +592,3 @@ test('with link and title and text afterward', t => {
     '<p><a href="image.jpg"><img src="/image_r.jpg" title="description" alt="description" /></a> text.</p>', tx);
   t.end();
 });
-
-

@@ -10,14 +10,12 @@ test('instiki:1', t => {
 });
 
 
-
 test('instiki:2', t => {
   const tx = '*this <span>span</span> is strong*';
   t.is(textile.convert(tx),
     '<p><strong>this <span>span</span> is strong</strong></p>', tx);
   t.end();
 });
-
 
 
 test('instiki:3', t => {
@@ -28,7 +26,6 @@ test('instiki:3', t => {
 });
 
 
-
 test('instiki:4', t => {
   const tx = '_this <span>span</span> is italic_';
   t.is(textile.convert(tx),
@@ -37,14 +34,12 @@ test('instiki:4', t => {
 });
 
 
-
-/* test( 'instiki:5', function ( t ) {
-  let tx = "%{color:red}nested span because of <span><span class=\"newWikiWord\">Camel Word<a href=\"../show/CamelWord\">?</a></span></span>%";
-  t.is( textile.convert( tx ),
-    "<p><span style=\"color:red;\">nested span because of <span><span class=\"newWikiWord\">Camel Word<a href=\"../show/CamelWord\">?</a></span></span></span></p>", tx );
+test.skip('instiki:5', t => {
+  const tx = '%{color:red}nested span because of <span><span class="newWikiWord">Camel Word<a href="../show/CamelWord">?</a></span></span>%';
+  t.is(textile.convert(tx),
+    '<p><span style="color:red;">nested span because of <span><span class="newWikiWord">Camel Word<a href="../show/CamelWord">?</a></span></span></span></p>', tx);
   t.end();
 });
-*/
 
 
 test('instiki:6', t => {
@@ -66,7 +61,6 @@ test('instiki:6', t => {
 </ul>`, tx);
   t.end();
 });
-
 
 
 test('instiki:7', t => {

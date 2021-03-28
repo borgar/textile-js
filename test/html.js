@@ -35,27 +35,25 @@ test('html:4', t => {
 
 
 // Does not confirm with PHP standard.
-/*
-test( 'no breaks between HTML elements', function ( t ) {
-  let tx = "<ul>\n\
-\t<li>You can put HTML code right in Textile.</li>\n\
-\t<li>It will not insert a break between elements</li>\n\
-\t<li>or wrap it all in a p tag.</li>\n\
-\t<li>It should insert a hard break\n\
-if you break.</li>\n\
-</ul>";
-  t.is( textile.convert( tx ),
-    "<ul>\n\
-\t<li>You can put <span class=\"caps\">HTML</span> code right in Textile.</li>\n\
-\t<li>It will not insert a break between elements</li>\n\
-\t<li>or wrap it all in a p tag.</li>\n\
-\t<li>It should insert a hard break<br />\n\
-if you break.</li>\n\
-</ul>", tx );
+test.skip('no breaks between HTML elements', t => {
+  const tx = `<ul>
+\t<li>You can put HTML code right in Textile.</li>
+\t<li>It will not insert a break between elements</li>
+\t<li>or wrap it all in a p tag.</li>
+\t<li>It should insert a hard break
+if you break.</li>
+</ul>`;
+  t.is(textile.convert(tx),
+    `<ul>
+\t<li>You can put <span class="caps">HTML</span> code right in Textile.</li>
+\t<li>It will not insert a break between elements</li>
+\t<li>or wrap it all in a p tag.</li>
+\t<li>It should insert a hard break<br />
+if you break.</li>
+</ul>`, tx);
   t.end();
 });
 
-*/
 
 test('line breaks', t => {
   const tx = `I spoke.<br />
@@ -155,29 +153,31 @@ test('preserves empty block standalone elements', t => {
   t.end();
 });
 
-/*
-test( 'unfinished standalone HTML', function ( t ) {
-  let tx = "<div>\n\
-This is some div text.\n\n\
-More div text.";
-  t.is( textile.convert( tx ),
-    "<div>\n\
-<p>This is some div text.</p>\n\
-<p>More div text.</p>", tx );
+
+test.skip('unfinished standalone HTML', t => {
+  const tx = `<div>
+This is some div text.
+
+More div text.`;
+  t.is(textile.convert(tx),
+    `<div>
+<p>This is some div text.</p>
+<p>More div text.</p>`, tx);
   t.end();
 });
 
 
-test( 'unfinished HTML block', function ( t ) {
-  let tx = "<div>This is some div text.\n\n\
-More div text.";
-  t.is( textile.convert( tx ),
-    "<div>This is some div text.<br />\n\
-<br />\n\
-More div text.", tx );
+test.skip('unfinished HTML block', t => {
+  const tx = `<div>This is some div text.
+
+More div text.`;
+  t.is(textile.convert(tx),
+    `<div>This is some div text.<br />
+<br />
+More div text.`, tx);
   t.end();
 });
-*/
+
 
 test('complex example from real life', t => {
   const tx = `<div class="span-17 last">

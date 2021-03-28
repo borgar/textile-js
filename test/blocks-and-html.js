@@ -218,5 +218,3 @@ p. This is <strong>a block</strong>.
 </div>`;
   t.is(textile.convert(tx), op, tx); t.end();
 });
-
-

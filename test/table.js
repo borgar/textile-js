@@ -25,7 +25,6 @@ h3. A header after the table`;
 });
 
 
-
 test('table:2', t => {
   const tx = `|_. a|_. b|_. c|
 |1|2|3|`;
@@ -44,7 +43,6 @@ test('table:2', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('table:3', t => {
@@ -71,7 +69,6 @@ test('table:3', t => {
 });
 
 
-
 test('table:4', t => {
   const tx = `table{border:1px solid black}.
 |This|is|a|row|
@@ -95,7 +92,6 @@ test('table:4', t => {
 });
 
 
-
 test('table:5', t => {
   const tx = '{background:#ddd}. |This|is|a|row|';
   t.is(textile.convert(tx),
@@ -109,7 +105,6 @@ test('table:5', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('table:6', t => {
@@ -130,7 +125,6 @@ test('table:6', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('table:7', t => {
@@ -174,7 +168,6 @@ test('table:7', t => {
 });
 
 
-
 test('table:8', t => {
   const tx = `|{background:#ddd}. Cell with gray background|Normal cell|
 |\\2. Cell spanning 2 columns|
@@ -204,7 +197,6 @@ test('table:8', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('row spanning mid-row', t => {
@@ -241,7 +233,6 @@ test('row spanning mid-row', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('table:10', t => {
@@ -308,7 +299,6 @@ test('table:10', t => {
 });
 
 
-
 test('combined table header and colspan', t => {
   const tx = `table(my_class).
 |_\\2. a |_. b |_. c |
@@ -329,7 +319,6 @@ test('combined table header and colspan', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('two adjacent tables', t => {
@@ -355,7 +344,6 @@ test('two adjacent tables', t => {
 });
 
 
-
 test('with cell attributes', t => {
   const tx = '|[en]. lang-ok|{color:red;}. style-ok|(myclass). class-ok|';
   t.is(textile.convert(tx),
@@ -370,7 +358,6 @@ test('with cell attributes', t => {
 });
 
 
-
 test('with improper cell attributes', t => {
   const tx = '|[en]lang-bad|{color:red;}style-bad|(myclass)class-bad|';
   t.is(textile.convert(tx),
@@ -383,7 +370,6 @@ test('with improper cell attributes', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('with line breaks in the cell', t => {
@@ -408,7 +394,6 @@ c</td>
 });
 
 
-
 test('with missing cells', t => {
   const tx = `|a|b|
 |a|
@@ -429,7 +414,6 @@ test('with missing cells', t => {
 </table>`, tx);
   t.end();
 });
-
 
 
 test('with empty cells', t => {
@@ -453,5 +437,4 @@ test('with empty cells', t => {
 </table>`, tx);
   t.end();
 });
-
 

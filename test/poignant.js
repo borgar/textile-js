@@ -66,5 +66,3 @@ Now that you've met @false@, I'm sure you can see what's on next.`;
 <p>Now that you&#8217;ve met <code>false</code>, I&#8217;m sure you can see what&#8217;s on next.</p>`, tx);
   t.end();
 });
-
-
