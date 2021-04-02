@@ -28,6 +28,7 @@ export default class Ribbon {
   advance (n) {
     this.index += (typeof n === 'string') ? n.length : n;
     this._feed = this._org.slice(this.index);
+    return this;
   }
 
   charAt (n) {
@@ -70,6 +71,18 @@ export default class Ribbon {
     return this;
   }
 
+  trimStart () {
+    const start = /^\s*/.exec(this._feed)[0].length;
+    return this.sub(start);
+  }
+
+  trimEnd () {
+    const end = /\s*$/.exec(this._feed)[0].length;
+    const slice = new Ribbon(this._feed.slice(0, this._feed.length - end));
+    slice.skew = this.index + this.skew;
+    return slice;
+  }
+
   trim () {
     const start = /^\s*/.exec(this._feed)[0].length;
     const end = /\s*$/.exec(this._feed)[0].length;
@@ -83,6 +96,10 @@ export default class Ribbon {
 
   startsWith (s) {
     return this._feed.slice(0, s.length) === s;
+  }
+
+  clone () {
+    return this.sub(0);
   }
 
   sub (start = 0, len = null) {

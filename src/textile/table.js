@@ -22,22 +22,21 @@ const charToTag = {
 };
 
 export function parseColgroup (src) {
-  const colgroup = new Element('colgroup', {}, src.offset);
+  const colgroup = new Element('colgroup', {}).setPos(src.offset);
   src.splitBy(/\|/, (bit, isCol) => {
     const col = isCol ? {} : colgroup.attr;
-    const pos = bit.offset;
-    let d = String(bit).trim();
+    let d = bit.trim();
     if (d) {
       const m1 = /^\\(\d+)/.exec(d);
       if (m1) {
         col.span = +m1[1];
-        d = d.slice(m1[0].length);
+        d = d.sub(m1[0].length);
       }
 
       const [ step, attr ] = parseAttr(d, 'col');
       if (step) {
         Object.assign(col, attr);
-        d = d.slice(step);
+        d = d.sub(step);
       }
 
       const m2 = /\b\d+\b/.exec(d);
@@ -47,7 +46,7 @@ export function parseColgroup (src) {
     }
     if (isCol) {
       colgroup.appendChild(new TextNode('\n\t\t'));
-      colgroup.appendChild(new Element('col', col, pos));
+      colgroup.appendChild(new Element('col', col).setPos(bit.offset));
     }
   });
 
@@ -63,13 +62,13 @@ export function parseTable (src, options) {
   const rowgroups = [];
   let colgroup;
   let caption;
-  const table = new Element('table', null, src.offset);
+  const table = new Element('table').setPos(src.offset);
   let currentTBody;
   let m;
   let extended = 0;
 
   const setRowGroup = (type, attr, pos) => {
-    currentTBody = new Element(type, attr, pos);
+    currentTBody = new Element(type, attr).setPos(pos);
     rowgroups.push(currentTBody);
   };
 
@@ -93,7 +92,7 @@ export function parseTable (src, options) {
     if (/\./.test(innerCaption)) { // mandatory "."
       // FIXME: possible bug: missing glyph transforms?
       const captionText = innerCaption.slice(1).replace(/\|\s*$/, '');
-      caption = new Element('caption', attr, src.offset);
+      caption = new Element('caption', attr).setPos(src.offset);
       caption.appendChild(new TextNode(captionText.trim()));
       extended++;
       src.advance(m[0]);
@@ -126,7 +125,7 @@ export function parseTable (src, options) {
       }
 
       const attr = parseAttr(m[3], 'tr')[1]; // FIXME: requires "\.\s?" -- else what ?
-      const row = new Element('tr', attr, rowPos);
+      const row = new Element('tr', attr).setPos(rowPos);
       currentTBody.appendChild(new TextNode('\n\t\t'));
       currentTBody.appendChild(row);
       const inner = src.sub(m[1].length, m[4].length);
@@ -148,7 +147,7 @@ export function parseTable (src, options) {
         const [ step, attr ] = parseAttr(inner, 'td');
         inner.advance(step);
 
-        let cell = new Element(isTh ? 'th' : 'td', attr, cellPos);
+        let cell = new Element(isTh ? 'th' : 'td', attr).setPos(cellPos);
 
         if (step || isTh) {
           const p = /^\.\s*/.exec(inner);

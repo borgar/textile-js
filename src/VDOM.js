@@ -47,6 +47,7 @@ function appendTo (parent, child) {
   return child;
 }
 
+
 export class Node {
   constructor (tagName) {
     this.nodeType = NODE;
@@ -82,6 +83,7 @@ export class Node {
   }
 }
 
+
 export class TextNode extends Node {
   constructor (data) {
     super();
@@ -93,6 +95,7 @@ export class TextNode extends Node {
     return escape(this.data);
   }
 }
+
 
 // Essentially this is the same as a textnode except it should not
 // merge with textnodes, and should not be post-processed.
@@ -108,6 +111,7 @@ export class RawNode extends Node {
   }
 }
 
+
 export class HiddenNode extends Node {
   constructor (data) {
     super();
@@ -119,6 +123,7 @@ export class HiddenNode extends Node {
     return '';
   }
 }
+
 
 export class CommentNode extends Node {
   constructor (data) {
@@ -132,15 +137,13 @@ export class CommentNode extends Node {
   }
 }
 
+
 export class Element extends Node {
-  constructor (tagName, attr, offsetPos) {
+  constructor (tagName, attr) {
     super();
     this.tagName = tagName;
     this.nodeType = ELEMENT_NODE;
     this.attr = Object.assign({}, attr);
-    if (offsetPos != null) {
-      this.pos.offset = offsetPos;
-    }
     this.children = [];
   }
 
@@ -193,6 +196,7 @@ export class Element extends Node {
   }
 }
 
+
 export class Document extends Node {
   constructor (data) {
     super();
@@ -213,12 +217,15 @@ export class Document extends Node {
   }
 }
 
+
 // expose constants as static props
-[ Node, RawNode, TextNode, CommentNode, Element, Document ].forEach(d => {
-  d.NODE = NODE;
-  d.ELEMENT_NODE = ELEMENT_NODE;
-  d.RAW_NODE = RAW_NODE;
-  d.TEXT_NODE = TEXT_NODE;
-  d.DOCUMENT_NODE = DOCUMENT_NODE;
-  d.COMMENT_NODE = COMMENT_NODE;
-});
+[ CommentNode, Document, Element, HiddenNode, Node, RawNode, TextNode ]
+  .forEach(d => {
+    d.NODE = NODE;
+    d.ELEMENT_NODE = ELEMENT_NODE;
+    d.HIDDEN_NODE = HIDDEN_NODE;
+    d.RAW_NODE = RAW_NODE;
+    d.TEXT_NODE = TEXT_NODE;
+    d.DOCUMENT_NODE = DOCUMENT_NODE;
+    d.COMMENT_NODE = COMMENT_NODE;
+  });

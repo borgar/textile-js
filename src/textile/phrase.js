@@ -1,5 +1,4 @@
 /* textile inline parser */
-import Ribbon from '../Ribbon.js';
 import { Element, TextNode, RawNode, CommentNode } from '../VDOM.js';
 import re from '../re.js';
 
@@ -59,11 +58,6 @@ const getMatchRe = (tok, fence, code) => {
 };
 
 export function parsePhrase (src, options) {
-  // FIXME: remove this
-  if (!(src instanceof Ribbon)) {
-    src = new Ribbon(src);
-  }
-
   const root = new Element('root');
   let m;
 
@@ -138,12 +132,12 @@ export function parsePhrase (src, options) {
       if (m[4]) { // +cite causes image to be wraped with a link (or link_ref)?
         // TODO: support link_ref for image cite
         root
-          .appendChild(new Element('a', { href: m[4] }, src.offset))
-          .appendChild(new Element('img', attr, src.offset));
+          .appendChild(new Element('a', { href: m[4] }).setPos(src.offset))
+          .appendChild(new Element('img', attr).setPos(src.offset));
       }
       else {
         root
-          .appendChild(new Element('img', attr, src.offset));
+          .appendChild(new Element('img', attr).setPos(src.offset));
       }
       src.advance(m[0]);
       continue;
@@ -155,6 +149,7 @@ export function parsePhrase (src, options) {
       root.appendChild(new CommentNode(m[1]));
       continue;
     }
+
     // html tag
     // TODO: this seems to have a lot of overlap with block tags... DRY?
     if ((m = testOpenTag(src))) {

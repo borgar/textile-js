@@ -6,8 +6,7 @@
 */
 
 import { parseFlow } from './textile/flow.js';
-export { parseHtml } from './html.js';
-import { Document, Element, RawNode, TextNode, CommentNode } from './VDOM.js';
+import { CommentNode, Document, Element, HiddenNode, Node, RawNode, TextNode } from './VDOM.js';
 
 function parseTextile (tx, opt) {
   const root = new Document();
@@ -51,6 +50,7 @@ textile.Document = Document;
 textile.Element = Element;
 textile.RawNode = RawNode;
 textile.TextNode = TextNode;
+export { CommentNode, Document, Element, HiddenNode, Node, RawNode, TextNode };
 
 // options
 textile.defaults = {

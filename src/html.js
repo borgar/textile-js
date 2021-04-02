@@ -1,5 +1,4 @@
 import re from './re.js';
-import Ribbon from './Ribbon.js';
 import { Element, TextNode, CommentNode } from './VDOM.js';
 import { singletons } from './constants.js';
 
@@ -46,12 +45,15 @@ const CLOSE = 'CLOSE';
 const SINGLE = 'SINGLE';
 const TEXT = 'TEXT';
 const COMMENT = 'COMMENT';
-const WS = 'WS';
 
-export function tokenize (src, whitelistTags, lazy, offset) {
+export function tokenize (src, whitelistTags, lazy) {
   const tokens = [];
+  const nesting = {};
+  let nestCount = 0;
+  let m;
   let textMode = false;
-  const oktag = tag => {
+
+  const isAllowed = tag => {
     if (textMode) {
       return tag === textMode;
     }
@@ -60,37 +62,33 @@ export function tokenize (src, whitelistTags, lazy, offset) {
     }
     return true;
   };
-  const nesting = {};
-  let nestCount = 0;
-  let m;
-
-  src = new Ribbon(String(src), offset);
 
   do {
     // comment
-    if ((m = testComment(src)) && oktag('!')) {
+    if ((m = testComment(src)) && isAllowed('!')) {
       tokens.push({
         type: COMMENT,
         data: m[1],
-        pos: src.index,
+        index: src.index,
+        offset: src.offset,
         src: m[0]
       });
       src.advance(m[0]);
     }
 
     // end tag
-    else if ((m = testCloseTag(src)) && oktag(m[1])) {
+    else if ((m = testCloseTag(src)) && isAllowed(m[1])) {
       const token = {
         type: CLOSE,
         tag: m[1],
-        pos: src.index,
+        index: src.index,
+        offset: src.offset,
         src: m[0]
       };
       src.advance(m[0]);
       tokens.push(token);
       nesting[token.tag]--;
       nestCount--;
-      // console.log( '/' + token.tag, nestCount, nesting );
       if (lazy && (
         !nestCount ||
         !nesting[token.tag] < 0 ||
@@ -105,15 +103,15 @@ export function tokenize (src, whitelistTags, lazy, offset) {
     }
 
     // open/void tag
-    else if ((m = testOpenTag(src)) && oktag(m[1])) {
+    else if ((m = testOpenTag(src)) && isAllowed(m[1])) {
       const token = {
         type: m[3] || m[1] in singletons ? SINGLE : OPEN,
         tag: m[1],
-        pos: src.index,
+        index: src.index,
+        offset: src.offset,
         src: m[0]
       };
       token.attr = parseHtmlAttr(m[2]);
-      // token.attr = src.addOffset(parseHtmlAttr(m[2]));
       // some elements can move parser into "text" mode
       if (m[1] === 'script' || m[1] === 'code' || m[1] === 'style') {
         textMode = token.tag;
@@ -134,7 +132,8 @@ export function tokenize (src, whitelistTags, lazy, offset) {
         tokens.push({
           type: TEXT,
           data: m[0],
-          pos: src.index,
+          index: src.index,
+          offset: src.offset,
           src: m[0]
         });
       }
@@ -157,23 +156,22 @@ export function parseHtml (tokens, lazy) {
   for (let i = 0; i < tokens.length; i++) {
     token = tokens[i];
     if (token.type === COMMENT) {
-      // curr.push([ '!', token.data ]);
       curr.appendChild(new CommentNode(token.data));
     }
-    else if (token.type === TEXT || token.type === WS) {
-      // curr.push(token.data);
+    else if (token.type === TEXT) {
       curr.appendChild(new TextNode(token.data));
     }
     else if (token.type === SINGLE) {
-      // curr.push(token.attr ? [ token.tag, token.attr ] : [ token.tag ]);
-      curr.appendChild(new Element(token.tag, token.attr));
+      curr.appendChild(
+        new Element(token.tag, token.attr).setPos(token.offset)
+      );
     }
     else if (token.type === OPEN) {
       // TODO: some things auto close other things: <td>, <li>, <p>, <table>
       // https://html.spec.whatwg.org/multipage/syntax.html#syntax-tag-omission
-      // const elm = token.attr ? [ token.tag, token.attr ] : [ token.tag ];
-      // curr.push(elm);
-      const elm = curr.appendChild(new Element(token.tag, token.attr));
+      const elm = curr.appendChild(
+        new Element(token.tag, token.attr).setPos(token.offset)
+      );
       stack.push(elm);
       curr = elm;
     }
@@ -189,11 +187,11 @@ export function parseHtml (tokens, lazy) {
         }
       }
       if (!stack.length && lazy) {
-        root.children.sourceLength = token.pos + token.src.length;
+        root.children.sourceLength = token.index + token.src.length;
         return root.children;
       }
     }
   }
-  root.children.sourceLength = token ? token.pos + token.src.length : 0;
+  root.children.sourceLength = token ? token.index + token.src.length : 0;
   return root.children;
 }

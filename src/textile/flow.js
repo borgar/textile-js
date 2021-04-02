@@ -6,7 +6,7 @@ import { Element, TextNode, RawNode, HiddenNode, CommentNode } from '../VDOM.js'
 import re from '../re.js';
 
 import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
-import { singletons } from '../constants.js';
+import { singletons, allowedFlowBlocktags } from '../constants.js';
 
 import { parsePhrase } from './phrase.js';
 import { copyAttr, parseAttr } from './attr.js';
@@ -18,22 +18,6 @@ import { txblocks, txlisthd, txattr } from './re_ext.js';
 re.pattern.txblocks = txblocks;
 re.pattern.txlisthd = txlisthd;
 re.pattern.txattr = txattr;
-
-// HTML tags allowed in the document (root) level that trigger HTML parsing
-const allowedBlocktags = {
-  p: 0,
-  hr: 0,
-  ul: 1,
-  ol: 0,
-  li: 0,
-  div: 1,
-  pre: 0,
-  object: 1,
-  script: 0,
-  noscript: 0,
-  blockquote: 1,
-  notextile: 1
-};
 
 const reBlock = re.compile(/^([:txblocks:])/);
 const reBlockNormal = re.compile(/^(.*?)($|\r?\n(?=[:txlisthd:])|\r?\n(?:\s*\n|$)+)/, 's');
@@ -63,7 +47,7 @@ function paragraph (src, { tag = 'p', attr = {}, linebreak = '\n', options }) {
       if (linebreak && i) {
         out.push(new TextNode('\n'));
       }
-      const elm = new Element(tag, attr, bit.offset);
+      const elm = new Element(tag, attr).setPos(bit.offset);
       elm.appendChild(parsePhrase(bit, options));
       out.push(elm);
     }
@@ -135,14 +119,14 @@ export function parseFlow (src, options) {
             options: options
           });
           root
-            .appendChild(new Element('blockquote', attr, outerOffs))
+            .appendChild(new Element('blockquote', attr).setPos(outerOffs))
             .appendChild([ new TextNode('\n'), ...par, new TextNode('\n') ]);
         }
 
         else if (blockType === 'bc') {
           root
-            .appendChild(new Element('pre', attr, outerOffs))
-            .appendChild(new Element('code', copyAttr(attr, { id: 1 }), outerOffs))
+            .appendChild(new Element('pre', attr).setPos(outerOffs))
+            .appendChild(new Element('code', copyAttr(attr, { id: 1 })).setPos(outerOffs))
             .appendChild(new RawNode(inner));
         }
 
@@ -153,7 +137,7 @@ export function parseFlow (src, options) {
         else if (blockType === '###') {
           // ignore the insides
           hasHidden = true;
-          root.appendChild(new HiddenNode(inner));
+          root.appendChild(new HiddenNode(inner).setPos(outerOffs));
         }
 
         else if (blockType === 'pre') {
@@ -161,7 +145,7 @@ export function parseFlow (src, options) {
           // "pre(foo#bar).. line1\n\nline2" prevents multiline preformat blocks
           // ...which seems like the whole point of having an extended pre block?
           root
-            .appendChild(new Element('pre', attr, outerOffs))
+            .appendChild(new Element('pre', attr).setPos(outerOffs))
             .appendChild(new RawNode(inner));
         }
 
@@ -172,12 +156,12 @@ export function parseFlow (src, options) {
           attr.class = (attr.class ? attr.class + ' ' : '') + 'footnote';
           attr.id = 'fn' + fnid;
           const subAttr = copyAttr(attr, { id: 1, class: 1 });
-          const fnLink = new Element('a', { href: '#fnr' + fnid, ...subAttr }, pos);
+          const fnLink = new Element('a', { href: '#fnr' + fnid, ...subAttr }).setPos(pos);
           fnLink
-            .appendChild(new Element('sup', subAttr, pos))
+            .appendChild(new Element('sup', subAttr).setPos(pos))
             .appendChild(new TextNode(fnid));
           root
-            .appendChild(new Element('p', attr, pos))
+            .appendChild(new Element('p', attr).setPos(pos))
             .appendChild([
               fnLink,
               new TextNode(' '),
@@ -211,19 +195,20 @@ export function parseFlow (src, options) {
       const tag = m[1];
 
       // Is block tag? ...
-      if (tag in allowedBlocktags) {
-        const pos = src.off;
+      if (tag in allowedFlowBlocktags) {
         if (m[3] || tag in singletons) { // single?
+          const pos = src.offset;
           src.advance(m[0]);
           if (/^\s*(\n|$)/.test(src)) {
-            const attr = parseHtmlAttr(m[2]);
-            root.appendChild(new Element(tag, attr, pos));
+            root.appendChild(
+              new Element(tag, parseHtmlAttr(m[2])).setPos(pos)
+            );
             src.skipWS();
             continue;
           }
         }
         else if (tag === 'pre') {
-          const t = tokenize(src, { pre: 1, code: 1 }, tag);
+          const t = tokenize(src.clone(), { pre: 1, code: 1 }, tag);
           const p = parseHtml(t, true);
           src.load();
           src.advance(p.sourceLength);
@@ -235,7 +220,7 @@ export function parseFlow (src, options) {
         }
         else if (tag === 'notextile') {
           // merge all child elements
-          const t = tokenize(src, null, tag);
+          const t = tokenize(src.clone(), null, tag);
           let s = 1; // start after open tag
           while (/^\s+$/.test(t[s].src)) {
             s++; // skip whitespace
@@ -243,7 +228,7 @@ export function parseFlow (src, options) {
           const p = parseHtml(t.slice(s, -1), true);
           const x = t.pop();
           src.load();
-          src.advance(x.pos + x.src.length);
+          src.advance(x.index + x.src.length);
           if (/^\s*(\n|$)/.test(src)) {
             root.appendChild(p);
             src.skipWS(); // skip tailing whitespace
@@ -252,23 +237,30 @@ export function parseFlow (src, options) {
         }
         else {
           src.skipWS();
-          const t = tokenize(src, null, tag);
-          const x = t.pop(); // this should be the end tag
+          const offs = src.offset;
+          const tokens = tokenize(src.clone(), null, tag);
+          const endTag = tokens.pop(); // this should be the end tag
           let s = 1; // start after open tag
-          while (t[s] && /^[\n\r]+$/.test(t[s].src)) {
+          while (tokens[s] && /^[\n\r]+$/.test(tokens[s].src)) {
             s++; // skip whitespace
           }
-          if (x.tag === tag) {
+          if (endTag.tag === tag) {
             // inner can be empty
-            const inner = (t.length > 1) ? String(src).slice(t[s].pos, x.pos) : '';
-            src.advance(x.pos + x.src.length);
+            const inner = tokens.length > 1
+              ? src.sub(tokens[s].index, endTag.index - tokens[s].index)
+              : new Ribbon('');
+
+            src.advance(endTag.index + endTag.src.length);
+
             if (/^\s*(\n|$)/.test(src)) {
-              const elm = new Element(tag, parseHtmlAttr(m[2]));
+              const elm = new Element(tag, parseHtmlAttr(m[2])).setPos(offs);
               if (tag === 'script' || tag === 'style') {
                 elm.appendChild(new TextNode(inner));
               }
               else {
-                const innerHTML = inner.replace(/^\n+/, '').replace(/\s*$/, '');
+                const sO = /^\n*/.exec(inner)[0].length;
+                const eO = /\s*$/.exec(inner)[0].length;
+                const innerHTML = inner.sub(sO, inner.length - sO - eO);
                 const isBlock = /\n\r?\n/.test(innerHTML) || tag === 'ol' || tag === 'ul';
                 const innerElm = isBlock
                   ? parseFlow(innerHTML, options)
@@ -294,7 +286,7 @@ export function parseFlow (src, options) {
 
     // ruler
     if ((m = reRuler.exec(src))) {
-      root.appendChild(new Element('hr', null, src.offset));
+      root.appendChild(new Element('hr').setPos(src.offset));
       src.advance(m[0]);
       continue;
     }
