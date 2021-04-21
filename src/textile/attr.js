@@ -8,7 +8,7 @@ const reColSpan = /^\\(\d+)/;
 const reRowSpan = /^\/(\d+)/;
 const reStyles = /^\{([^}]*)\}/;
 const reCSS = /^\s*([^:\s]+)\s*:\s*(.+)\s*$/;
-const reLang = /^\[([^[\]\n]+)\]/;
+const reLang = /^\[([a-zA-Z0-9_-]+)\]/;
 
 const pbaAlignLookup = {
   '<': 'left',

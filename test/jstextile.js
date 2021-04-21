@@ -682,3 +682,10 @@ test('correct glyph convertion', t => {
     '<p>foo &#8212; bar <em>foo foo -- bar bar</em> <code>foo -- bar</code></p>\nfoo -- bar');
   t.end();
 });
+
+
+test('less liberal lang attr #76', t => {
+  t.is(textile.convert('%["red":https://example.com].%'),
+    '<p><span><a href="https://example.com">red</a>.</span></p>');
+  t.end();
+});
