@@ -26,7 +26,7 @@ const phraseConvert = {
   '@': 'code'
 };
 
-const rePhrase = /^([[{]?)(__?|\*\*?|\?\?|[-+^~@%])/;
+const rePhrase = /^(\[?)(__?|\*\*?|\?\?|[-+^~@%])/;
 const reImage = re.compile(/^!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^./]))?)([^!\s]+?) ?(?:\(((?:[^()]|\([^()]+\))+)\))?!(?::([^\s]+?(?=[!-.:-@[\\\]-`{-~](?:$|\s)|\s|$)))?/);
 const reImageFenced = re.compile(/^\[!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^./]))?)([^!\s]+?) ?(?:\(((?:[^()]|\([^()]+\))+)\))?!(?::([^\s]+?(?=[!-.:-@[\\\]-`{-~](?:$|\s)|\s|$)))?\]/);
 // NB: there is an exception in here to prevent matching "TM)"
@@ -42,10 +42,6 @@ const getMatchRe = (tok, fence, code) => {
   if (fence === '[') {
     mMid = '^(.*?)';
     mEnd = '(?:])';
-  }
-  else if (fence === '{') {
-    mMid = '^(.*?)';
-    mEnd = '(?:})';
   }
   else {
     const t1 = re.escape(tok.charAt(0));
