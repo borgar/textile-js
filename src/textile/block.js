@@ -8,7 +8,7 @@ import re from '../re.js';
 import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
 import { singletons, allowedFlowBlocktags } from '../constants.js';
 
-import { parsePhrase } from './phrase.js';
+import { parseInline } from './inline.js';
 import { copyAttr, parseAttr } from './attr.js';
 import { testList, parseList } from './list.js';
 import { testDefList, parseDefList } from './deflist.js';
@@ -41,21 +41,21 @@ function paragraph (src, { tag = 'p', attr = {}, linebreak = '\n', options }) {
   src.splitBy(/(?:\r?\n){2,}/, (bit, i) => {
     if (tag === 'p' && /^\s/.test(bit)) {
       // no-paragraphs
-      out = out.concat(parsePhrase(bit.trim(), options));
+      out = out.concat(parseInline(bit.trim(), options));
     }
     else {
       if (linebreak && i) {
         out.push(new TextNode('\n'));
       }
       const elm = new Element(tag, attr).setPos(bit.offset);
-      elm.appendChild(parsePhrase(bit, options));
+      elm.appendChild(parseInline(bit, options));
       out.push(elm);
     }
   });
   return out;
 }
 
-export function parseFlow (src, options) {
+export function parseBlock (src, options) {
   const root = new Element('root');
 
   let linkRefs;
@@ -165,7 +165,7 @@ export function parseFlow (src, options) {
             .appendChild([
               fnLink,
               new TextNode(' '),
-              ...parsePhrase(inner, options)
+              ...parseInline(inner, options)
             ]);
         }
 
@@ -263,8 +263,8 @@ export function parseFlow (src, options) {
                 const innerHTML = inner.sub(sO, inner.length - sO - eO);
                 const isBlock = /\n\r?\n/.test(innerHTML) || tag === 'ol' || tag === 'ul';
                 const innerElm = isBlock
-                  ? parseFlow(innerHTML, options)
-                  : parsePhrase(innerHTML, { ...options, breaks: false });
+                  ? parseBlock(innerHTML, options)
+                  : parseInline(innerHTML, { ...options, breaks: false });
                 if (isBlock || /^\n/.test(inner)) {
                   elm.appendChild(new TextNode('\n'));
                 }

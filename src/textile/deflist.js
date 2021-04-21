@@ -1,7 +1,7 @@
 /* definitions list parser */
 import { Element, TextNode } from '../VDOM.js';
-import { parsePhrase } from './phrase.js';
-import { parseFlow } from './flow.js';
+import { parseInline } from './inline.js';
+import { parseBlock } from './block.js';
 
 const reDeflist = /^((?:- (?:[^\n]\n?)+?)+(:=)(?: *\n[^\0]+?=:(?:\n|$)|(?:[^\0]+?(?:$|\n(?=\n|- )))))+/;
 const reItem = /^((?:- (?:[^\n]\n?)+?)+)(:=)( *\n[^\0]+?=:\s*(?:\n|$)|(?:[^\0]+?(?:$|\n(?=\n|- ))))/;
@@ -22,7 +22,7 @@ export function parseDefList (src, options) {
       .splitBy(/(?:^|\n)- /, (bit, i) => {
         if (i) {
           const term = new Element('dt').setPos(src.offset);
-          term.appendChild(parsePhrase(bit.trim(), options));
+          term.appendChild(parseInline(bit.trim(), options));
           deflist.appendChild([ new TextNode('\t'), term, new TextNode('\n') ]);
         }
       });
@@ -39,11 +39,11 @@ export function parseDefList (src, options) {
       .trim();
     if (/=:$/.test(def)) {
       defElm.appendChild(
-        parseFlow(def.sub(0, def.length - 2).trim(), options)
+        parseBlock(def.sub(0, def.length - 2).trim(), options)
       );
     }
     else {
-      defElm.appendChild(parsePhrase(def, options));
+      defElm.appendChild(parseInline(def, options));
     }
 
     deflist.appendChild(new TextNode('\n'));

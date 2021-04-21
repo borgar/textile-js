@@ -2,7 +2,7 @@
 import re from '../re.js';
 import { Element, TextNode } from '../VDOM.js';
 import { parseAttr } from './attr.js';
-import { parsePhrase } from './phrase.js';
+import { parseInline } from './inline.js';
 import { txlisthd, txlisthd2 } from './re_ext.js';
 
 re.pattern.txlisthd = txlisthd;
@@ -124,7 +124,7 @@ export function parseList (src, options) {
       parent.li.setAttr(pba);
       parent.attrCount++;
     }
-    parent.li.appendChild(parsePhrase(inner.trim(), options));
+    parent.li.appendChild(parseInline(inner.trim(), options));
 
     src.advance(m[0]);
     currIndex[destLevel] = (currIndex[destLevel] || 0) + 1;

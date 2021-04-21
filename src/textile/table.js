@@ -3,7 +3,7 @@
 import re from '../re.js';
 import { Element, TextNode } from '../VDOM.js';
 import { parseAttr } from './attr.js';
-import { parsePhrase } from './phrase.js';
+import { parseInline } from './inline.js';
 import { txattr } from './re_ext.js';
 
 re.pattern.txattr = txattr;
@@ -162,7 +162,7 @@ export function parseTable (src, options) {
 
         const mx = /^(==.*?==|[^|])*/.exec(inner);
         const contentLength = mx[0].length;
-        cell.appendChild(parsePhrase(inner.sub(0, contentLength), options));
+        cell.appendChild(parseInline(inner.sub(0, contentLength), options));
 
         row.appendChild(cell);
 

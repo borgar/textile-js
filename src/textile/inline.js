@@ -53,7 +53,7 @@ const getMatchRe = (tok, fence, code) => {
   return re.compile(`${mMid}(?:${re.escape(tok)})${mEnd}`);
 };
 
-export function parsePhrase (src, options) {
+export function parseInline (src, options) {
   const root = new Element('root');
   let m;
 
@@ -111,7 +111,7 @@ export function parsePhrase (src, options) {
         else {
           root
             .appendChild(new Element(phraseType, { ...baseAttr, ...attr }).setPos(offs))
-            .appendChild(parsePhrase(src.sub(0, m2[1].length), options));
+            .appendChild(parseInline(src.sub(0, m2[1].length), options));
         }
         src.advance(m2[0]);
         continue;
@@ -173,7 +173,7 @@ export function parsePhrase (src, options) {
           }
           else {
             const inner = src.sub(0, m[1].length);
-            element.appendChild(parsePhrase(inner, options));
+            element.appendChild(parseInline(inner, options));
           }
           root.appendChild(child);
           src.advance(m[0]);
@@ -243,7 +243,7 @@ export function parsePhrase (src, options) {
       }
       else {
         inner.skipRe(/^(\.?\s*)/);
-        const content = parsePhrase(inner, options);
+        const content = parseInline(inner, options);
         link.appendChild(content);
       }
       src.advance(m[0]);

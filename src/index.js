@@ -5,13 +5,13 @@
 **
 */
 
-import { parseFlow } from './textile/flow.js';
+import { parseBlock } from './textile/block.js';
 import { CommentNode, Document, Element, HiddenNode, Node, RawNode, TextNode } from './VDOM.js';
 
 function parseTextile (tx, opt) {
   const root = new Document();
   root.pos.offset = 0;
-  root.appendChild(parseFlow(tx, opt));
+  root.appendChild(parseBlock(tx, opt));
   return root;
 }
 
