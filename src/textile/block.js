@@ -2,7 +2,7 @@
 ** textile flow content parser
 */
 import Ribbon from '../Ribbon.js';
-import { Element, TextNode, RawNode, HiddenNode, CommentNode } from '../VDOM.js';
+import { Element, TextNode, RawNode, HiddenNode, CommentNode, ExtendedNode } from '../VDOM.js';
 import re from '../re.js';
 
 import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
@@ -99,12 +99,24 @@ export function parseBlock (src, options) {
       src.advance(step);
 
       if ((m = /^\.(\.?)(?:\s|(?=:))/.exec(src))) {
-        // FIXME: this whole copyAttr seems rather strange?
+        // FIXME: this whole copyAttr deal seems rather strange?
         // slurp rest of block
         src.advance(m[0]);
 
-        m = getBlockRe(blockType, !!m[1]).exec(src);
+        const isExtended = !!m[1];
+        m = getBlockRe(blockType, isExtended).exec(src);
+
         const inner = src.sub(0, m[1].length);
+
+        // Extended blocks are wrapped in a container so that
+        // the source start/end positions make sense, and the
+        // relationship between the child blocks is not lost
+        let parentNode = root;
+        if (isExtended) {
+          parentNode = new ExtendedNode();
+          parentNode.setPos(outerOffs);
+          root.appendChild(parentNode);
+        }
 
         // bq | bc | notextile | pre | h# | fn# | p | ###
         if (blockType === 'bq') {
@@ -118,33 +130,33 @@ export function parseBlock (src, options) {
             attr: copyAttr(attr, { cite: 1, id: 1 }),
             options: options
           });
-          root
+          parentNode
             .appendChild(new Element('blockquote', attr).setPos(outerOffs))
             .appendChild([ new TextNode('\n'), ...par, new TextNode('\n') ]);
         }
 
         else if (blockType === 'bc') {
-          root
+          parentNode
             .appendChild(new Element('pre', attr).setPos(outerOffs))
             .appendChild(new Element('code', copyAttr(attr, { id: 1 })).setPos(outerOffs))
             .appendChild(new RawNode(inner));
         }
 
         else if (blockType === 'notextile') {
-          root.appendChild(parseHtml(tokenize(inner)));
+          parentNode.appendChild(parseHtml(tokenize(inner)));
         }
 
         else if (blockType === '###') {
           // ignore the insides
           hasHidden = true;
-          root.appendChild(new HiddenNode(inner).setPos(outerOffs));
+          parentNode.appendChild(new HiddenNode(inner).setPos(outerOffs));
         }
 
         else if (blockType === 'pre') {
           // I disagree with RedCloth, but agree with PHP here:
           // "pre(foo#bar).. line1\n\nline2" prevents multiline preformat blocks
           // ...which seems like the whole point of having an extended pre block?
-          root
+          parentNode
             .appendChild(new Element('pre', attr).setPos(outerOffs))
             .appendChild(new RawNode(inner));
         }
@@ -160,7 +172,7 @@ export function parseBlock (src, options) {
           fnLink
             .appendChild(new Element('sup', subAttr).setPos(pos))
             .appendChild(new TextNode(fnid));
-          root
+          parentNode
             .appendChild(new Element('p', attr).setPos(pos))
             .appendChild([
               fnLink,
@@ -173,7 +185,7 @@ export function parseBlock (src, options) {
           const par = paragraph(inner, { tag: blockType, attr, options });
           // first paragraph must use outer offset
           par[0].setPos(outerOffs);
-          root.appendChild(par);
+          parentNode.appendChild(par);
         }
 
         src.advance(m[0]);

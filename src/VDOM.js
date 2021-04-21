@@ -1,9 +1,10 @@
 import { singletons } from './constants.js';
 
+const EXTENDED_NODE = -3;
+const HIDDEN_NODE = -2;
+const RAW_NODE = -1;
 const NODE = 0;
 const ELEMENT_NODE = 1;
-const RAW_NODE = -1;
-const HIDDEN_NODE = -2;
 const TEXT_NODE = 3;
 const DOCUMENT_NODE = 9;
 const COMMENT_NODE =  8;
@@ -138,6 +139,23 @@ export class CommentNode extends Node {
 }
 
 
+export class ExtendedNode extends Node {
+  constructor (tagName, attr) {
+    super();
+    this.nodeType = EXTENDED_NODE;
+    this.children = [];
+  }
+
+  appendChild (node) {
+    return appendTo(this, node);
+  }
+
+  toHTML () {
+    return this.children.map(d => d.toHTML()).join('');
+  }
+}
+
+
 export class Element extends Node {
   constructor (tagName, attr) {
     super();
@@ -225,6 +243,7 @@ export class Document extends Node {
     d.ELEMENT_NODE = ELEMENT_NODE;
     d.HIDDEN_NODE = HIDDEN_NODE;
     d.RAW_NODE = RAW_NODE;
+    d.EXTENDED_NODE = EXTENDED_NODE;
     d.TEXT_NODE = TEXT_NODE;
     d.DOCUMENT_NODE = DOCUMENT_NODE;
     d.COMMENT_NODE = COMMENT_NODE;
