@@ -52,7 +52,7 @@ function appendTo (parent, child) {
 export class Node {
   constructor (tagName) {
     this.nodeType = NODE;
-    this.pos = { offset: null };
+    this.pos = {};
   }
 
   toHTML () {
