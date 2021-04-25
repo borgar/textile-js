@@ -78,8 +78,9 @@ export class Node {
     return this;
   }
 
-  setPos (offset) {
-    this.pos.offset = offset;
+  setPos (start, length) {
+    this.pos.start = start;
+    this.pos.end = start + length;
     return this;
   }
 }
@@ -237,7 +238,7 @@ export class Document extends Node {
 
 
 // expose constants as static props
-[ CommentNode, Document, Element, HiddenNode, Node, RawNode, TextNode ]
+[ CommentNode, Document, Element, ExtendedNode, HiddenNode, Node, RawNode, TextNode ]
   .forEach(d => {
     d.NODE = NODE;
     d.ELEMENT_NODE = ELEMENT_NODE;

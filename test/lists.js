@@ -21,7 +21,7 @@ test('hard break in list', t => {
     `<ul>
 \t<li>first line</li>
 \t<li>second<br />
-line</li>
+  line</li>
 \t<li>third line</li>
 </ul>`, tx);
   t.end();

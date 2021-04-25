@@ -38,7 +38,8 @@ export function parseList (src, options) {
   let s;
 
   while ((m = reItem.exec(src))) {
-    const item = new Element('li').setPos(src.offset);
+    const item = new Element('li');
+    item.setPos(src.offset, m[0].length);
     const destLevel = m[1].length;
     let newLi = null;
     let parent;
@@ -67,11 +68,13 @@ export function parseList (src, options) {
     }
 
     // create nesting until we have correct level
+    const startPos = src.offset;
+    const len = m[0].length;
     while (stack.length < destLevel) {
       const listType = (m[1].substr(-1) === '#') ? 'ol' : 'ul';
-      newLi = new Element('li').setPos(src.offset);
-      const ul = new Element(listType).setPos(src.offset);
-      item.setPos(src.offset);
+      newLi = new Element('li').setPos(startPos, len);
+      const ul = new Element(listType).setPos(startPos, len);
+      item.setPos(startPos, len);
       ul.appendChild(new TextNode(listPad(stack.length + 1)));
       ul.appendChild(newLi);
       parent = stack[stack.length - 1];

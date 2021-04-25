@@ -1,6 +1,6 @@
 /* eslint camelcase: 0 */
 
-export const txblocks = '(?:b[qc]|div|notextile|pre|h[1-6]|fn\\d+|p|###)';
+export const txblocks = '(?:b[qc]|div|notextile|pre|h[1-6]|fn\\d+\\^?|p|###)';
 
 export const ucaps = 'A-Z' +
     // Latin extended À-Þ

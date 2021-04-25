@@ -27,7 +27,7 @@ const reBlockExtendedPre = re.compile(/^(.*?)($|\r?\n+(?=[:txblocks:][:txattr:]\
 
 const reRuler = /^(---+|\*\*\*+|___+)(\r?\n\s+|$)/;
 const reLinkRef = re.compile(/^\[([^\]]+)\]((?:https?:\/\/|\/)\S+)(?:\s*\n|$)/);
-const reFootnoteDef = /^fn\d+$/;
+const reFootnoteDef = /^fn(\d+)(\^?)$/;
 
 const getBlockRe = (blockType, isExtended) => {
   if (blockType === 'bc' || blockType === 'pre') {
@@ -36,19 +36,19 @@ const getBlockRe = (blockType, isExtended) => {
   return isExtended ? reBlockExtended : reBlockNormal;
 };
 
-function paragraph (src, { tag = 'p', attr = {}, linebreak = '\n', options }) {
+function splitParagraphs (src, { tag = 'p', attr = {}, linebreak = '\n', options }) {
   let out = [];
-  src.splitBy(/(?:\r?\n){2,}/, (bit, i) => {
+  src.splitBy(/(?:\r?\n){2,}/, (bit, index) => {
     if (tag === 'p' && /^\s/.test(bit)) {
       // no-paragraphs
       out = out.concat(parseInline(bit.trim(), options));
     }
     else {
-      if (linebreak && i) {
+      if (linebreak && index) {
         out.push(new TextNode('\n'));
       }
-      const elm = new Element(tag, attr).setPos(bit.offset);
-      elm.appendChild(parseInline(bit, options));
+      const elm = new Element(tag, attr).setPos(bit.offset, bit.length);
+      elm.appendChild(parseInline(bit.trimEndNewlines(), options));
       out.push(elm);
     }
   });
@@ -91,22 +91,26 @@ export function parseBlock (src, options) {
     // named block
     if ((m = reBlock.exec(src))) {
       const outerOffs = src.offset;
-      const attr = {};
       src.advance(m[0]);
       const blockType = m[0];
-      const [ step, _attr ] = parseAttr(src, blockType);
-      Object.assign(attr, _attr);
+      const [ step, attr ] = parseAttr(src, blockType);
       src.advance(step);
 
+      // FIXME: this whole copyAttr deal seems rather strange?
+      // slurp rest of block
       if ((m = /^\.(\.?)(?:\s|(?=:))/.exec(src))) {
-        // FIXME: this whole copyAttr deal seems rather strange?
-        // slurp rest of block
+        let fn;
+        const isExtended = !!m[1];
         src.advance(m[0]);
 
-        const isExtended = !!m[1];
         m = getBlockRe(blockType, isExtended).exec(src);
 
-        const inner = src.sub(0, m[1].length);
+        // find the size of the block (including any trailing newlines)
+        const blockLen = (src.offset + m[0].length) - outerOffs;
+
+        // any trailing newlines belong to this block
+        // const inner = src.sub(0, m[1].length);
+        const inner = src.sub(0, m[0].length);
 
         // Extended blocks are wrapped in a container so that
         // the source start/end positions make sense, and the
@@ -114,7 +118,7 @@ export function parseBlock (src, options) {
         let parentNode = root;
         if (isExtended) {
           parentNode = new ExtendedNode();
-          parentNode.setPos(outerOffs);
+          parentNode.setPos(outerOffs, blockLen);
           root.appendChild(parentNode);
         }
 
@@ -126,30 +130,36 @@ export function parseBlock (src, options) {
             inner.advance(mCite[0]);
           }
           // RedCloth adds all attr to both which is bad because it produces duplicate IDs
-          const par = paragraph(inner, {
+          const par = splitParagraphs(inner, {
             attr: copyAttr(attr, { cite: 1, id: 1 }),
             options: options
           });
           parentNode
-            .appendChild(new Element('blockquote', attr).setPos(outerOffs))
+            .appendChild(new Element('blockquote', attr).setPos(outerOffs, blockLen))
             .appendChild([ new TextNode('\n'), ...par, new TextNode('\n') ]);
         }
 
         else if (blockType === 'bc') {
           parentNode
-            .appendChild(new Element('pre', attr).setPos(outerOffs))
-            .appendChild(new Element('code', copyAttr(attr, { id: 1 })).setPos(outerOffs))
-            .appendChild(new RawNode(inner));
+            .appendChild(new Element('pre', attr).setPos(outerOffs, blockLen))
+            .appendChild(
+              new Element('code', copyAttr(attr, { id: 1 }))
+                .setPos(inner.offset, blockLen - (inner.offset - outerOffs))
+            )
+            .appendChild(new RawNode(inner.trimEndNewlines()));
         }
 
         else if (blockType === 'notextile') {
-          parentNode.appendChild(parseHtml(tokenize(inner)));
+          parentNode.appendChild(parseHtml(tokenize(inner.trimEndNewlines())));
         }
 
         else if (blockType === '###') {
           // ignore the insides
           hasHidden = true;
-          parentNode.appendChild(new HiddenNode(inner).setPos(outerOffs));
+          parentNode.appendChild(
+            new HiddenNode(inner.trimEndNewlines())
+              .setPos(outerOffs, blockLen)
+          );
         }
 
         else if (blockType === 'pre') {
@@ -157,34 +167,40 @@ export function parseBlock (src, options) {
           // "pre(foo#bar).. line1\n\nline2" prevents multiline preformat blocks
           // ...which seems like the whole point of having an extended pre block?
           parentNode
-            .appendChild(new Element('pre', attr).setPos(outerOffs))
-            .appendChild(new RawNode(inner));
+            .appendChild(new Element('pre', attr).setPos(outerOffs, blockLen))
+            .appendChild(new RawNode(inner.trimEndNewlines()));
         }
 
-        else if (reFootnoteDef.test(blockType)) { // footnote
+        else if ((fn = reFootnoteDef.exec(blockType))) { // footnote
           // Need to be careful: RedCloth fails "fn1(foo#m). footnote" -- it confuses the ID
-          const fnid = blockType.replace(/\D+/g, '');
-          const pos = src.offset;
+          const fnid = fn[1];
+          const shouldBacklink = !!fn[2];
           attr.class = (attr.class ? attr.class + ' ' : '') + 'footnote';
           attr.id = 'fn' + fnid;
           const subAttr = copyAttr(attr, { id: 1, class: 1 });
-          const fnLink = new Element('a', { href: '#fnr' + fnid, ...subAttr }).setPos(pos);
-          fnLink
-            .appendChild(new Element('sup', subAttr).setPos(pos))
-            .appendChild(new TextNode(fnid));
+          let fnMark = new Element('sup', subAttr).setPos(outerOffs + 2, fnid.length);
+          fnMark.appendChild(new TextNode(fnid));
+          // eslint-disable-next-line no-constant-condition
+          if (shouldBacklink || true) { // FIXME: need option to turn this on/off
+            // FIXME: PHP sensibly adds an instance prefix to the IDs: fn2 => fn18281493636081906fec71d-2
+            const backlink = new Element('a', { href: '#fnr' + fnid, ...subAttr })
+              .setPos(outerOffs + 2, fnid.length + (shouldBacklink ? 1 : 0));
+            backlink.appendChild(fnMark);
+            fnMark = backlink;
+          }
           parentNode
-            .appendChild(new Element('p', attr).setPos(pos))
+            .appendChild(new Element('p', attr).setPos(outerOffs, blockLen))
             .appendChild([
-              fnLink,
+              fnMark,
               new TextNode(' '),
-              ...parseInline(inner, options)
+              ...parseInline(inner.trimEndNewlines(), options)
             ]);
         }
 
         else { // heading | paragraph
-          const par = paragraph(inner, { tag: blockType, attr, options });
-          // first paragraph must use outer offset
-          par[0].setPos(outerOffs);
+          const par = splitParagraphs(inner, { tag: blockType, attr, options });
+          // first paragraph must use outer offset as its start
+          par[0].pos.start = outerOffs;
           parentNode.appendChild(par);
         }
 
@@ -197,42 +213,46 @@ export function parseBlock (src, options) {
 
     // HTML comment
     if ((m = testComment(src))) {
-      root.appendChild(new CommentNode(m[1]));
-      src.advance(m[0] + (/(?:\s*\n+)+/.exec(src) || [])[0]);
+      const tag = m[0] + (/(?:\s*\n+)+/.exec(src) || [])[0];
+      const node = new CommentNode(m[1]);
+      node.setPos(src.offset, tag.length);
+      node.html = true;
+      root.appendChild(node);
+      src.advance(tag);
       continue;
     }
 
     // block HTML
     if ((m = testOpenTagBlock(src))) {
-      const tag = m[1];
+      const openPos = src.offset;
+      const tagName = m[1];
 
       // Is block tag? ...
-      if (tag in allowedFlowBlocktags) {
-        if (m[3] || tag in singletons) { // single?
-          const pos = src.offset;
+      if (tagName in allowedFlowBlocktags) {
+        if (m[3] || tagName in singletons) { // single?
           src.advance(m[0]);
           if (/^\s*(\n|$)/.test(src)) {
-            root.appendChild(
-              new Element(tag, parseHtmlAttr(m[2])).setPos(pos)
-            );
             src.skipWS();
+            root.appendChild(new Element(tagName, parseHtmlAttr(m[2])).setPos(openPos, src.offset - openPos));
             continue;
           }
         }
-        else if (tag === 'pre') {
-          const t = tokenize(src.clone(), { pre: 1, code: 1 }, tag);
+        else if (tagName === 'pre') {
+          const t = tokenize(src.clone(), { pre: 1, code: 1 }, tagName);
           const p = parseHtml(t, true);
           src.load();
           src.advance(p.sourceLength);
           if (/^\s*(\n|$)/.test(src)) {
-            root.appendChild(p);
+            root.appendChild(p[0]);
             src.skipWS(); // skip tailing whitespace
+            // add tailing whitespace to container tag
+            p[0].pos.end = src.offset;
             continue;
           }
         }
-        else if (tag === 'notextile') {
+        else if (tagName === 'notextile') {
           // merge all child elements
-          const t = tokenize(src.clone(), null, tag);
+          const t = tokenize(src.clone(), null, tagName);
           let s = 1; // start after open tag
           while (/^\s+$/.test(t[s].src)) {
             s++; // skip whitespace
@@ -249,14 +269,13 @@ export function parseBlock (src, options) {
         }
         else {
           src.skipWS();
-          const offs = src.offset;
-          const tokens = tokenize(src.clone(), null, tag);
+          const tokens = tokenize(src.clone(), null, tagName);
           const endTag = tokens.pop(); // this should be the end tag
           let s = 1; // start after open tag
           while (tokens[s] && /^[\n\r]+$/.test(tokens[s].src)) {
             s++; // skip whitespace
           }
-          if (endTag.tag === tag) {
+          if (endTag.tag === tagName) {
             // inner can be empty
             const inner = tokens.length > 1
               ? src.sub(tokens[s].index, endTag.index - tokens[s].index)
@@ -265,15 +284,16 @@ export function parseBlock (src, options) {
             src.advance(endTag.index + endTag.src.length);
 
             if (/^\s*(\n|$)/.test(src)) {
-              const elm = new Element(tag, parseHtmlAttr(m[2])).setPos(offs);
-              if (tag === 'script' || tag === 'style') {
+              const elm = new Element(tagName, parseHtmlAttr(m[2]));
+              elm.html = true;
+              if (tagName === 'script' || tagName === 'style') {
                 elm.appendChild(new TextNode(inner));
               }
               else {
                 const sO = /^\n*/.exec(inner)[0].length;
                 const eO = /\s*$/.exec(inner)[0].length;
                 const innerHTML = inner.sub(sO, inner.length - sO - eO);
-                const isBlock = /\n\r?\n/.test(innerHTML) || tag === 'ol' || tag === 'ul';
+                const isBlock = /\n\r?\n/.test(innerHTML) || tagName === 'ol' || tagName === 'ul';
                 const innerElm = isBlock
                   ? parseBlock(innerHTML, options)
                   : parseInline(innerHTML, { ...options, breaks: false });
@@ -288,6 +308,7 @@ export function parseBlock (src, options) {
 
               root.appendChild(elm);
               src.skipWS(); // skip tailing whitespace
+              elm.setPos(openPos, src.offset - openPos);
               continue;
             }
           }
@@ -298,7 +319,8 @@ export function parseBlock (src, options) {
 
     // ruler
     if ((m = reRuler.exec(src))) {
-      root.appendChild(new Element('hr').setPos(src.offset));
+      const node = new Element('hr').setPos(src.offset, m[0].length);
+      root.appendChild(node);
       src.advance(m[0]);
       continue;
     }
@@ -329,7 +351,12 @@ export function parseBlock (src, options) {
 
     // paragraph
     m = reBlockNormal.exec(src);
-    root.appendChild(paragraph(src.sub(0, m[1].length), { options }));
+    root.appendChild(
+      splitParagraphs(
+        src.sub(0, m[0].length),
+        { options }
+      )
+    );
     src.advance(m[0]);
   }
 

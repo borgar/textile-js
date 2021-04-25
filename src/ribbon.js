@@ -52,16 +52,17 @@ export default class Ribbon {
     return this.skipRe(/^\s+/);
   }
 
-  splitBy (re, cb) {
+  splitBy (re, cb, withDelimitier = true) {
     let i = 0;
     do {
       const m = re.exec(this._feed);
       if (m) {
-        cb(this.sub(0, m.index), i);
+        const len = withDelimitier ? m.index + m[0].length : m.index;
+        cb(this.sub(0, len), i, m[0].length);
         this.advance(m.index + m[0].length);
       }
       else {
-        cb(this.sub(0), i);
+        cb(this.sub(0), i, 0);
         this.advance(this.length);
         break;
       }
@@ -76,11 +77,16 @@ export default class Ribbon {
     return this.sub(start);
   }
 
-  trimEnd () {
-    const end = /\s*$/.exec(this._feed)[0].length;
+  trimEnd (_re = /\s*$/) {
+    const m = _re.exec(this._feed);
+    const end = m ? m[0].length : 0;
     const slice = new Ribbon(this._feed.slice(0, this._feed.length - end));
     slice.skew = this.index + this.skew;
     return slice;
+  }
+
+  trimEndNewlines () {
+    return this.trimEnd(/\r?\n(?:\s*\n)*$/);
   }
 
   trim () {

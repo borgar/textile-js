@@ -33,7 +33,9 @@ export function parseHtmlAttr (attrSrc) {
   let m;
   if (attrSrc) {
     while ((m = reAttr.exec(attrSrc))) {
-      attr[m[1]] = (typeof m[2] === 'string') ? m[2].replace(/^(["'])(.*)\1$/, '$2') : null;
+      attr[m[1]] = typeof m[2] === 'string'
+        ? m[2].replace(/^(["'])(.*)\1$/, '$2')
+        : null;
       attrSrc = attrSrc.slice(m[0].length);
     }
   }
@@ -156,22 +158,29 @@ export function parseHtml (tokens, lazy) {
   for (let i = 0; i < tokens.length; i++) {
     token = tokens[i];
     if (token.type === COMMENT) {
-      curr.appendChild(new CommentNode(token.data));
+      const node = new CommentNode(token.data);
+      node.html = true;
+      curr.appendChild(node);
     }
     else if (token.type === TEXT) {
-      curr.appendChild(new TextNode(token.data));
+      const node = new TextNode(token.data);
+      node.html = true;
+      curr.appendChild(node);
     }
     else if (token.type === SINGLE) {
-      curr.appendChild(
-        new Element(token.tag, token.attr).setPos(token.offset)
-      );
+      const node = new Element(token.tag, token.attr);
+      node.setPos(token.offset, token.src.length);
+      node.html = true;
+      curr.appendChild(node);
     }
     else if (token.type === OPEN) {
       // TODO: some things auto close other things: <td>, <li>, <p>, <table>
       // https://html.spec.whatwg.org/multipage/syntax.html#syntax-tag-omission
-      const elm = curr.appendChild(
-        new Element(token.tag, token.attr).setPos(token.offset)
-      );
+      const node = new Element(token.tag, token.attr);
+      // set singleton size, this is corrected on close
+      node.setPos(token.offset, token.src.length);
+      node.html = true;
+      const elm = curr.appendChild(node);
       stack.push(elm);
       curr = elm;
     }
@@ -180,7 +189,12 @@ export function parseHtml (tokens, lazy) {
         for (let i = stack.length - 1; i >= 0; i--) {
           const head = stack[i];
           if (head.tagName === token.tag) {
-            stack.splice(i);
+            const closing = stack.splice(i);
+            // adjust source position end for all closing container nodes
+            for (let j = 0; j < closing.length; j++) {
+              const pos = closing[j].pos;
+              pos.end = token.offset + (j ? 0 : token.src.length);
+            }
             curr = stack[stack.length - 1] || root;
             break;
           }

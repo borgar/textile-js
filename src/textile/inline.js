@@ -62,15 +62,16 @@ export function parseInline (src, options) {
     src.save();
 
     // linebreak -- having this first keeps it from messing to much with other phrases
-    if (src.startsWith('\r\n')) {
+    const haveCR = src.startsWith('\r\n') ? 1 : 0;
+    if (haveCR) {
       src.advance(1); // skip cartridge returns
     }
     if (src.startsWith('\n')) {
       if (options.breaks) {
-        root.appendChild(new Element('br').setPos(src.offset));
+        root.appendChild(new Element('br').setPos(src.offset - haveCR, haveCR ? 2 : 1));
       }
       root.appendChild(new TextNode('\n'));
-      src.skipWS();
+      src.advance(1);
       continue;
     }
 
@@ -100,17 +101,20 @@ export function parseInline (src, options) {
       }
       // FIXME: if we can't match the fence on the end, we should output fence-prefix as normal text
       // seek end
-      let m2;
-      if ((m2 = getMatchRe(tok, fence, isCode).exec(src)) && m2[1]) {
-        // console.log(m);
+      const m2 = getMatchRe(tok, fence, isCode).exec(src);
+      if (m2 && m2[1]) {
         if (isCode) {
           root
-            .appendChild(new Element(phraseType, baseAttr).setPos(offs))
+            .appendChild(new Element(phraseType, baseAttr).setPos(offs, m2[0].length + (fence ? 2 : 1)))
             .appendChild(new RawNode(m2[1]));
         }
         else {
+          const endOffs = src.offset + m2[0].length;
           root
-            .appendChild(new Element(phraseType, { ...baseAttr, ...attr }).setPos(offs))
+            .appendChild(
+              new Element(phraseType, { ...baseAttr, ...attr })
+                .setPos(offs, endOffs - offs)
+            )
             .appendChild(parseInline(src.sub(0, m2[1].length), options));
         }
         src.advance(m2[0]);
@@ -125,15 +129,17 @@ export function parseInline (src, options) {
       const attr = parseAttr(m[1] || '', 'img')[1];
       attr.src = m[2];
       attr.alt = m[3] ? (attr.title = m[3]) : '';
+      const startPos = src.offset;
+      const length = m[0].length;
       if (m[4]) { // +cite causes image to be wraped with a link (or link_ref)?
         // TODO: support link_ref for image cite
         root
-          .appendChild(new Element('a', { href: m[4] }).setPos(src.offset))
-          .appendChild(new Element('img', attr).setPos(src.offset));
+          .appendChild(new Element('a', { href: m[4] }).setPos(startPos, length))
+          .appendChild(new Element('img', attr).setPos(startPos, length - m[4].length - 1));
       }
       else {
         root
-          .appendChild(new Element('img', attr).setPos(src.offset));
+          .appendChild(new Element('img', attr).setPos(startPos, length));
       }
       src.advance(m[0]);
       continue;
@@ -141,8 +147,11 @@ export function parseInline (src, options) {
 
     // html comment
     if ((m = testComment(src))) {
+      const node = new CommentNode(m[1]);
+      node.html = true;
+      node.setPos(src.offset, m[0].length);
+      root.appendChild(node);
       src.advance(m[0]);
-      root.appendChild(new CommentNode(m[1]));
       continue;
     }
 
@@ -151,9 +160,12 @@ export function parseInline (src, options) {
     if ((m = testOpenTag(src))) {
       const tag = m[1];
       const single = m[3] || m[1] in singletons;
-      const element = new Element(tag, parseHtmlAttr(m[2])).setPos(src.offset);
+      const element = new Element(tag, parseHtmlAttr(m[2]));
+      const startPos = src.offset;
+      element.html = true;
       src.advance(m[0]);
       if (single) { // single tag
+        element.setPos(startPos, m[0].length);
         root.appendChild(element);
         root.appendChild(new TextNode(src.skipWS()));
         continue;
@@ -162,21 +174,23 @@ export function parseInline (src, options) {
         // gulp up the rest of this block...
         const reEndTag = re.compile(`^(.*?)(</${tag}\\s*>)`, 's');
         let child = element;
-        if ((m = reEndTag.exec(src))) {
+        const m2 = reEndTag.exec(src);
+        if (m2) {
           if (tag === 'code') {
-            element.appendChild(new RawNode(m[1]));
+            element.appendChild(new RawNode(m2[1]));
           }
           else if (tag === 'notextile') {
             // HTML is still parsed, even though textile is not
-            const inner = src.sub(0, m[1].length);
+            const inner = src.sub(0, m2[1].length);
             child = parseHtml(tokenize(inner));
           }
           else {
-            const inner = src.sub(0, m[1].length);
+            const inner = src.sub(0, m2[1].length);
             element.appendChild(parseInline(inner, options));
           }
+          element.setPos(startPos, m[0].length + m2[0].length);
           root.appendChild(child);
-          src.advance(m[0]);
+          src.advance(m2[0]);
           continue;
         }
         // end tag is missing, treat tag as normal text...
@@ -186,13 +200,13 @@ export function parseInline (src, options) {
 
     // footnote
     if ((m = reFootnote.exec(src)) && /\S/.test(behind)) {
-      const sup = new Element('sup', { class: 'footnote', id: 'fnr' + m[1] }).setPos(src.offset);
+      const sup = new Element('sup', { class: 'footnote', id: 'fnr' + m[1] }).setPos(src.offset, m[0].length);
       if (m[2] === '!') { // "!" suppresses the link
         sup.appendChild(new TextNode(m[1]));
       }
       else {
         sup
-          .appendChild(new Element('a', { href: '#fn' + m[1] }).setPos(src.offset))
+          .appendChild(new Element('a', { href: '#fn' + m[1] }).setPos(src.offset, m[0].length))
           .appendChild(new TextNode(m[1]));
       }
       root.appendChild(sup);
@@ -202,12 +216,11 @@ export function parseInline (src, options) {
 
     // caps / abbr
     if ((m = reCaps.exec(src))) {
-      // FIXME: possible error: should convert glyphs?
-      const caps = new Element('span', { class: 'caps' }).setPos(src.offset);
+      const caps = new Element('span', { class: 'caps' }).setPos(src.offset, m[0].length);
       caps.appendChild(new TextNode(m[1]));
       if (m[2]) {
         root
-          .appendChild(new Element('abbr', { title: m[2] }).setPos(src.offset))
+          .appendChild(new Element('abbr', { title: m[2] }).setPos(src.offset, m[0].length))
           .appendChild(caps);
       }
       else {
@@ -219,7 +232,9 @@ export function parseInline (src, options) {
 
     // links
     if ((boundary && (m = reLink.exec(src))) || (m = reLinkFenced.exec(src))) {
-      const link = root.appendChild(new Element('a').setPos(src.offset));
+      const link = root.appendChild(new Element('a'));
+      link.setPos(src.offset, m[0].length);
+
       const title = reLinkTitle.exec(m[1]);
       const isFenced = m[0][0] === '[';
       const titleLen = title ? title[0].length : 0;

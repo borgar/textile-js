@@ -95,7 +95,6 @@ test('paragraph', t => {
   t.end();
 });
 
-
 test('pre', t => {
   t.is(
     parse('one\n\npre. two'),

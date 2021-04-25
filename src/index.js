@@ -6,11 +6,12 @@
 */
 
 import { parseBlock } from './textile/block.js';
-import { CommentNode, Document, Element, HiddenNode, Node, RawNode, TextNode } from './VDOM.js';
+import { CommentNode, Document, Element, ExtendedNode, HiddenNode, Node, RawNode, TextNode } from './VDOM.js';
 
 function parseTextile (tx, opt) {
   const root = new Document();
-  root.pos.offset = 0;
+  root.pos.start = 0;
+  root.pos.end = tx.length;
   root.appendChild(parseBlock(tx, opt));
   return root;
 }
@@ -26,7 +27,7 @@ function addLines (rootNode, sourceTx) {
   // convert offsets to zero-based line numbers
   let index = 0;
   rootNode.visit(d => {
-    const offset = d.pos.offset;
+    const offset = d.pos.start;
     if (offset !== null) {
       while (newlineIndexes[index] < offset) {
         index++;
@@ -48,9 +49,10 @@ export default function textile (sourceTx, opt) {
 textile.CommentNode = CommentNode;
 textile.Document = Document;
 textile.Element = Element;
+textile.ExtendedNode = ExtendedNode;
 textile.RawNode = RawNode;
 textile.TextNode = TextNode;
-export { CommentNode, Document, Element, HiddenNode, Node, RawNode, TextNode };
+export { CommentNode, Document, Element, ExtendedNode, HiddenNode, Node, RawNode, TextNode };
 
 // options
 textile.defaults = {

@@ -22,7 +22,7 @@ const charToTag = {
 };
 
 export function parseColgroup (src) {
-  const colgroup = new Element('colgroup', {}).setPos(src.offset);
+  const colgroup = new Element('colgroup');
   src.splitBy(/\|/, (bit, isCol) => {
     const col = isCol ? {} : colgroup.attr;
     let d = bit.trim();
@@ -46,9 +46,12 @@ export function parseColgroup (src) {
     }
     if (isCol) {
       colgroup.appendChild(new TextNode('\n\t\t'));
-      colgroup.appendChild(new Element('col', col).setPos(bit.offset));
+      colgroup.appendChild(
+        new Element('col', col)
+          .setPos(bit.offset - 1, bit.length + 1)
+      );
     }
-  });
+  }, false);
 
   colgroup.appendChild(new TextNode('\n\t'));
   return colgroup;
@@ -62,14 +65,20 @@ export function parseTable (src, options) {
   const rowgroups = [];
   let colgroup;
   let caption;
-  const table = new Element('table').setPos(src.offset);
+  const table = new Element('table').setPos(src.offset, src.length);
   let currentTBody;
   let m;
   let extended = 0;
 
   const setRowGroup = (type, attr, pos) => {
-    currentTBody = new Element(type, attr).setPos(pos);
-    rowgroups.push(currentTBody);
+    // close current group
+    if (currentTBody) {
+      currentTBody.pos.end = src.offset;
+    }
+    if (type) {
+      currentTBody = new Element(type, attr).setPos(pos);
+      rowgroups.push(currentTBody);
+    }
   };
 
   if ((m = reHead.exec(src))) {
@@ -85,15 +94,12 @@ export function parseTable (src, options) {
   // caption
   if ((m = reCaption.exec(src))) {
     const [ step, attr ] = parseAttr(m[1], 'caption');
-    let innerCaption = m[1];
-    if (step) {
-      innerCaption = innerCaption.slice(step);
-    }
-    if (/\./.test(innerCaption)) { // mandatory "."
-      // FIXME: possible bug: missing glyph transforms?
-      const captionText = innerCaption.slice(1).replace(/\|\s*$/, '');
-      caption = new Element('caption', attr).setPos(src.offset);
-      caption.appendChild(new TextNode(captionText.trim()));
+    if (/\./.test(m[1].slice(step))) { // mandatory "."
+      const tail = /\|?\s*$/.exec(m[1]);
+      const len = m[1].length - 1 - step - (tail ? tail[0].length : 0);
+      caption = new Element('caption', attr);
+      caption.setPos(src.offset, m[0].length);
+      caption.appendChild(parseInline(src.sub(3 + step, len).trim(), options));
       extended++;
       src.advance(m[0]);
     }
@@ -103,6 +109,7 @@ export function parseTable (src, options) {
     // colgroup
     if ((m = reColgroup.exec(src))) {
       colgroup = parseColgroup(src.sub(m[1].length, m[2].length));
+      colgroup.setPos(src.offset, m[0].length);
       extended++;
       src.advance(m[0]);
     }
@@ -123,9 +130,8 @@ export function parseTable (src, options) {
       if (!currentTBody) {
         setRowGroup('tbody', null, rowPos);
       }
-
       const attr = parseAttr(m[3], 'tr')[1]; // FIXME: requires "\.\s?" -- else what ?
-      const row = new Element('tr', attr).setPos(rowPos);
+      const row = new Element('tr', attr).setPos(rowPos, m[0].length);
       currentTBody.appendChild(new TextNode('\n\t\t'));
       currentTBody.appendChild(row);
       const inner = src.sub(m[1].length, m[4].length);
@@ -138,7 +144,6 @@ export function parseTable (src, options) {
 
         const cellPos = cellNum ? inner.offset - 1 : rowPos;
 
-        // cell loop
         const isTh = inner.startsWith('_');
         if (isTh) {
           inner.advance(1);
@@ -147,8 +152,7 @@ export function parseTable (src, options) {
         const [ step, attr ] = parseAttr(inner, 'td');
         inner.advance(step);
 
-        let cell = new Element(isTh ? 'th' : 'td', attr).setPos(cellPos);
-
+        let cell = new Element(isTh ? 'th' : 'td', attr);
         if (step || isTh) {
           const p = /^\.\s*/.exec(inner);
           if (p) {
@@ -162,6 +166,7 @@ export function parseTable (src, options) {
 
         const mx = /^(==.*?==|[^|])*/.exec(inner);
         const contentLength = mx[0].length;
+        cell.setPos(cellPos, (inner.offset + contentLength) - cellPos);
         cell.appendChild(parseInline(inner.sub(0, contentLength), options));
 
         row.appendChild(cell);
@@ -178,6 +183,10 @@ export function parseTable (src, options) {
     }
   }
   while (m);
+
+  // close the table
+  src.skipWS();
+  setRowGroup(null, null, src.offset);
 
   // assemble table
   if (extended) {
