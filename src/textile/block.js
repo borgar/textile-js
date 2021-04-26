@@ -11,7 +11,8 @@ import { singletons, allowedFlowBlocktags } from '../constants.js';
 import { parseInline } from './inline.js';
 import { copyAttr, parseAttr } from './attr.js';
 import { testList, parseList } from './list.js';
-import { testDefList, parseDefList } from './deflist.js';
+import { testDefListRC, parseDefListRC } from './deflistrc.js';
+import { testDefListWiki, parseDefListWiki } from './deflistwiki.js';
 import { testTable, parseTable } from './table.js';
 
 import { txblocks, txlisthd, txattr } from './re_ext.js';
@@ -333,10 +334,18 @@ export function parseBlock (src, options) {
       continue;
     }
 
-    // definition list
-    if ((m = testDefList(src))) {
+    // TX/Wiki definition list
+    if ((m = testDefListWiki(src))) {
       const len = m[0].length;
-      root.appendChild(parseDefList(src.sub(0, len), options));
+      root.appendChild(parseDefListWiki(src.sub(0, len), options));
+      src.advance(len);
+      continue;
+    }
+
+    // RedCloth definition list
+    if ((m = testDefListRC(src))) {
+      const len = m[0].length;
+      root.appendChild(parseDefListRC(src.sub(0, len), options));
       src.advance(len);
       continue;
     }

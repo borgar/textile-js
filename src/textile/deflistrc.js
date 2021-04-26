@@ -6,11 +6,11 @@ import { parseBlock } from './block.js';
 const reDeflist = /^((?:- (?:[^\n]\n?)+?)+(:=)(?: *\n[^\0]+?=:(?:\n|$)|(?:[^\0]+?(?:$|\n(?=\n|- )))))+(?:\r?\n)*/;
 const reItem = /^((?:- (?:[^\n]\n?)+?)+)(:=)( *\n[^\0]+?=:\s*(?:\n|$)|(?:[^\0]+?(?:$|\n(?=\n|- )(?:\r?\n)*)))/;
 
-export function testDefList (src) {
+export function testDefListRC (src) {
   return reDeflist.exec(src);
 }
 
-export function parseDefList (src, options) {
+export function parseDefListRC (src, options) {
   const deflist = new Element('dl');
   deflist.setPos(src.offset, src.length);
   deflist.appendChild(new TextNode('\n'));
