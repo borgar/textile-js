@@ -465,7 +465,7 @@ test('image parsing speed bug 2 (issue #40)', t => {
 
 test('parse inline textile in footnotes', t => {
   t.is(textile.convert('fn1. This is _emphasized_ *strong*'),
-    '<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> This is <em>emphasized</em> <strong>strong</strong></p>',
+    '<p class="footnote" id="fn1"><sup>1</sup> This is <em>emphasized</em> <strong>strong</strong></p>',
     'footnote inline textile');
   t.end();
 });
@@ -687,5 +687,50 @@ test('correct glyph convertion', t => {
 test('less liberal lang attr #76', t => {
   t.is(textile.convert('%["red":https://example.com].%'),
     '<p><span><a href="https://example.com">red</a>.</span></p>');
+  t.end();
+});
+
+
+test('footnote handling #74', t => {
+  t.is(
+    textile.convert('fn1. one'),
+    '<p class="footnote" id="fn1"><sup>1</sup> one</p>',
+    'fn1. one'
+  );
+  t.is(
+    textile.convert('fn1^. one'),
+    '<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> one</p>',
+    'fn1^. one'
+  );
+  t.is(
+    textile.convert('fn1(foo). one'),
+    '<p class="foo footnote" id="fn1"><sup>1</sup> one</p>',
+    'fn1(foo). one'
+  );
+  t.is(
+    textile.convert('fn1^(foo). one'),
+    '<p class="foo footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> one</p>',
+    'fn1^(foo). one'
+  );
+  t.is(
+    textile.convert('fn1. one\n\ntwo'),
+    '<p class="footnote" id="fn1"><sup>1</sup> one</p>\n<p>two</p>',
+    'fn1. one\n\ntwo'
+  );
+  t.is(
+    textile.convert('fn1.. one\n\ntwo'),
+    '<p class="footnote" id="fn1"><sup>1</sup> one<br />\n<br />\ntwo</p>',
+    'fn1.. one\n\ntwo'
+  );
+  t.is(
+    textile.convert('fn1^(foo). one\n\ntwo'),
+    '<p class="foo footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> one</p>\n<p>two</p>',
+    'fn1^(foo). one\n\ntwo'
+  );
+  t.is(
+    textile.convert('fn1^(foo).. one\n\ntwo'),
+    '<p class="foo footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> one<br />\n<br />\ntwo</p>',
+    'fn1^(foo).. one\n\ntwo'
+  );
   t.end();
 });

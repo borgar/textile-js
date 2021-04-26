@@ -364,7 +364,7 @@ test('block quote citation', t => {
 test('footnotes', t => {
   const tx = `A footnote reference[1].
 
-fn1. The footnote.`;
+fn1^. The footnote.`;
   t.is(textile.convert(tx),
     `<p>A footnote reference<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>.</p>
 <p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> The footnote.</p>`, tx);

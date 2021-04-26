@@ -57,7 +57,9 @@ export { CommentNode, Document, Element, ExtendedNode, HiddenNode, Node, RawNode
 // options
 textile.defaults = {
   // single-line linebreaks are converted to <br> by default
-  breaks: true
+  breaks: true,
+  // automatically backlink footnotes, regardless of syntax
+  autobacklink: false
 };
 
 textile.setOptions = opt => {

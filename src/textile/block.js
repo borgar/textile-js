@@ -181,7 +181,7 @@ export function parseBlock (src, options) {
           let fnMark = new Element('sup', subAttr).setPos(outerOffs + 2, fnid.length);
           fnMark.appendChild(new TextNode(fnid));
           // eslint-disable-next-line no-constant-condition
-          if (shouldBacklink || true) { // FIXME: need option to turn this on/off
+          if (shouldBacklink || options.autobacklink) {
             // FIXME: PHP sensibly adds an instance prefix to the IDs: fn2 => fn18281493636081906fec71d-2
             const backlink = new Element('a', { href: '#fnr' + fnid, ...subAttr })
               .setPos(outerOffs + 2, fnid.length + (shouldBacklink ? 1 : 0));

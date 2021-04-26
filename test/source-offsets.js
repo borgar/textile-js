@@ -123,10 +123,8 @@ test('fn#', t => {
   t.deepEqual(
     parse('fn1. one\n\nfn2. two'),
     [ [ 'p', [ 0, 10 ], 'fn1. one\n\n' ],
-      [ 'a', [ 2, 3 ], '1' ],
       [ 'sup', [ 2, 3 ], '1' ],
       [ 'p', [ 10, 18 ], 'fn2. two' ],
-      [ 'a', [ 12, 13 ], '2' ],
       [ 'sup', [ 12, 13 ], '2' ] ],
     'named footnote'
   );
@@ -134,7 +132,6 @@ test('fn#', t => {
     parse('fn1.. one\n\ntwo'),
     [ [ EXND, [ 0, 14 ], 'fn1.. one\n\ntwo' ],
       [ 'p', [ 0, 14 ], 'fn1.. one\n\ntwo' ],
-      [ 'a', [ 2, 3 ], '1' ],
       [ 'sup', [ 2, 3 ], '1' ],
       [ 'br', [ 9, 10 ], '\n' ],
       [ 'br', [ 10, 11 ], '\n' ]
