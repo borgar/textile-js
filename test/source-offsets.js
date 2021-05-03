@@ -430,7 +430,38 @@ test('lists', t => {
   t.end();
 });
 
-test('definition lists', t => {
+test('mediawiki definition lists', t => {
+  t.deepEqual(
+    parse(`prefix
+
+; foo
+: def1
+; xyz
+; bar
+: def2
+; baz
+: def3
+...*extended*
+
+postfix`),
+    [ [ 'p', [ 0, 8 ], 'prefix\n\n' ],
+      [ 'dl', [ 8, 68 ], '; foo\n: def1\n; xyz\n; bar\n: def2\n; baz\n: def3\n...*extended*\n\n' ],
+      [ 'dt', [ 8, 14 ], '; foo\n' ],
+      [ 'dd', [ 14, 21 ], ': def1\n' ],
+      [ 'dt', [ 21, 27 ], '; xyz\n' ],
+      [ 'dt', [ 27, 33 ], '; bar\n' ],
+      [ 'dd', [ 33, 40 ], ': def2\n' ],
+      [ 'dt', [ 40, 46 ], '; baz\n' ],
+      [ 'dd', [ 46, 66 ], ': def3\n...*extended*' ],
+      [ 'br', [ 52, 53 ], '\n' ],
+      [ 'strong', [ 56, 66 ], '*extended*' ],
+      [ 'p', [ 68, 75 ], 'postfix' ] ],
+    'complex with content'
+  );
+  t.end();
+});
+
+test('redcloth definition lists', t => {
   t.deepEqual(
     parse(`prefix
 
