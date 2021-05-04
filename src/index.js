@@ -16,6 +16,25 @@ function parseTextile (tx, opt) {
   return root;
 }
 
+const binSearch = (list, item) => {
+  let low = 0;
+  let high = list.length - 1;
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    const guess = list[mid];
+    if (guess > item) {
+      high = mid - 1;
+    }
+    else if (guess < item) {
+      low = mid + 1;
+    }
+    else if (guess === item) {
+      return mid;
+    }
+  }
+  return low;
+};
+
 function addLines (rootNode, sourceTx) {
   // find newlines
   const newlineIndexes = [];
@@ -25,14 +44,9 @@ function addLines (rootNode, sourceTx) {
     pos = sourceTx.indexOf('\n', pos + 1);
   }
   // convert offsets to zero-based line numbers
-  let index = 0;
   rootNode.visit(d => {
-    const offset = d.pos.start;
-    if (offset !== null) {
-      while (newlineIndexes[index] < offset) {
-        index++;
-      }
-      d.pos.line = index;
+    if (d.pos.start != null) {
+      d.pos.line = binSearch(newlineIndexes, d.pos.start);
     }
   });
   // return the rootNode
