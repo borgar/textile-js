@@ -14,6 +14,7 @@ import { testList, parseList } from './list.js';
 import { testDefListRC, parseDefListRC } from './deflistrc.js';
 import { testDefListWiki, parseDefListWiki } from './deflistwiki.js';
 import { testTable, parseTable } from './table.js';
+import { testEndnote, parseEndnote, testNotelist, parseNotelist, renderNotelist } from './endnote.js';
 
 import { txblocks, txlisthd, txattr } from './re_ext.js';
 re.pattern.txblocks = txblocks;
@@ -60,7 +61,7 @@ export function parseBlock (src, options) {
   const root = new Element('root');
 
   let linkRefs;
-  let hasHidden = false;
+  let skipNextLineBreak = true;
   let m;
 
   if (!(src instanceof Ribbon)) {
@@ -71,7 +72,9 @@ export function parseBlock (src, options) {
   while (src.valueOf()) {
     src.save();
 
-    // link_ref -- this goes first because it shouldn't trigger a linebreak
+    // these go first because they shouldn't trigger a linebreak
+
+    // link_ref
     if ((m = reLinkRef.exec(src))) {
       if (!linkRefs) {
         linkRefs = {};
@@ -81,13 +84,20 @@ export function parseBlock (src, options) {
       continue;
     }
 
+    // endnote definition
+    if ((m = testEndnote(src))) {
+      const len = m[0].length;
+      root.appendChild(parseEndnote(src.sub(0, len), options));
+      src.advance(len);
+      continue;
+    }
+
     // add linebreak
-    const isNotFirst = hasHidden
-      ? root.children.filter(d => !(d instanceof HiddenNode)).length
-      : root.children.length;
-    if (isNotFirst) {
+    if (!skipNextLineBreak) {
       root.appendChild(new TextNode('\n'));
     }
+    skipNextLineBreak = false;
+
 
     // named block
     if ((m = reBlock.exec(src))) {
@@ -156,11 +166,11 @@ export function parseBlock (src, options) {
 
         else if (blockType === '###') {
           // ignore the insides
-          hasHidden = true;
           parentNode.appendChild(
             new HiddenNode(inner.trimEndNewlines())
               .setPos(outerOffs, blockLen)
           );
+          skipNextLineBreak = true;
         }
 
         else if (blockType === 'pre') {
@@ -358,6 +368,14 @@ export function parseBlock (src, options) {
       continue;
     }
 
+    // endnote list
+    if ((m = testNotelist(src))) {
+      const len = m[0].length;
+      root.appendChild(parseNotelist(src.sub(0, len), options));
+      src.advance(len);
+      continue;
+    }
+
     // paragraph
     m = reBlockNormal.exec(src);
     root.appendChild(
@@ -380,6 +398,8 @@ export function parseBlock (src, options) {
       }
     });
   }
+
+  renderNotelist(root, options);
 
   return root.children;
 }

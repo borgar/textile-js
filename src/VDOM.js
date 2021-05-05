@@ -196,6 +196,21 @@ export class Element extends Node {
     return appendTo(this, node);
   }
 
+  insertBefore (newNode, referenceNode) {
+    const index = !!referenceNode && this.children.indexOf(referenceNode);
+    const finalIndex = index < 0 || typeof index !== 'number' ? Infinity : index;
+    this.children.splice(finalIndex, 0, newNode);
+    return newNode;
+  }
+
+  removeChild (oldNode) {
+    const index = !!oldNode && this.children.indexOf(oldNode);
+    if (index >= 0) {
+      this.children.splice(index, 1);
+    }
+    return oldNode;
+  }
+
   get firstChild () {
     return this.children[0];
   }

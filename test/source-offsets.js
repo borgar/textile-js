@@ -20,8 +20,8 @@ function parse (tx) {
       }
       struct.push([
         tagName,
-        [ start, end ],
-        tx.slice(start, end)
+        [ start == null ? null : start, end == null ? null : end ],
+        (start == null || end == null) ? null : tx.slice(start, end)
       ]);
     }
   });
@@ -670,7 +670,45 @@ test('link', t => {
     [ [ 'p', [ 0, 29 ], 'foo "one _two_ three":url bar' ],
       [ 'a', [ 4, 25 ], '"one _two_ three":url' ],
       [ 'em', [ 9, 14 ], '_two_' ] ],
-    'basic link'
+    'basic link with nested content'
+  );
+  t.end();
+});
+
+test('endnotes', t => {
+  t.deepEqual(
+    parse('[#a] [#b]\n\nnote#a. foo\n\nnotelist.'),
+    [ [ 'p', [ 0, 11 ], '[#a] [#b]\n\n' ],
+      [ 'sup', [ 0, 4 ], '[#a]' ],
+      [ 'a', [ 0, 4 ], '[#a]' ],
+      [ 'span', [ 0, 4 ], '[#a]' ],
+      [ 'sup', [ 5, 9 ], '[#b]' ],
+      [ 'a', [ 5, 9 ], '[#b]' ],
+      [ 'span', [ 5, 9 ], '[#b]' ],
+      [ 'ol', [ 24, 33 ], 'notelist.' ],
+      [ 'li', [ 11, 24 ], 'note#a. foo\n\n' ],
+      [ 'sup', [ null, null ], null ],
+      [ 'a', [ null, null ], null ],
+      [ 'span', [ null, null ], null ],
+      [ 'li', [ 5, 9 ], '[#b]' ],
+      [ 'sup', [ null, null ], null ],
+      [ 'a', [ null, null ], null ],
+      [ 'span', [ null, null ], null ] ],
+    'basic endnotes'
+  );
+  t.deepEqual(
+    parse('[#a]\n\nnote#a. foo\n\nnote#b. bar\n\nnotelist+.'),
+    [ [ 'p', [ 0, 6 ], '[#a]\n\n' ],
+      [ 'sup', [ 0, 4 ], '[#a]' ],
+      [ 'a', [ 0, 4 ], '[#a]' ],
+      [ 'span', [ 0, 4 ], '[#a]' ],
+      [ 'ol', [ 32, 42 ], 'notelist+.' ],
+      [ 'li', [ 6, 19 ], 'note#a. foo\n\n' ],
+      [ 'sup', [ null, null ], null ],
+      [ 'a', [ null, null ], null ],
+      [ 'span', [ null, null ], null ],
+      [ 'li', [ 19, 32 ], 'note#b. bar\n\n' ] ],
+    'basic endnotes'
   );
   t.end();
 });

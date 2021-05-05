@@ -15,7 +15,6 @@ Goodbye.
 `;
   t.is(textile.convert(tx),
     `<h3>Hello</h3>
-
 <p>Goodbye.</p>`, tx);
   t.end();
 });
@@ -31,7 +30,6 @@ More text to follow.
 `;
   t.is(textile.convert(tx),
     `<p>Some text here.</p>
-
 <p>More text to follow.</p>`, tx);
   t.end();
 });
@@ -49,7 +47,6 @@ p. More text to follow.
 `;
   t.is(textile.convert(tx),
     `<p>Some text here.</p>
-
 <p>More text to follow.</p>`, tx);
   t.end();
 });

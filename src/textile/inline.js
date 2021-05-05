@@ -4,6 +4,7 @@ import re from '../re.js';
 
 import { parseAttr } from './attr.js';
 import { parseGlyph } from './glyph.js';
+import { testEndnoteRef, parseEndnoteRef } from './endnote.js';
 import { parseHtml, parseHtmlAttr, tokenize, testComment, testOpenTag } from '../html.js';
 import { singletons } from '../constants.js';
 
@@ -211,6 +212,14 @@ export function parseInline (src, options) {
       }
       root.appendChild(sup);
       src.advance(m[0]);
+      continue;
+    }
+
+    // endnote
+    if ((m = testEndnoteRef(src))) {
+      const len = m[0].length;
+      root.appendChild(parseEndnoteRef(src.sub(0, len), options));
+      src.advance(len);
       continue;
     }
 

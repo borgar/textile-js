@@ -48,12 +48,13 @@ const re = {
       if (arguments.length === 1) { // no flags arg provided, use the RegExp one
         flags = (src.global ? 'g' : '') +
                 (src.ignoreCase ? 'i' : '') +
+                (src.unicode ? 'u' : '') +
                 (src.multiline ? 'm' : '');
       }
       src = src.source;
     }
     // don't do the same thing twice
-    const ckey = src + (flags || '');
+    const ckey = src + '//' + (flags || '');
     if (ckey in _cache) {
       return _cache[ckey];
     }
@@ -68,7 +69,7 @@ const re = {
       rx = rx.replace(/([^\\])\./g, '$1[^\\0]');
     }
     // clean flags and output new regexp
-    flags = (flags || '').replace(/[^gim]/g, '');
+    flags = (flags || '').replace(/[^gimu]/g, '');
     return (_cache[ckey] = new RegExp(rx, flags));
   }
 
