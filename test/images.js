@@ -592,3 +592,11 @@ test('with link and title and text afterward', t => {
     '<p><a href="image.jpg"><img src="/image_r.jpg" title="description" alt="description" /></a> text.</p>', tx);
   t.end();
 });
+
+
+test('image cite uses link ref', t => {
+  const tx = 'text !/image.jpg!:foo text.\n\n[foo]https://example.com/';
+  t.is(textile.convert(tx),
+    '<p>text <a href="https://example.com/"><img src="/image.jpg" alt="" /></a> text.</p>', tx);
+  t.end();
+});

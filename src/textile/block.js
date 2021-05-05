@@ -8,6 +8,7 @@ import re from '../re.js';
 import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
 import { singletons, allowedFlowBlocktags } from '../constants.js';
 
+import { safeHref } from './safeHref.js';
 import { parseInline } from './inline.js';
 import { copyAttr, parseAttr } from './attr.js';
 import { testList, parseList } from './list.js';
@@ -28,7 +29,7 @@ const reBlockNormalPre = re.compile(/^(.*?)($|\r?\n(?:\s*\n|$)+)/, 's');
 const reBlockExtendedPre = re.compile(/^(.*?)($|\r?\n+(?=[:txblocks:][:txattr:]\.))/, 's');
 
 const reRuler = /^(---+|\*\*\*+|___+)(\r?\n\s+|$)/;
-const reLinkRef = re.compile(/^\[([^\]]+)\]((?:https?:\/\/|\/)\S+)(?:\s*\n|$)/);
+const reLinkRef = /^\[([^\]]+)\]((?:([a-zA-Z]+):|\/)\S+)(?:\s*\n|$)/;
 const reFootnoteDef = /^fn(\d+)(\^?)$/;
 
 const getBlockRe = (blockType, isExtended) => {
@@ -192,7 +193,7 @@ export function parseBlock (src, options) {
           let fnMark = new Element('sup', subAttr).setPos(outerOffs + 2, fnid.length);
           fnMark.appendChild(new TextNode(fnid));
           // eslint-disable-next-line no-constant-condition
-          if (shouldBacklink || options.autobacklink) {
+          if (shouldBacklink || options.auto_backlink) {
             // FIXME: PHP sensibly adds an instance prefix to the IDs: fn2 => fn18281493636081906fec71d-2
             const backlink = new Element('a', { href: '#fnr' + fnid, ...subAttr })
               .setPos(outerOffs + 2, fnid.length + (shouldBacklink ? 1 : 0));
@@ -393,7 +394,7 @@ export function parseBlock (src, options) {
       if (node.tagName === 'a') {
         const href = node.getAttribute('href');
         if (href && linkRefs[href]) {
-          node.setAttribute('href', linkRefs[href]);
+          node.setAttribute('href', safeHref(linkRefs[href], options));
         }
       }
     });

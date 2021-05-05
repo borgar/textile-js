@@ -73,7 +73,9 @@ textile.defaults = {
   // single-line linebreaks are converted to <br> by default
   breaks: true,
   // automatically backlink footnotes, regardless of syntax
-  autobacklink: false
+  auto_backlink: false,
+  // list of blocked href protocols
+  blocked_uri: [ 'javascript', 'vbscript', 'data' ]
 };
 
 textile.setOptions = opt => {

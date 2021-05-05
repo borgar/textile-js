@@ -643,3 +643,26 @@ test('containing HTML tags with quotes', t => {
   t.end();
 });
 
+test('xss attack 1', t => {
+  const tx = '"link":javascript:alert(\'XSS\')';
+  t.is(textile.convert(tx), '<p><a href="">link</a></p>', tx);
+  t.end();
+});
+
+test('xss attack 2', t => {
+  const tx = '"link":foo\n\n[foo]javascript:alert(\'XSS\')';
+  t.is(textile.convert(tx), '<p><a href="">link</a></p>', tx);
+  t.end();
+});
+
+test('xss attack 3', t => {
+  const tx = '[!/image.jpg!:javascript:alert(\'XSS\')]';
+  t.is(textile.convert(tx), '<p><a href=""><img src="/image.jpg" alt="" /></a></p>', tx);
+  t.end();
+});
+
+test('xss attack 4', t => {
+  const tx = '[!/image.jpg!:foo]\n\n[foo]javascript:alert(\'XSS\')';
+  t.is(textile.convert(tx), '<p><a href=""><img src="/image.jpg" alt="" /></a></p>', tx);
+  t.end();
+});

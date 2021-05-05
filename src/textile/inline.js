@@ -4,6 +4,7 @@ import re from '../re.js';
 
 import { parseAttr } from './attr.js';
 import { parseGlyph } from './glyph.js';
+import { safeHref } from './safeHref.js';
 import { testEndnoteRef, parseEndnoteRef } from './endnote.js';
 import { parseHtml, parseHtmlAttr, tokenize, testComment, testOpenTag } from '../html.js';
 import { singletons } from '../constants.js';
@@ -128,14 +129,19 @@ export function parseInline (src, options) {
     // image
     if ((m = reImage.exec(src)) || (m = reImageFenced.exec(src))) {
       const attr = parseAttr(m[1] || '', 'img')[1];
-      attr.src = m[2];
-      attr.alt = m[3] ? (attr.title = m[3]) : '';
+      attr.src = safeHref(m[2], options, 'image');
+      if (m[3]) {
+        attr.title = m[3];
+        attr.alt = m[3];
+      }
+      else {
+        attr.alt = '';
+      }
       const startPos = src.offset;
       const length = m[0].length;
-      if (m[4]) { // +cite causes image to be wraped with a link (or link_ref)?
-        // TODO: support link_ref for image cite
+      if (m[4]) { // +cite causes image to be wraped with a link
         root
-          .appendChild(new Element('a', { href: m[4] }).setPos(startPos, length))
+          .appendChild(new Element('a', { href: safeHref(m[4], options) }).setPos(startPos, length))
           .appendChild(new Element('img', attr).setPos(startPos, length - m[4].length - 1));
       }
       else {
@@ -253,7 +259,7 @@ export function parseInline (src, options) {
         inner.advance(step);
         link.setAttr(attr);
       }
-      link.setAttribute('href', m[2]);
+      link.setAttribute('href', safeHref(m[2], options));
       if (title && !inner.length) {
         inner = src.sub((isFenced ? 2 : 1) + step, m[1].length - step);
       }
