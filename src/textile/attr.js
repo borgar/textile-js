@@ -76,9 +76,11 @@ export function parseAttr (input, element, endToken) {
 
   do {
     if ((m = reStyles.exec(remaining))) {
-      m[1].split(';').forEach(function (p) {
+      m[1].split(';').forEach(p => {
         const d = p.match(reCSS);
-        if (d) { st[d[1]] = d[2]; }
+        if (d) {
+          st[d[1]] = d[2];
+        }
       });
       remaining = remaining.slice(m[0].length);
       continue;
