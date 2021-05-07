@@ -6,10 +6,11 @@ import { Element, TextNode, RawNode, HiddenNode, CommentNode, ExtendedNode } fro
 import re from '../re.js';
 
 import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
-import { singletons, allowedFlowBlocktags } from '../constants.js';
+import { singletons } from '../constants.js';
 
 import { safeHref } from './safeHref.js';
 import { parseInline } from './inline.js';
+import { parseGlyph } from './glyph.js';
 import { copyAttr, parseAttr } from './attr.js';
 import { testList, parseList } from './list.js';
 import { testDefListRC, parseDefListRC } from './deflistrc.js';
@@ -61,7 +62,7 @@ function splitParagraphs (src, { tag = 'p', attr = {}, linebreak = '\n', options
 export function parseBlock (src, options) {
   const root = new Element('root');
 
-  let linkRefs;
+  const linkRefs = {};
   let skipNextLineBreak = true;
   let m;
 
@@ -77,9 +78,6 @@ export function parseBlock (src, options) {
 
     // link_ref
     if ((m = reLinkRef.exec(src))) {
-      if (!linkRefs) {
-        linkRefs = {};
-      }
       src.advance(m[0]);
       linkRefs[m[1]] = m[2];
       continue;
@@ -162,7 +160,9 @@ export function parseBlock (src, options) {
         }
 
         else if (blockType === 'notextile') {
-          parentNode.appendChild(parseHtml(tokenize(inner.trimEndNewlines())));
+          parentNode.appendChild(
+            parseHtml(tokenize(inner.trimEndNewlines()), null, true)
+          );
         }
 
         else if (blockType === '###') {
@@ -240,7 +240,7 @@ export function parseBlock (src, options) {
       const tagName = m[1];
 
       // Is block tag? ...
-      if (tagName in allowedFlowBlocktags) {
+      if (options.allowed_block_tags && options.allowed_block_tags.includes(tagName)) {
         if (m[3] || tagName in singletons) { // single?
           src.advance(m[0]);
           if (/^\s*(\n|$)/.test(src)) {
@@ -388,17 +388,23 @@ export function parseBlock (src, options) {
     src.advance(m[0]);
   }
 
-  // apply link refs to anchor tags
-  if (linkRefs) {
-    root.visit(node => {
-      if (node.tagName === 'a') {
-        const href = node.getAttribute('href');
+  root.visit(node => {
+    if (node.tagName === 'a') {
+      let href = node.getAttribute('href');
+      if (href) {
+        // apply link refs to anchor tags
         if (href && linkRefs[href]) {
-          node.setAttribute('href', safeHref(linkRefs[href], options));
+          href = linkRefs[href];
         }
+        // ensure safe URL in href
+        node.setAttribute('href', safeHref(href, options));
       }
-    });
-  }
+    }
+    // convert certain glyphs in text nodes
+    if (node instanceof TextNode) {
+      node.data = parseGlyph(node.data);
+    }
+  });
 
   renderNotelist(root, options);
 

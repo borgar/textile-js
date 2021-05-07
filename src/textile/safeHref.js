@@ -1,6 +1,6 @@
-export function safeHref (url, options, type = 'link') {
+export function safeHref (url, options) {
   const blacklist = options.blocked_uri;
-  if (Array.isArray(blacklist)) {
+  if (url && Array.isArray(blacklist)) {
     for (let i = 0; i < blacklist.length; i++) {
       if (url.startsWith(blacklist[i] + ':')) {
         return '';

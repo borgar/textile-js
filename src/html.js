@@ -1,5 +1,5 @@
 import re from './re.js';
-import { Element, TextNode, CommentNode } from './VDOM.js';
+import { Element, TextNode, CommentNode, RawNode } from './VDOM.js';
 import { singletons } from './constants.js';
 
 re.pattern.html_id = '[a-zA-Z][a-zA-Z\\d:]*';
@@ -150,7 +150,7 @@ export function tokenize (src, whitelistTags, lazy) {
 // This "indesciminately" parses HTML text into a list of JSON-ML element
 // No steps are taken however to prevent things like <table><p><td>,
 // a user can still create nonsensical but "well-formed" markup
-export function parseHtml (tokens, lazy) {
+export function parseHtml (tokens, lazy, rawTextOnly = false) {
   const root = new Element('root');
   const stack = [];
   let curr = root;
@@ -163,7 +163,9 @@ export function parseHtml (tokens, lazy) {
       curr.appendChild(node);
     }
     else if (token.type === TEXT) {
-      const node = new TextNode(token.data);
+      // if a PRE, CODE, or SCRIPT exists as a parent, use Raw text to prevent glyph convertions
+      const isRawText = rawTextOnly || stack.some(d => /^(pre|code|script)$/i.test(d.tagName));
+      const node = isRawText ? new RawNode(token.data) : new TextNode(token.data);
       node.html = true;
       curr.appendChild(node);
     }

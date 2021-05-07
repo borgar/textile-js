@@ -3,8 +3,6 @@ import { Element, TextNode, RawNode, CommentNode } from '../VDOM.js';
 import re from '../re.js';
 
 import { parseAttr } from './attr.js';
-import { parseGlyph } from './glyph.js';
-import { safeHref } from './safeHref.js';
 import { testEndnoteRef, parseEndnoteRef } from './endnote.js';
 import { parseHtml, parseHtmlAttr, tokenize, testComment, testOpenTag } from '../html.js';
 import { singletons } from '../constants.js';
@@ -129,7 +127,7 @@ export function parseInline (src, options) {
     // image
     if ((m = reImage.exec(src)) || (m = reImageFenced.exec(src))) {
       const attr = parseAttr(m[1] || '', 'img')[1];
-      attr.src = safeHref(m[2], options, 'image');
+      attr.src = m[2];
       if (m[3]) {
         attr.title = m[3];
         attr.alt = m[3];
@@ -141,7 +139,7 @@ export function parseInline (src, options) {
       const length = m[0].length;
       if (m[4]) { // +cite causes image to be wraped with a link
         root
-          .appendChild(new Element('a', { href: safeHref(m[4], options) }).setPos(startPos, length))
+          .appendChild(new Element('a', { href: m[4] }).setPos(startPos, length))
           .appendChild(new Element('img', attr).setPos(startPos, length - m[4].length - 1));
       }
       else {
@@ -189,7 +187,7 @@ export function parseInline (src, options) {
           else if (tag === 'notextile') {
             // HTML is still parsed, even though textile is not
             const inner = src.sub(0, m2[1].length);
-            child = parseHtml(tokenize(inner));
+            child = parseHtml(tokenize(inner), null, true);
           }
           else {
             const inner = src.sub(0, m2[1].length);
@@ -259,7 +257,7 @@ export function parseInline (src, options) {
         inner.advance(step);
         link.setAttr(attr);
       }
-      link.setAttribute('href', safeHref(m[2], options));
+      link.setAttribute('href', m[2]);
       if (title && !inner.length) {
         inner = src.sub((isFenced ? 2 : 1) + step, m[1].length - step);
       }
@@ -289,12 +287,5 @@ export function parseInline (src, options) {
   }
   while (src.valueOf());
 
-  // FIXME: might be better to post process the entire tree as a last step?
-  // convert certain glyphs in text nodes
-  root.children.forEach(node => {
-    if (node instanceof TextNode) {
-      node.data = parseGlyph(node.data);
-    }
-  });
   return root.children;
 }

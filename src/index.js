@@ -75,7 +75,27 @@ textile.defaults = {
   // automatically backlink footnotes, regardless of syntax
   auto_backlink: false,
   // list of blocked href protocols
-  blocked_uri: [ 'javascript', 'vbscript', 'data' ]
+  blocked_uri: [
+    'javascript',
+    'vbscript',
+    'data'
+  ],
+  // HTML tags allowed in the document (root) level that trigger HTML parsing
+  allowed_block_tags: [
+    'blockquote',
+    'div',
+    'hr',
+    'li',
+    'noscript',
+    'notextile',
+    'object',
+    'ol',
+    'p',
+    'pre',
+    'script',
+    'style',
+    'ul'
+  ]
 };
 
 textile.setOptions = opt => {

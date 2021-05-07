@@ -666,3 +666,9 @@ test('xss attack 4', t => {
   t.is(textile.convert(tx), '<p><a href=""><img src="/image.jpg" alt="" /></a></p>', tx);
   t.end();
 });
+
+test('xss attack 5', t => {
+  const tx = '<a href="javascript:alert(\'XSS\')">link</a>';
+  t.is(textile.convert(tx), '<p><a href="">link</a></p>', tx);
+  t.end();
+});
