@@ -735,3 +735,16 @@ test('footnote handling #74', t => {
   );
   t.end();
 });
+
+
+test('html casing', t => {
+  // http://w3c.github.io/html-reference/documents.html#case-insensitivity
+  t.is(textile.convert('<DIV ID="ONE"><SPAN CLASS="TWO">foo<BR>bar</SPAN></DIV>'),
+    '<div id="ONE"><span class="TWO">foo<br />bar</span></div>',
+    'single line');
+  t.is(textile.convert('<DIV ID="ONE">\n\n<SPAN CLASS="TWO">foo<BR>bar</SPAN>\n\n</DIV>'),
+    '<div id="ONE"><span class="TWO">foo<br />bar</span>\n</div>',
+    'split lines');
+  t.end();
+});
+

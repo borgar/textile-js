@@ -163,9 +163,9 @@ export function parseInline (src, options) {
     // html tag
     // TODO: this seems to have a lot of overlap with block tags... DRY?
     if ((m = testOpenTag(src))) {
-      const tag = m[1];
-      const single = m[3] || m[1] in singletons;
-      const element = new Element(tag, parseHtmlAttr(m[2]));
+      const tagName = m[1].toLowerCase();
+      const single = m[3] || tagName in singletons;
+      const element = new Element(tagName, parseHtmlAttr(m[2]));
       const startPos = src.offset;
       element.html = true;
       src.advance(m[0]);
@@ -177,14 +177,14 @@ export function parseInline (src, options) {
       }
       else { // need terminator
         // gulp up the rest of this block...
-        const reEndTag = re.compile(`^(.*?)(</${tag}\\s*>)`, 's');
+        const reEndTag = re.compile(`^(.*?)(</${tagName}\\s*>)`, 'is');
         let child = element;
         const m2 = reEndTag.exec(src);
         if (m2) {
-          if (tag === 'code') {
+          if (tagName === 'code') {
             element.appendChild(new RawNode(m2[1]));
           }
-          else if (tag === 'notextile') {
+          else if (tagName === 'notextile') {
             // HTML is still parsed, even though textile is not
             const inner = src.sub(0, m2[1].length);
             child = parseHtml(tokenize(inner), null, true);

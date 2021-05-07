@@ -672,3 +672,9 @@ test('xss attack 5', t => {
   t.is(textile.convert(tx), '<p><a href="">link</a></p>', tx);
   t.end();
 });
+
+test('xss attack 6', t => {
+  const tx = '<a href="JAVASCRIPT:alert(\'XSS\')">link</a>';
+  t.is(textile.convert(tx), '<p><a href="">link</a></p>', tx);
+  t.end();
+});

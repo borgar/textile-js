@@ -33,7 +33,8 @@ export function parseHtmlAttr (attrSrc) {
   let m;
   if (attrSrc) {
     while ((m = reAttr.exec(attrSrc))) {
-      attr[m[1]] = typeof m[2] === 'string'
+      const attrName = m[1].toLowerCase();
+      attr[attrName] = typeof m[2] === 'string'
         ? m[2].replace(/^(["'])(.*)\1$/, '$2')
         : null;
       attrSrc = attrSrc.slice(m[0].length);
@@ -82,7 +83,7 @@ export function tokenize (src, whitelistTags, lazy) {
     else if ((m = testCloseTag(src)) && isAllowed(m[1])) {
       const token = {
         type: CLOSE,
-        tag: m[1],
+        tag: m[1].toLowerCase(),
         index: src.index,
         offset: src.offset,
         src: m[0]
@@ -106,9 +107,10 @@ export function tokenize (src, whitelistTags, lazy) {
 
     // open/void tag
     else if ((m = testOpenTag(src)) && isAllowed(m[1])) {
+      const tagName = m[1].toLowerCase();
       const token = {
-        type: m[3] || m[1] in singletons ? SINGLE : OPEN,
-        tag: m[1],
+        type: (m[3] || tagName in singletons) ? SINGLE : OPEN,
+        tag: tagName,
         index: src.index,
         offset: src.offset,
         src: m[0]

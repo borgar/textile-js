@@ -236,7 +236,7 @@ export function parseBlock (src, options) {
     // block HTML
     if ((m = testOpenTagBlock(src))) {
       const openPos = src.offset;
-      const tagName = m[1];
+      const tagName = m[1].toLowerCase();
 
       // Is block tag? ...
       if (options.allowed_block_tags && options.allowed_block_tags.includes(tagName)) {
@@ -249,7 +249,7 @@ export function parseBlock (src, options) {
           }
         }
         else if (tagName === 'pre') {
-          const t = tokenize(src.clone(), { pre: 1, code: 1 }, tagName);
+          const t = tokenize(src.clone(), { pre: 1, code: 1 }, true);
           const p = parseHtml(t, true);
           src.load();
           src.advance(p.sourceLength);
@@ -263,7 +263,7 @@ export function parseBlock (src, options) {
         }
         else if (tagName === 'notextile') {
           // merge all child elements
-          const t = tokenize(src.clone(), null, tagName);
+          const t = tokenize(src.clone(), null, true);
           let s = 1; // start after open tag
           while (/^\s+$/.test(t[s].src)) {
             s++; // skip whitespace
