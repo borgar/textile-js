@@ -188,14 +188,13 @@ export function parseBlock (src, options) {
           const fnid = fn[1];
           const shouldBacklink = !!fn[2];
           attr.class = (attr.class ? attr.class + ' ' : '') + 'footnote';
-          attr.id = 'fn' + fnid;
+          attr.id = `fn${options.id_prefix ? '-' : ''}${options.id_prefix}-${fnid}`;
           const subAttr = copyAttr(attr, { id: 1, class: 1 });
           let fnMark = new Element('sup', subAttr).setPos(outerOffs + 2, fnid.length);
           fnMark.appendChild(new TextNode(fnid));
           // eslint-disable-next-line no-constant-condition
           if (shouldBacklink || options.auto_backlink) {
-            // FIXME: PHP sensibly adds an instance prefix to the IDs: fn2 => fn18281493636081906fec71d-2
-            const backlink = new Element('a', { href: '#fnr' + fnid, ...subAttr })
+            const backlink = new Element('a', { href: `#fnr${options.id_prefix ? '-' : ''}${options.id_prefix}-${fnid}`, ...subAttr })
               .setPos(outerOffs + 2, fnid.length + (shouldBacklink ? 1 : 0));
             backlink.appendChild(fnMark);
             fnMark = backlink;

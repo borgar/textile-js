@@ -205,13 +205,15 @@ export function parseInline (src, options) {
 
     // footnote
     if ((m = reFootnote.exec(src)) && /\S/.test(behind)) {
-      const sup = new Element('sup', { class: 'footnote', id: 'fnr' + m[1] }).setPos(src.offset, m[0].length);
+      const fnrId = `fnr${options.id_prefix ? '-' : ''}${options.id_prefix}-${m[1]}`;
+      const sup = new Element('sup', { class: 'footnote', id: fnrId }).setPos(src.offset, m[0].length);
       if (m[2] === '!') { // "!" suppresses the link
         sup.appendChild(new TextNode(m[1]));
       }
       else {
+        const fnRef = `#fn${options.id_prefix ? '-' : ''}${options.id_prefix}-${m[1]}`;
         sup
-          .appendChild(new Element('a', { href: '#fn' + m[1] }).setPos(src.offset, m[0].length))
+          .appendChild(new Element('a', { href: fnRef }).setPos(src.offset, m[0].length))
           .appendChild(new TextNode(m[1]));
       }
       root.appendChild(sup);

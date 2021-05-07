@@ -320,14 +320,14 @@ Any old text`;
 test('footnote reference', t => {
   const tx = 'This is covered elsewhere[1].';
   t.is(textile.convert(tx),
-    '<p>This is covered elsewhere<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>.</p>', tx);
+    '<p>This is covered elsewhere<sup class="footnote" id="fnr-1"><a href="#fn-1">1</a></sup>.</p>', tx);
   t.end();
 });
 
 test('footnote reference with bang', t => {
   const tx = 'This is covered elsewhere[1!].';
   t.is(textile.convert(tx),
-    '<p>This is covered elsewhere<sup class="footnote" id="fnr1">1</sup>.</p>', tx);
+    '<p>This is covered elsewhere<sup class="footnote" id="fnr-1">1</sup>.</p>', tx);
   t.end();
 });
 
@@ -335,7 +335,7 @@ test('footnote reference with bang', t => {
 test('footnote', t => {
   const tx = 'fn1. Down here, in fact.';
   t.is(textile.convert(tx),
-    '<p class="footnote" id="fn1"><sup>1</sup> Down here, in fact.</p>', tx);
+    '<p class="footnote" id="fn-1"><sup>1</sup> Down here, in fact.</p>', tx);
   t.end();
 });
 
@@ -343,7 +343,7 @@ test('footnote', t => {
 test('footnote with backlink', t => {
   const tx = 'fn1^. Down here, in fact.';
   t.is(textile.convert(tx),
-    '<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> Down here, in fact.</p>', tx);
+    '<p class="footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> Down here, in fact.</p>', tx);
   t.end();
 });
 

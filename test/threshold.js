@@ -366,8 +366,8 @@ test('footnotes', t => {
 
 fn1^. The footnote.`;
   t.is(textile.convert(tx),
-    `<p>A footnote reference<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>.</p>
-<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> The footnote.</p>`, tx);
+    `<p>A footnote reference<sup class="footnote" id="fnr-1"><a href="#fn-1">1</a></sup>.</p>
+<p class="footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> The footnote.</p>`, tx);
   t.end();
 });
 
@@ -980,7 +980,7 @@ A ["footnoted link":http://thresholdstate.com/][1].`;
   t.is(textile.convert(tx),
     `<p>A close<img src="/img.gif" alt="" />image.<br />
 A tight<a href="http://thresholdstate.com/">text</a>link.<br />
-A <a href="http://thresholdstate.com/">footnoted link</a><sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>.</p>`, tx);
+A <a href="http://thresholdstate.com/">footnoted link</a><sup class="footnote" id="fnr-1"><a href="#fn-1">1</a></sup>.</p>`, tx);
   t.end();
 });
 

@@ -50,17 +50,18 @@ function charCounter (start = 'a') {
 
 
 class EndNoteKeeper {
-  constructor () {
+  constructor (id_prefix) {
     this.refCounter = 1;
     this.noteCounter = 1;
     this.byLabel = {};
+    this.id_prefix = id_prefix;
     this.list = [];
   }
 
   getNote (label) {
     if (!this.byLabel[label]) {
       this.byLabel[label] = {
-        id: `note-${this.noteCounter}`,
+        id: `note${this.id_prefix ? '-' : ''}${this.id_prefix}-${this.noteCounter}`,
         label: label,
         index: this.noteCounter,
         attr: {},
@@ -70,7 +71,7 @@ class EndNoteKeeper {
         addRef: () => {
           const note = this.getNote(label);
           const ref = {
-            id: `noteref-${note.index}.${note.refs.length + 1}`,
+            id: `noteref${this.id_prefix ? '-' : ''}${this.id_prefix}-${note.index}.${note.refs.length + 1}`,
             label: note.label,
             index: this.refCounter
           };
@@ -88,7 +89,7 @@ class EndNoteKeeper {
 
 function getNotes (options) {
   if (!options.endNotes) {
-    options.endNotes = new EndNoteKeeper();
+    options.endNotes = new EndNoteKeeper(options.id_prefix);
   }
   return options.endNotes;
 }

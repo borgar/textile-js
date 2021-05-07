@@ -465,7 +465,7 @@ test('image parsing speed bug 2 (issue #40)', t => {
 
 test('parse inline textile in footnotes', t => {
   t.is(textile.convert('fn1. This is _emphasized_ *strong*'),
-    '<p class="footnote" id="fn1"><sup>1</sup> This is <em>emphasized</em> <strong>strong</strong></p>',
+    '<p class="footnote" id="fn-1"><sup>1</sup> This is <em>emphasized</em> <strong>strong</strong></p>',
     'footnote inline textile');
   t.end();
 });
@@ -526,7 +526,7 @@ test('footnotes have to directly follow text (#26)', t => {
 
 test('footnote links can be disabled with !', t => {
   t.is(textile.convert('foobar[1234!]'),
-    '<p>foobar<sup class="footnote" id="fnr1234">1234</sup></p>');
+    '<p>foobar<sup class="footnote" id="fnr-1234">1234</sup></p>');
   t.end();
 });
 
@@ -619,6 +619,7 @@ test('inline tag should bound phrase (#57)', t => {
   t.end();
 });
 
+
 test('inline tag should bound phrase [2] (#57)', t => {
   const tx = '*fo<i/>o*<i/>bar';
   t.is(textile.convert(tx),
@@ -694,42 +695,42 @@ test('less liberal lang attr #76', t => {
 test('footnote handling #74', t => {
   t.is(
     textile.convert('fn1. one'),
-    '<p class="footnote" id="fn1"><sup>1</sup> one</p>',
+    '<p class="footnote" id="fn-1"><sup>1</sup> one</p>',
     'fn1. one'
   );
   t.is(
     textile.convert('fn1^. one'),
-    '<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> one</p>',
+    '<p class="footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> one</p>',
     'fn1^. one'
   );
   t.is(
     textile.convert('fn1(foo). one'),
-    '<p class="foo footnote" id="fn1"><sup>1</sup> one</p>',
+    '<p class="foo footnote" id="fn-1"><sup>1</sup> one</p>',
     'fn1(foo). one'
   );
   t.is(
     textile.convert('fn1^(foo). one'),
-    '<p class="foo footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> one</p>',
+    '<p class="foo footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> one</p>',
     'fn1^(foo). one'
   );
   t.is(
     textile.convert('fn1. one\n\ntwo'),
-    '<p class="footnote" id="fn1"><sup>1</sup> one</p>\n<p>two</p>',
+    '<p class="footnote" id="fn-1"><sup>1</sup> one</p>\n<p>two</p>',
     'fn1. one\n\ntwo'
   );
   t.is(
     textile.convert('fn1.. one\n\ntwo'),
-    '<p class="footnote" id="fn1"><sup>1</sup> one<br />\n<br />\ntwo</p>',
+    '<p class="footnote" id="fn-1"><sup>1</sup> one<br />\n<br />\ntwo</p>',
     'fn1.. one\n\ntwo'
   );
   t.is(
     textile.convert('fn1^(foo). one\n\ntwo'),
-    '<p class="foo footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> one</p>\n<p>two</p>',
+    '<p class="foo footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> one</p>\n<p>two</p>',
     'fn1^(foo). one\n\ntwo'
   );
   t.is(
     textile.convert('fn1^(foo).. one\n\ntwo'),
-    '<p class="foo footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> one<br />\n<br />\ntwo</p>',
+    '<p class="foo footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> one<br />\n<br />\ntwo</p>',
     'fn1^(foo).. one\n\ntwo'
   );
   t.end();

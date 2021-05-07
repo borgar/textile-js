@@ -8,11 +8,11 @@
 import { parseBlock } from './textile/block.js';
 import { CommentNode, Document, Element, ExtendedNode, HiddenNode, Node, RawNode, TextNode } from './VDOM.js';
 
-function parseTextile (tx, opt) {
+function parseTextile (tx, options) {
   const root = new Document();
   root.pos.start = 0;
   root.pos.end = tx.length;
-  root.appendChild(parseBlock(tx, opt));
+  root.appendChild(parseBlock(tx, options));
   return root;
 }
 
@@ -53,9 +53,20 @@ function addLines (rootNode, sourceTx) {
   return rootNode;
 }
 
-export default function textile (sourceTx, opt) {
+function getOptions (options) {
+  const opts = Object.assign({}, textile.defaults, options);
+  if (opts.id_prefix && typeof opts.id_prefix !== 'string') {
+    opts.id_prefix = Math.floor(Math.random() * 1e9).toString(36);
+  }
+  else if (!opts.id_prefix) {
+    opts.id_prefix = '';
+  }
+  return opts;
+}
+
+export default function textile (sourceTx, options) {
   // get a throw-away copy of options
-  opt = Object.assign({}, textile.defaults, opt);
+  const opt = getOptions(options);
   // run the converter
   return parseTextile(sourceTx, opt).toHTML();
 }
@@ -95,7 +106,9 @@ textile.defaults = {
     'script',
     'style',
     'ul'
-  ]
+  ],
+  // id prefix
+  id_prefix: false
 };
 
 textile.setOptions = opt => {
@@ -104,10 +117,14 @@ textile.setOptions = opt => {
 };
 
 textile.convert = textile;
+
 textile.parse = textile;
-textile.parseTree = function (sourceTx, opt) {
-  opt = Object.assign({}, textile.defaults, opt);
-  return addLines(parseTextile(sourceTx, opt), sourceTx);
+
+textile.parseTree = function (sourceTx, options) {
+  return addLines(
+    parseTextile(sourceTx, getOptions(options)),
+    sourceTx
+  );
 };
 
 export const parseTree = textile.parseTree;
