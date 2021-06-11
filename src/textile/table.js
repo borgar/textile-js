@@ -1,13 +1,12 @@
 /* textile table parser */
 
-import re from '../re.js';
+import Re from '../Re.js';
 import { Element, TextNode } from '../VDOM.js';
 import { parseAttr } from './attr.js';
 import { parseInline } from './inline.js';
 import { txattr } from './re_ext.js';
 
-re.pattern.txattr = txattr;
-
+const re = new Re({ txattr });
 const reTable = re.compile(/^((?:table[:txattr:]\.(?:\s(.+?))\s*\n)?(?:(?:[:txattr:]\.[^\n\S]*)?\|.*?\|[^\n\S]*(?:\n|$))+)([^\n\S]*\n+)?/, 's');
 const reHead = /^table(_?)([^\n]*?)\.(?:[ \t](.+?))?\s*\n/;
 const reRow = re.compile(/^((?:\|([~^-][:txattr:])\.\s*\n)?([:txattr:]\.[^\n\S]*)?\|)(.*?)\|[^\n\S]*(\n|$)/, 's');

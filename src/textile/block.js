@@ -3,7 +3,7 @@
 */
 import Ribbon from '../Ribbon.js';
 import { Element, TextNode, RawNode, HiddenNode, CommentNode, ExtendedNode } from '../VDOM.js';
-import re from '../re.js';
+import Re from '../Re.js';
 
 import { parseHtml, tokenize, parseHtmlAttr, testComment, testOpenTagBlock } from '../html.js';
 import { singletons } from '../constants.js';
@@ -19,9 +19,7 @@ import { testTable, parseTable } from './table.js';
 import { testEndnote, parseEndnote, testNotelist, parseNotelist, renderNotelist } from './endnote.js';
 
 import { txblocks, txlisthd, txattr } from './re_ext.js';
-re.pattern.txblocks = txblocks;
-re.pattern.txlisthd = txlisthd;
-re.pattern.txattr = txattr;
+const re = new Re({ txblocks, txlisthd, txattr });
 
 const reBlock = re.compile(/^([:txblocks:])/);
 const reBlockNormal = re.compile(/^(.*?)($|\r?\n(?=[:txlisthd:])|\r?\n(?:\s*\n|$)+)/, 's');

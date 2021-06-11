@@ -1,5 +1,6 @@
 /* textile glyph parser */
-import re from '../re.js';
+import Re from '../Re.js';
+const re = new Re();
 
 const reApostrophe = /(\w)'(\w)/g;
 const reArrow = /([^-]|^)->/;

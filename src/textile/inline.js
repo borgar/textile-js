@@ -1,6 +1,6 @@
 /* textile inline parser */
 import { Element, TextNode, RawNode, CommentNode } from '../VDOM.js';
-import re from '../re.js';
+import Re from '../Re.js';
 
 import { parseAttr } from './attr.js';
 import { testEndnoteRef, parseEndnoteRef } from './endnote.js';
@@ -8,9 +8,17 @@ import { parseHtml, parseHtmlAttr, tokenize, testComment, testOpenTag } from '..
 import { singletons } from '../constants.js';
 
 import { ucaps, txattr, txcite } from './re_ext.js';
-re.pattern.txattr = txattr;
-re.pattern.txcite = txcite;
-re.pattern.ucaps = ucaps;
+const re = new Re({ ucaps, txattr, txcite });
+
+const rePhrase = /^(\[?)(__?|\*\*?|\?\?|[-+^~@%])/;
+const reImage = re.compile(/^!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^./]))?)([^!\s]+?) ?(?:\(((?:[^()]|\([^()]+\))+)\))?!(?::([^\s]+?(?=[!-.:-@[\\\]-`{-~](?:$|\s)|\s|$)))?/);
+const reImageFenced = re.compile(/^\[!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^./]))?)([^!\s]+?) ?(?:\(((?:[^()]|\([^()]+\))+)\))?!(?::([^\s]+?(?=[!-.:-@[\\\]-`{-~](?:$|\s)|\s|$)))?\]/);
+// NB: there is an exception in here to prevent matching "TM)"
+const reCaps = re.compile(/^((?!TM\)|tm\))[[:ucaps:]](?:[[:ucaps:]\d]{1,}(?=\()|[[:ucaps:]\d]{2,}))(?:\((.*?)\))?(?=\W|$)/);
+const reLink = re.compile(/^"(?!\s)((?:[^"]|"(?![\s:])[^\n"]+"(?!:))+)"[:txcite:]/);
+const reLinkFenced = /^\["([^\n]+?)":((?:\[[a-z0-9]*\]|[^\]])+)\]/;
+const reLinkTitle = /\s*\(((?:\([^()]*\)|[^()])+)\)$/;
+const reFootnote = /^\[(\d+)(!?)\]/;
 
 const phraseConvert = {
   '*': 'strong',
@@ -26,16 +34,6 @@ const phraseConvert = {
   '@': 'code'
 };
 
-const rePhrase = /^(\[?)(__?|\*\*?|\?\?|[-+^~@%])/;
-const reImage = re.compile(/^!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^./]))?)([^!\s]+?) ?(?:\(((?:[^()]|\([^()]+\))+)\))?!(?::([^\s]+?(?=[!-.:-@[\\\]-`{-~](?:$|\s)|\s|$)))?/);
-const reImageFenced = re.compile(/^\[!(?!\s)([:txattr:](?:\.[^\n\S]|\.(?:[^./]))?)([^!\s]+?) ?(?:\(((?:[^()]|\([^()]+\))+)\))?!(?::([^\s]+?(?=[!-.:-@[\\\]-`{-~](?:$|\s)|\s|$)))?\]/);
-// NB: there is an exception in here to prevent matching "TM)"
-const reCaps = re.compile(/^((?!TM\)|tm\))[[:ucaps:]](?:[[:ucaps:]\d]{1,}(?=\()|[[:ucaps:]\d]{2,}))(?:\((.*?)\))?(?=\W|$)/);
-const reLink = re.compile(/^"(?!\s)((?:[^"]|"(?![\s:])[^\n"]+"(?!:))+)"[:txcite:]/);
-const reLinkFenced = /^\["([^\n]+?)":((?:\[[a-z0-9]*\]|[^\]])+)\]/;
-const reLinkTitle = /\s*\(((?:\([^()]*\)|[^()])+)\)$/;
-const reFootnote = /^\[(\d+)(!?)\]/;
-
 const getMatchRe = (tok, fence, code) => {
   let mMid;
   let mEnd;
@@ -44,13 +42,13 @@ const getMatchRe = (tok, fence, code) => {
     mEnd = '(?:])';
   }
   else {
-    const t1 = re.escape(tok.charAt(0));
+    const t1 = Re.escape(tok.charAt(0));
     mMid = code
       ? '^(\\S+|\\S+.*?\\S)'
       : `^([^\\s${t1}]+|[^\\s${t1}].*?\\S(${t1}*))`;
     mEnd = '(?=$|[\\s.,"\'!?;:()«»„“”‚‘’<>])';
   }
-  return re.compile(`${mMid}(?:${re.escape(tok)})${mEnd}`);
+  return re.compile(`${mMid}(?:${Re.escape(tok)})${mEnd}`);
 };
 
 export function parseInline (src, options) {

@@ -1,13 +1,11 @@
 /* textile list parser */
-import re from '../re.js';
+import Re from '../Re.js';
 import { Element, TextNode } from '../VDOM.js';
 import { parseAttr } from './attr.js';
 import { parseInline } from './inline.js';
 import { txlisthd, txlisthd2 } from './re_ext.js';
 
-re.pattern.txlisthd = txlisthd;
-re.pattern.txlisthd2 = txlisthd2;
-
+const re = new Re({ txlisthd, txlisthd2 });
 const reList = re.compile(/^((?:[:txlisthd:][^\0]*?(?:\r?\n|$))+)(\s*\n|$)/, 's');
 const reItem = re.compile(/^([#*]+)([^\0]+?)(\n(?=[:txlisthd2:])|$) */, 's');
 

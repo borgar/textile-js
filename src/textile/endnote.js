@@ -1,15 +1,14 @@
 /* textile inline parser */
 import { Element, TextNode, HiddenNode } from '../VDOM.js';
-import re from '../re.js';
+import Re from '../Re.js';
 
 import { parseAttr } from './attr.js';
 import { parseInline } from './inline.js';
-
 import { txattr } from './re_ext.js';
-re.pattern.txattr = txattr;
 
 export const symbols = '¤§µ¶†‡•∗∴◊♠♣♥♦|';
 
+const re = new Re({ txattr, symbols });
 const reEndnoteDef = re.compile(
   /^note#([^%<*!@#^([{.\s]+)([*!^]?)([:txattr:])\.?\s+(.*?)($|\r?\n(?:\s*\n|$)+)/
 );
@@ -17,7 +16,7 @@ const reEndnoteRef = re.compile(
   /^\[([:txattr:])#([^\]!]+?)(!?)\]/
 );
 const reNotelist = re.compile(
-  /^notelist([:txattr:])(:(?:\p{L}|\p{M}|\p{N}|\p{Pc}|[¤§µ¶†‡•∗∴◊♠♣♥♦|]))?([\^!]?)(\+?)\.?\s*?(?:$|\r?\n(?:\s*\n|$)+)/u
+  /^notelist([:txattr:])(:(?:\p{L}|\p{M}|\p{N}|\p{Pc}|[[:symbols:]]))?([\^!]?)(\+?)\.?\s*?(?:$|\r?\n(?:\s*\n|$)+)/, 'u'
 );
 
 function charCounter (start = 'a') {

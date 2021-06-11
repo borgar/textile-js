@@ -1,11 +1,11 @@
 /* definitions list parser */
 import { Element, TextNode } from '../VDOM.js';
-import re from '../re.js';
+import Re from '../Re.js';
 import { parseInline } from './inline.js';
 import { parseAttr } from './attr.js';
 import { txattr } from './re_ext.js';
-re.pattern.txattr = txattr;
 
+const re = new Re({ txattr });
 const reDeflistWiki = re.compile(
   /^[;:](?:[:txattr:])?(\. ?| )[^\0]*?(?:\s*\n\r?\n|$)/
 );

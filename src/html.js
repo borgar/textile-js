@@ -1,9 +1,11 @@
-import re from './re.js';
+import Re from './Re.js';
 import { Element, TextNode, CommentNode, RawNode } from './VDOM.js';
 import { singletons } from './constants.js';
 
-re.pattern.html_id = '[a-zA-Z][a-zA-Z\\d:]*';
-re.pattern.html_attr = '(?:"[^"]+"|\'[^\']+\'|[^>\\s]+)';
+const re = new Re({
+  html_id: '[a-zA-Z][a-zA-Z\\d:]*',
+  html_attr: '(?:"[^"]+"|\'[^\']+\'|[^>\\s]+)'
+});
 
 const reAttr = re.compile(/^\s*([^=\s]+)(?:\s*=\s*("[^"]+"|'[^']+'|[^>\s]+))?/);
 const reComment = re.compile(/^<!--(.+?)-->/, 's');
