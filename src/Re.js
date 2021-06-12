@@ -54,8 +54,14 @@ export default class Re {
         if (src.ignoreCase && !/[iI]/.test(_flags)) {
           _flags += 'i';
         }
+        if (src.dotAll && !/[sS]/.test(_flags)) {
+          _flags += 's';
+        }
         if (src.unicode && !/[uU]/.test(_flags)) {
           _flags += 'u';
+        }
+        if (src.sticky && !/[yY]/.test(_flags)) {
+          _flags += 'y';
         }
         if (src.multiline && !/[mM]/.test(_flags)) {
           _flags += 'm';
@@ -85,11 +91,10 @@ export default class Re {
     }
 
     // clean flags and output new regexp
-    flags = (flags || '').replace(/[^gimu]/ig, '');
+    flags = (flags || '').replace(/[^giymu]/ig, '');
     return (_cache[ckey] = new RegExp(rx, flags));
   }
 }
 
 Re.isRegExp = isRegExp;
 Re.escape = escape;
-
