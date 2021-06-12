@@ -49,7 +49,7 @@ test('extended block containing block start', t => {
 When the elephant comes to take a p. you...`;
   t.is(textile.convert(tx),
     `<p>I saw a ship. It ate my elephant.</p>
-<p>When the elephant comes to take a p. you&#8230;</p>`, tx);
+<p>When the elephant comes to take a p. you…</p>`, tx);
   t.end();
 });
 
@@ -71,7 +71,7 @@ When the elephant comes to take a p. you...`;
   t.is(textile.convert(tx),
     `<blockquote>
 <p>I saw a ship. It ate my elephant.</p>
-<p>When the elephant comes to take a p. you&#8230;</p>
+<p>When the elephant comes to take a p. you…</p>
 </blockquote>`, tx);
   t.end();
 });
@@ -165,7 +165,7 @@ And none replied.</p>`, tx);
 test('curly quotes', t => {
   const tx = '"Observe!"';
   t.is(textile.convert(tx),
-    '<p>&#8220;Observe!&#8221;</p>', tx);
+    '<p>“Observe!”</p>', tx);
   t.end();
 });
 
@@ -175,8 +175,8 @@ test('quotes contained in multi-paragraph quotes', t => {
 
 "It's wonderful."`;
   t.is(textile.convert(tx),
-    `<p>&#8220;I first learned about this thing called &#8220;Redcloth&#8221; several years ago.</p>
-<p>&#8220;It&#8217;s wonderful.&#8221;</p>`, tx);
+    `<p>“I first learned about this thing called “Redcloth” several years ago.</p>
+<p>“It’s wonderful.”</p>`, tx);
   t.end();
 });
 
@@ -184,7 +184,7 @@ test('quotes contained in multi-paragraph quotes', t => {
 test('double hyphens', t => {
   const tx = 'Observe--very nice!';
   t.is(textile.convert(tx),
-    '<p>Observe&#8212;very nice!</p>', tx);
+    '<p>Observe—very nice!</p>', tx);
   t.end();
 });
 
@@ -192,7 +192,7 @@ test('double hyphens', t => {
 test('double hyphens with spaces', t => {
   const tx = 'Observe -- very nice!';
   t.is(textile.convert(tx),
-    '<p>Observe &#8212; very nice!</p>', tx);
+    '<p>Observe — very nice!</p>', tx);
   t.end();
 });
 
@@ -200,7 +200,7 @@ test('double hyphens with spaces', t => {
 test('parenthetical phrase set off with em dashes', t => {
   const tx = 'An emdash indicates a parenthetical thought--like this one--which is set apart from the rest of a sentence.';
   t.is(textile.convert(tx),
-    '<p>An emdash indicates a parenthetical thought&#8212;like this one&#8212;which is set apart from the rest of a sentence.</p>', tx);
+    '<p>An emdash indicates a parenthetical thought—like this one—which is set apart from the rest of a sentence.</p>', tx);
   t.end();
 });
 
@@ -208,7 +208,7 @@ test('parenthetical phrase set off with em dashes', t => {
 test('parenthetical phrase set off with em dashes surrounded by spaces', t => {
   const tx = 'An emdash indicates a parenthetical thought -- like this one -- which is set apart from the rest of a sentence.';
   t.is(textile.convert(tx),
-    '<p>An emdash indicates a parenthetical thought &#8212; like this one &#8212; which is set apart from the rest of a sentence.</p>', tx);
+    '<p>An emdash indicates a parenthetical thought — like this one — which is set apart from the rest of a sentence.</p>', tx);
   t.end();
 });
 
@@ -216,7 +216,7 @@ test('parenthetical phrase set off with em dashes surrounded by spaces', t => {
 test('single hyphens with spaces', t => {
   const tx = 'Observe - tiny and brief.';
   t.is(textile.convert(tx),
-    '<p>Observe &#8211; tiny and brief.</p>', tx);
+    '<p>Observe – tiny and brief.</p>', tx);
   t.end();
 });
 
@@ -232,7 +232,7 @@ test('midword hyphens ', t => {
 test('ellipses', t => {
   const tx = 'Observe...';
   t.is(textile.convert(tx),
-    '<p>Observe&#8230;</p>', tx);
+    '<p>Observe…</p>', tx);
   t.end();
 });
 
@@ -240,7 +240,7 @@ test('ellipses', t => {
 test('dimension sign', t => {
   const tx = 'Observe: 2x3.';
   t.is(textile.convert(tx),
-    '<p>Observe: 2&#215;3.</p>', tx);
+    '<p>Observe: 2×3.</p>', tx);
   t.end();
 });
 
@@ -248,7 +248,7 @@ test('dimension sign', t => {
 test('dimension sign with space after', t => {
   const tx = 'The room is 2x3 inches big.';
   t.is(textile.convert(tx),
-    '<p>The room is 2&#215;3 inches big.</p>', tx);
+    '<p>The room is 2×3 inches big.</p>', tx);
   t.end();
 });
 
@@ -256,7 +256,7 @@ test('dimension sign with space after', t => {
 test('dimension sign with spaces', t => {
   const tx = 'Observe: 2 x 4.';
   t.is(textile.convert(tx),
-    '<p>Observe: 2 &#215; 4.</p>', tx);
+    '<p>Observe: 2 × 4.</p>', tx);
   t.end();
 });
 
@@ -264,7 +264,7 @@ test('dimension sign with spaces', t => {
 test('dimension signs chained', t => {
   const tx = 'Observe: 2x3x4.';
   t.is(textile.convert(tx),
-    '<p>Observe: 2&#215;3&#215;4.</p>', tx);
+    '<p>Observe: 2×3×4.</p>', tx);
   t.end();
 });
 
@@ -272,7 +272,7 @@ test('dimension signs chained', t => {
 test('dimension signs with double primes', t => {
   const tx = 'My mouse: 2.5" x 4".';
   t.is(textile.convert(tx),
-    '<p>My mouse: 2.5&#8243; &#215; 4&#8243;.</p>', tx);
+    '<p>My mouse: 2.5″ × 4″.</p>', tx);
   t.end();
 });
 
@@ -280,7 +280,7 @@ test('dimension signs with double primes', t => {
 test('dimension signs with single primes', t => {
   const tx = "My office: 5' x 4.5'.";
   t.is(textile.convert(tx),
-    '<p>My office: 5&#8242; &#215; 4.5&#8242;.</p>', tx);
+    '<p>My office: 5′ × 4.5′.</p>', tx);
   t.end();
 });
 
@@ -288,7 +288,7 @@ test('dimension signs with single primes', t => {
 test('trademark and copyright', t => {
   const tx = 'one(TM), two(R), three(C).';
   t.is(textile.convert(tx),
-    '<p>one&#8482;, two&#174;, three&#169;.</p>', tx);
+    '<p>one™, two®, three©.</p>', tx);
   t.end();
 });
 
@@ -385,7 +385,7 @@ I <b>really</b> <i>know</i>.</p>`, tx);
 test('citation', t => {
   const tx = "??Cat's Cradle?? by Vonnegut";
   t.is(textile.convert(tx),
-    '<p><cite>Cat&#8217;s Cradle</cite> by Vonnegut</p>', tx);
+    '<p><cite>Cat’s Cradle</cite> by Vonnegut</p>', tx);
   t.end();
 });
 
@@ -409,7 +409,7 @@ test('code phrases not created with multiple email addresses', t => {
 test('del', t => {
   const tx = "I'm -sure- not sure.";
   t.is(textile.convert(tx),
-    '<p>I&#8217;m <del>sure</del> not sure.</p>', tx);
+    '<p>I’m <del>sure</del> not sure.</p>', tx);
   t.end();
 });
 
@@ -473,7 +473,7 @@ test('tight superscript and subscript', t => {
 test('span', t => {
   const tx = "I'm %unaware% of most soft drinks.";
   t.is(textile.convert(tx),
-    '<p>I&#8217;m <span>unaware</span> of most soft drinks.</p>', tx);
+    '<p>I’m <span>unaware</span> of most soft drinks.</p>', tx);
   t.end();
 });
 
@@ -482,7 +482,7 @@ test('style span', t => {
   const tx = `I'm %{color:red}unaware%
 of most %{font-size:0.5em;}soft drinks%.`;
   t.is(textile.convert(tx),
-    `<p>I&#8217;m <span style="color:red">unaware</span><br />
+    `<p>I’m <span style="color:red">unaware</span><br />
 of most <span style="font-size:0.5em">soft drinks</span>.</p>`, tx);
   t.end();
 });
@@ -748,7 +748,7 @@ and "it's":hobix "all":hobix I ever
 [hobix]http://hobix.com`;
   t.is(textile.convert(tx),
     `<p>I am crazy about <a href="http://hobix.com">Hobix</a><br />
-and <a href="http://hobix.com">it&#8217;s</a> <a href="http://hobix.com">all</a> I ever<br />
+and <a href="http://hobix.com">it’s</a> <a href="http://hobix.com">all</a> I ever<br />
 <a href="http://hobix.com">link to</a>!</p>`, tx);
   t.end();
 });
@@ -1087,7 +1087,7 @@ test('parentheses in asterisks', t => {
 test('parentheses in underscores in quotes', t => {
   const tx = '"before _(in parens)_ after"';
   t.is(textile.convert(tx),
-    '<p>&#8220;before <em>(in parens)</em> after&#8221;</p>', tx);
+    '<p>“before <em>(in parens)</em> after”</p>', tx);
   t.end();
 });
 
@@ -1103,7 +1103,7 @@ test('underscores in parentheses', t => {
 test('underscores in parentheses in quotes', t => {
   const tx = '"one _two three_ (four _five six_) seven"';
   t.is(textile.convert(tx),
-    '<p>&#8220;one <em>two three</em> (four <em>five six</em>) seven&#8221;</p>', tx);
+    '<p>“one <em>two three</em> (four <em>five six</em>) seven”</p>', tx);
   t.end();
 });
 
@@ -1119,7 +1119,7 @@ test('underscores in parentheses 2', t => {
 test('underscores in parentheses in quotes 2', t => {
   const tx = '"one (two _three four_) five"';
   t.is(textile.convert(tx),
-    '<p>&#8220;one (two <em>three four</em>) five&#8221;</p>', tx);
+    '<p>“one (two <em>three four</em>) five”</p>', tx);
   t.end();
 });
 
@@ -1148,8 +1148,8 @@ test('square brackets are preserved', t => {
   const tx = `citation ["(Berk.) Hilton"], see
 [Papers "blah blah."]`;
   t.is(textile.convert(tx),
-    `<p>citation [&#8220;(Berk.) Hilton&#8221;], see<br />
-[Papers &#8220;blah blah.&#8221;]</p>`, tx);
+    `<p>citation [“(Berk.) Hilton”], see<br />
+[Papers “blah blah.”]</p>`, tx);
   t.end();
 });
 
@@ -1255,7 +1255,7 @@ test('citation ending with question mark', t => {
 test('citation including question mark', t => {
   const tx = "??What's the Matter with Kansas? How Conservatives Won the Heart of America?? is a great book!";
   t.is(textile.convert(tx),
-    '<p><cite>What&#8217;s the Matter with Kansas? How Conservatives Won the Heart of America</cite> is a great book!</p>', tx);
+    '<p><cite>What’s the Matter with Kansas? How Conservatives Won the Heart of America</cite> is a great book!</p>', tx);
   t.end();
 });
 
@@ -1273,7 +1273,7 @@ _and_this_too_ it should keep the emphasis but does not with redcloth.`;
 test('code captures spaces when made explicit with square brackets', t => {
   const tx = "Start a paragraph with [@p. @] (that's p, a period, and a space).";
   t.is(textile.convert(tx),
-    '<p>Start a paragraph with <code>p. </code> (that&#8217;s p, a period, and a space).</p>', tx);
+    '<p>Start a paragraph with <code>p. </code> (that’s p, a period, and a space).</p>', tx);
   t.end();
 });
 

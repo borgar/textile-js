@@ -135,7 +135,7 @@ test('textism:13', t => {
 test('textism:14', t => {
   const tx = "Nabokov's ??Pnin??";
   t.is(textile.convert(tx),
-    '<p>Nabokov&#8217;s <cite>Pnin</cite></p>', tx);
+    '<p>Nabokov’s <cite>Pnin</cite></p>', tx);
   t.end();
 });
 
@@ -407,9 +407,9 @@ Multi-level list:
   t.is(textile.convert(tx),
     `<h2 style="color:green">This is a title</h2>
 <h3>This is a subhead</h3>
-<p style="color:red">This is some text of dubious character. Isn&#8217;t the use of &#8220;quotes&#8221; just lazy writing &#8212; and theft of &#8216;intellectual property&#8217; besides? I think the time has come to see a block quote.</p>
+<p style="color:red">This is some text of dubious character. Isn’t the use of “quotes” just lazy writing — and theft of ‘intellectual property’ besides? I think the time has come to see a block quote.</p>
 <blockquote lang="fr">
-<p lang="fr">This is a block quote. I&#8217;ll admit it&#8217;s not the most exciting block quote ever devised.</p>
+<p lang="fr">This is a block quote. I’ll admit it’s not the most exciting block quote ever devised.</p>
 </blockquote>
 <p>Simple list:</p>
 <ol>

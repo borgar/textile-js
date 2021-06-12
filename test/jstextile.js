@@ -11,7 +11,7 @@ test('HTML blockquote spanning paragraphs', t => {
   '<p>A line break delimited block quote:</p>\n' +
     '<blockquote>\n' +
     '<p>How unbearable at times are people who are happy, people for whom everything works out.</p>\n' +
-    '<p>Anton Pavlovich Chekhov &#8211; 1860-1904</p>\n' +
+    '<p>Anton Pavlovich Chekhov – 1860-1904</p>\n' +
     '</blockquote>');
   t.end();
 });
@@ -65,7 +65,7 @@ test('Span with an ending percentage', t => {
 
 
 test('Arrow glyph', t => {
-  t.is(textile.convert('-> arrow'), '<p>&#8594; arrow</p>');
+  t.is(textile.convert('-> arrow'), '<p>→ arrow</p>');
   t.end();
 });
 
@@ -88,14 +88,14 @@ test('Simple table with tailing space', t => {
 
 test('clean trademarks #1', t => {
   t.is(textile.convert('(TM) and (tm), but not (Tm) or (tM)'),
-    '<p>&#8482; and &#8482;, but not (Tm) or (tM)</p>');
+    '<p>™ and ™, but not (Tm) or (tM)</p>');
   t.end();
 });
 
 
 test('clean trademarks #3', t => {
   t.is(textile.convert('(TM) and [TM], but not (TM] or [TM)'),
-    '<p>&#8482; and &#8482;, but not (TM] or [TM)</p>');
+    '<p>™ and ™, but not (TM] or [TM)</p>');
   t.end();
 });
 
@@ -499,14 +499,14 @@ test('support unicode symbols (#27)', t => {
     'Three quarters (3/4) symbol\n' +
     'Degree (o) symbol\n' +
     'Plus/minus (+/-) symbol'),
-  '<p>Trademark&#8482;<br />\n' +
-  'Registered&#174;<br />\n' +
-  'Copyright &#169; 2008<br />\n' +
-  'One quarter &#188; symbol<br />\n' +
-  'One half &#189; symbol<br />\n' +
-  'Three quarters &#190; symbol<br />\n' +
-  'Degree &#176; symbol<br />\n' +
-  'Plus/minus &#177; symbol</p>');
+  '<p>Trademark™<br />\n' +
+  'Registered®<br />\n' +
+  'Copyright © 2008<br />\n' +
+  'One quarter ¼ symbol<br />\n' +
+  'One half ½ symbol<br />\n' +
+  'Three quarters ¾ symbol<br />\n' +
+  'Degree ° symbol<br />\n' +
+  'Plus/minus ± symbol</p>');
   t.end();
 });
 
@@ -680,7 +680,7 @@ test('link alias work in HTML tags', t => {
 
 test('correct glyph convertion', t => {
   t.is(textile.convert('p. foo -- bar _foo ==foo -- bar== bar_ @foo -- bar@\n\nnotextile. foo -- bar'),
-    '<p>foo &#8212; bar <em>foo foo -- bar bar</em> <code>foo -- bar</code></p>\nfoo -- bar');
+    '<p>foo — bar <em>foo foo -- bar bar</em> <code>foo -- bar</code></p>\nfoo -- bar');
   t.end();
 });
 

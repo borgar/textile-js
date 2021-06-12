@@ -423,7 +423,7 @@ test('links:52', t => {
 test('links:53', t => {
   const tx = '"testing":';
   t.is(textile.convert(tx),
-    '<p>&#8220;testing&#8221;:</p>', tx);
+    '<p>“testing”:</p>', tx);
   t.end();
 });
 
@@ -495,7 +495,7 @@ test('link containing parentheses', t => {
 test('link containing quotes', t => {
   const tx = '"He said it is "very unlikely" this works":http://slashdot.org/';
   t.is(textile.convert(tx),
-    '<p><a href="http://slashdot.org/">He said it is &#8220;very unlikely&#8221; this works</a></p>', tx);
+    '<p><a href="http://slashdot.org/">He said it is “very unlikely” this works</a></p>', tx);
   t.end();
 });
 
@@ -503,7 +503,7 @@ test('link containing quotes', t => {
 test('link containing multiple quotes', t => {
   const tx = '"He said it is "very unlikely" the "economic stimulus" works":http://slashdot.org/';
   t.is(textile.convert(tx),
-    '<p><a href="http://slashdot.org/">He said it is &#8220;very unlikely&#8221; the &#8220;economic stimulus&#8221; works</a></p>', tx);
+    '<p><a href="http://slashdot.org/">He said it is “very unlikely” the “economic stimulus” works</a></p>', tx);
   t.end();
 });
 
@@ -511,7 +511,7 @@ test('link containing multiple quotes', t => {
 test('linked quoted phrase', t => {
   const tx = '""Open the pod bay doors please, HAL."":http://www.youtube.com/watch?v=npN9l2Bd06s';
   t.is(textile.convert(tx),
-    '<p><a href="http://www.youtube.com/watch?v=npN9l2Bd06s">&#8220;Open the pod bay doors please, <span class="caps">HAL</span>.&#8221;</a></p>', tx);
+    '<p><a href="http://www.youtube.com/watch?v=npN9l2Bd06s">“Open the pod bay doors please, <span class="caps">HAL</span>.”</a></p>', tx);
   t.end();
 });
 
@@ -519,7 +519,7 @@ test('linked quoted phrase', t => {
 test('link following quoted phrase', t => {
   const tx = '"quote" text "quote" text "link":http://google.com';
   t.is(textile.convert(tx),
-    '<p>&#8220;quote&#8221; text &#8220;quote&#8221; text <a href="http://google.com">link</a></p>', tx);
+    '<p>“quote” text “quote” text <a href="http://google.com">link</a></p>', tx);
   t.end();
 });
 
@@ -583,7 +583,7 @@ test('links containing parentheses without brackets inside a parenthesis', t => 
 test('quotes and follow link', t => {
   const tx = 'Some "text" followed by a "link":http://redcloth.org.';
   t.is(textile.convert(tx),
-    '<p>Some &#8220;text&#8221; followed by a <a href="http://redcloth.org">link</a>.</p>', tx);
+    '<p>Some “text” followed by a <a href="http://redcloth.org">link</a>.</p>', tx);
   t.end();
 });
 
@@ -603,8 +603,8 @@ test('contained in multi-paragraph quotes', t => {
 
 "It's wonderful."`;
   t.is(textile.convert(tx),
-    `<p>&#8220;I first learned about <a href="http://redcloth.org/">Redcloth</a> several years ago.</p>
-<p>&#8220;It&#8217;s wonderful.&#8221;</p>`, tx);
+    `<p>“I first learned about <a href="http://redcloth.org/">Redcloth</a> several years ago.</p>
+<p>“It’s wonderful.”</p>`, tx);
   t.end();
 });
 
@@ -614,8 +614,8 @@ test('as html in notextile contained in multi-paragraph quotes', t => {
 
 "I like links."`;
   t.is(textile.convert(tx),
-    `<p>&#8220;Here is a <a href="http://redcloth.org/">link</a>.</p>
-<p>&#8220;I like links.&#8221;</p>`, tx);
+    `<p>“Here is a <a href="http://redcloth.org/">link</a>.</p>
+<p>“I like links.”</p>`, tx);
   t.end();
 });
 
@@ -623,7 +623,7 @@ test('as html in notextile contained in multi-paragraph quotes', t => {
 test('contained in para with multiple quotes', t => {
   const tx = '"My wife, Tipper, and I will donate 100% of the proceeds of the award to the "Alliance For Climate Protection":http://www.looktothestars.org/charity/638-alliance-for-climate-protection," said Gore in an email. "I am deeply honored to receive the Nobel Peace Prize."';
   t.is(textile.convert(tx),
-    '<p>&#8220;My wife, Tipper, and I will donate 100% of the proceeds of the award to the <a href="http://www.looktothestars.org/charity/638-alliance-for-climate-protection">Alliance For Climate Protection</a>,&#8221; said Gore in an email. &#8220;I am deeply honored to receive the Nobel Peace Prize.&#8221;</p>', tx);
+    '<p>“My wife, Tipper, and I will donate 100% of the proceeds of the award to the <a href="http://www.looktothestars.org/charity/638-alliance-for-climate-protection">Alliance For Climate Protection</a>,” said Gore in an email. “I am deeply honored to receive the Nobel Peace Prize.”</p>', tx);
   t.end();
 });
 

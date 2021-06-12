@@ -54,10 +54,10 @@ test('instiki:6', t => {
     `<h2>Version History</h2>
 <ul>
 \t<li><a href="http://www.threewordslong.com/render-0-8-9b.patch">Version<br />
-0.0</a> &#8211; Early version using <span class="caps">MD5</span> hashes.</li>
+0.0</a> – Early version using <span class="caps">MD5</span> hashes.</li>
 \t<li><a href="http://www.threewordslong.com/chunk-0-1.patch.gz">Version<br />
-0.1</a> &#8211; First cut of new system. Much cleaner.</li>
-\t<li><a href="http://www.threewordslong.com/chunk-0-2.patch.gz">Version 0.2</a> &#8211; Fixed problem with &#8220;authors&#8221; page and some tests.</li>
+0.1</a> – First cut of new system. Much cleaner.</li>
+\t<li><a href="http://www.threewordslong.com/chunk-0-2.patch.gz">Version 0.2</a> – Fixed problem with “authors” page and some tests.</li>
 </ul>`, tx);
   t.end();
 });
@@ -66,7 +66,7 @@ test('instiki:6', t => {
 test('instiki:7', t => {
   const tx = '--richSeymour --whyTheLuckyStiff';
   t.is(textile.convert(tx),
-    '<p>&#8212;richSeymour &#8212;whyTheLuckyStiff</p>', tx);
+    '<p>—richSeymour —whyTheLuckyStiff</p>', tx);
   t.end();
 });
 

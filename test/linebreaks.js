@@ -42,7 +42,7 @@ When the elephant comes to take a p. you...`;
   t.is(textile.convert(tx),
     `<blockquote>
 <p>I saw a ship. It ate my elephant.</p>
-<p>When the elephant comes to take a p. you&#8230;</p>
+<p>When the elephant comes to take a p. you…</p>
 </blockquote>`, tx);
   t.end();
 });

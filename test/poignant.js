@@ -51,18 +51,18 @@ Now that you've met @false@, I'm sure you can see what's on next.`;
     print "Plastic cup is on the up 'n' up!"
   end
 </pre>
-<p>If <code>plastic_cup</code> contains either <code>nil</code> or <code>false</code>, you won&#8217;t see anything print to the screen.  They&#8217;re not on the <code>if</code> guest list.  So <code>if</code> isn&#8217;t going to run any of the code it&#8217;s protecting.</p>
+<p>If <code>plastic_cup</code> contains either <code>nil</code> or <code>false</code>, you won’t see anything print to the screen.  They’re not on the <code>if</code> guest list.  So <code>if</code> isn’t going to run any of the code it’s protecting.</p>
 <p>But <code>nil</code> and <code>false</code> need not walk away in shame.  They may be of questionable character, but <code>unless</code> runs a smaller establishment that caters to the bedraggled. The <code>unless</code> keyword has a policy of only allowing those with a negative charge in. Who are: <code>nil</code> and <code>false</code>.</p>
 <pre>
   unless plastic_cup
     print "Plastic cup is on the down low."
   end
 </pre>
-<p>You can also use <code>if</code> and <code>unless</code> at the end of a single line of code, if that&#8217;s all that is being protected.</p>
+<p>You can also use <code>if</code> and <code>unless</code> at the end of a single line of code, if that’s all that is being protected.</p>
 <pre>
   print "Yeah, plastic cup is up again!" if plastic_cup
   print "Hardly. It's down." unless plastic_cup
 </pre>
-<p>Now that you&#8217;ve met <code>false</code>, I&#8217;m sure you can see what&#8217;s on next.</p>`, tx);
+<p>Now that you’ve met <code>false</code>, I’m sure you can see what’s on next.</p>`, tx);
   t.end();
 });

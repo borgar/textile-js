@@ -26,7 +26,7 @@ a line break.</p>`, tx);
 test('xhtml tags', t => {
   const tx = "Here's some <b>bold</b> text.";
   t.is(textile.convert(tx),
-    '<p>Here&#8217;s some <b>bold</b> text.</p>', tx);
+    '<p>Here’s some <b>bold</b> text.</p>', tx);
   t.end();
 });
 
@@ -42,7 +42,7 @@ test('no paragraph tags', t => {
 test('smart quotes', t => {
   const tx = '"Proceed!" said he to the host.';
   t.is(textile.convert(tx),
-    '<p>&#8220;Proceed!&#8221; said he to the host.</p>', tx);
+    '<p>“Proceed!” said he to the host.</p>', tx);
   t.end();
 });
 
@@ -50,7 +50,7 @@ test('smart quotes', t => {
 test('smart quotes 2', t => {
   const tx = "'Proceed!' said he to the host.";
   t.is(textile.convert(tx),
-    '<p>&#8216;Proceed!&#8217; said he to the host.</p>', tx);
+    '<p>‘Proceed!’ said he to the host.</p>', tx);
   t.end();
 });
 
@@ -58,7 +58,7 @@ test('smart quotes 2', t => {
 test('nested quotation marks', t => {
   const tx = "\"'I swear, captain,' replied I.\"";
   t.is(textile.convert(tx),
-    '<p>&#8220;&#8216;I swear, captain,&#8217; replied I.&#8221;</p>', tx);
+    '<p>“‘I swear, captain,’ replied I.”</p>', tx);
   t.end();
 });
 
@@ -66,7 +66,7 @@ test('nested quotation marks', t => {
 test('nested quotation marks 2', t => {
   const tx = "'\"I swear, captain,\" replied I.'";
   t.is(textile.convert(tx),
-    '<p>&#8216;&#8220;I swear, captain,&#8221; replied I.&#8217;</p>', tx);
+    '<p>‘“I swear, captain,” replied I.’</p>', tx);
   t.end();
 });
 
@@ -74,7 +74,7 @@ test('nested quotation marks 2', t => {
 test('apostrophe glyphs', t => {
   const tx = "Greengrocers' apostrophe's.";
   t.is(textile.convert(tx),
-    '<p>Greengrocers&#8217; apostrophe&#8217;s.</p>', tx);
+    '<p>Greengrocers’ apostrophe’s.</p>', tx);
   t.end();
 });
 
@@ -82,7 +82,7 @@ test('apostrophe glyphs', t => {
 test('em-dash glyphs', t => {
   const tx = 'You know the Italian proverb -- Chi ha compagno ha padrone.';
   t.is(textile.convert(tx),
-    '<p>You know the Italian proverb &#8212; Chi ha compagno ha padrone.</p>', tx);
+    '<p>You know the Italian proverb — Chi ha compagno ha padrone.</p>', tx);
   t.end();
 });
 
@@ -90,7 +90,7 @@ test('em-dash glyphs', t => {
 test('em-dash glyphs 2', t => {
   const tx = 'You know the Italian proverb--Chi ha compagno ha padrone.';
   t.is(textile.convert(tx),
-    '<p>You know the Italian proverb&#8212;Chi ha compagno ha padrone.</p>', tx);
+    '<p>You know the Italian proverb—Chi ha compagno ha padrone.</p>', tx);
   t.end();
 });
 
@@ -98,7 +98,7 @@ test('em-dash glyphs 2', t => {
 test('en-dash glyphs', t => {
   const tx = 'You know the Italian proverb - Chi ha compagno ha padrone.';
   t.is(textile.convert(tx),
-    '<p>You know the Italian proverb &#8211; Chi ha compagno ha padrone.</p>', tx);
+    '<p>You know the Italian proverb – Chi ha compagno ha padrone.</p>', tx);
   t.end();
 });
 
@@ -106,7 +106,7 @@ test('en-dash glyphs', t => {
 test('ellipsis character', t => {
   const tx = 'Meanwhile...';
   t.is(textile.convert(tx),
-    '<p>Meanwhile&#8230;</p>', tx);
+    '<p>Meanwhile…</p>', tx);
   t.end();
 });
 
@@ -114,7 +114,7 @@ test('ellipsis character', t => {
 test('dimension character', t => {
   const tx = '1 x 2 x 3 = 6';
   t.is(textile.convert(tx),
-    '<p>1 &#215; 2 &#215; 3 = 6</p>', tx);
+    '<p>1 × 2 × 3 = 6</p>', tx);
   t.end();
 });
 
@@ -122,7 +122,7 @@ test('dimension character', t => {
 test('dimension character 2', t => {
   const tx = '1x2x3 = 6';
   t.is(textile.convert(tx),
-    '<p>1&#215;2&#215;3 = 6</p>', tx);
+    '<p>1×2×3 = 6</p>', tx);
   t.end();
 });
 
@@ -130,7 +130,7 @@ test('dimension character 2', t => {
 test('trademark register copyright', t => {
   const tx = 'Registered(r) Trademark(tm) Copyright (c).';
   t.is(textile.convert(tx),
-    '<p>Registered&#174; Trademark&#8482; Copyright &#169;.</p>', tx);
+    '<p>Registered® Trademark™ Copyright ©.</p>', tx);
   t.end();
 });
 
@@ -261,7 +261,7 @@ test('link alias', t => {
 
 [tstate]http://thresholdstate.com/`;
   t.is(textile.convert(tx),
-    `<p>Here&#8217;s <a href="http://thresholdstate.com/">a link</a>, and<br />
+    `<p>Here’s <a href="http://thresholdstate.com/">a link</a>, and<br />
 <a href="http://thresholdstate.com/">another link</a> to the same site.</p>`, tx);
   t.end();
 });
@@ -590,7 +590,7 @@ test('paragraphs with inline xhtml', t => {
 test('paragraphs with inline xhtml 2', t => {
   const tx = "<span class=\"myspan\">I'll make my own way.</span>";
   t.is(textile.convert(tx),
-    '<p><span class="myspan">I&#8217;ll make my own way.</span></p>', tx);
+    '<p><span class="myspan">I’ll make my own way.</span></p>', tx);
   t.end();
 });
 
@@ -944,7 +944,7 @@ test('row span', t => {
 test('whitespace required', t => {
   const tx = "this*won't*work";
   t.is(textile.convert(tx),
-    '<p>this*won&#8217;t*work</p>', tx);
+    '<p>this*won’t*work</p>', tx);
   t.end();
 });
 

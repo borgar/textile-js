@@ -1,50 +1,169 @@
 /* textile glyph parser */
 import Re from '../Re.js';
-const re = new Re();
 
-const reApostrophe = /(\w)'(\w)/g;
-const reArrow = /([^-]|^)->/;
-const reClosingDQuote = re.compile(/([^\s[(])"(?=$|\s|[:punct:])/g);
-const reClosingSQuote = re.compile(/([^\s[(])'(?=$|\s|[:punct:])/g);
-const reCopyright = /(\b ?|\s|^)(?:\(C\)|\[C\])/gi;
-const reDimsign = /([\d.,]+['"]? ?)x( ?)(?=[\d.,]['"]?)/g;
-const reDoublePrime = re.compile(/(\d*[.,]?\d+)"(?=\s|$|[:punct:])/g);
-const reEllipsis = /([^.]?)\.{3}/g;
-const reEmdash = /(^|[\s\w])--([\s\w]|$)/g;
-const reEndash = / - /g;
-const reOpenDQuote = /"/g;
-const reOpenSQuote = /'/g;
-const reRegistered = /(\b ?|\s|^)(?:\(R\)|\[R\])/gi;
-const reSinglePrime = re.compile(/(\d*[.,]?\d+)'(?=\s|$|[:punct:])/g);
-const reTrademark = /(\b ?|\s|^)(?:\((?:TM|tm)\)|\[(?:TM|tm)\])/g;
+const QUOTE_SINGLE_OPEN  = '‘';
+const QUOTE_SINGLE_CLOSE = '’';
+const QUOTE_DOUBLE_OPEN  = '“';
+const QUOTE_DOUBLE_CLOSE = '”';
+const PRIME              = '′';
+const PRIME_DOUBLE       = '″';
+const ELLIPSIS           = '…';
+const ARROW              = '→';
+const EMDASH             = '—';
+const ENDASH             = '–';
+const DIMENSION          = '×';
+const TRADEMARK          = '™';
+const REGISTERED         = '®';
+const COPYRIGHT          = '©';
+const HALF               = '½';
+const QUARTER            = '¼';
+const THREEQUARTERS      = '¾';
+const DEGREES            = '°';
+const PLUSMINUS          = '±';
 
-export function parseGlyph (src) {
-  if (typeof src !== 'string') {
-    return src;
+const toEntity = char => {
+  return char ? `&#${char.charCodeAt(0)};` : '';
+};
+
+const handleCopy = (m, index, s, ent) => {
+  return (/(\b ?|\s|^)$/.test(s.slice(0, index))) ? ent : m;
+};
+
+const handleDimension = (m, index, s, ent) => {
+  if (
+    /\d[.,'")\]]* ?$/.test(s.slice(0, index)) &&
+    / ?[.,([]*\d/.test(s.slice(index + 1))
+  ) {
+    return ent;
   }
-  // NB: order is important here ...
-  return src
-    .replace(reArrow, '$1&#8594;')
-    .replace(reDimsign, '$1&#215;$2')
-    .replace(reEllipsis, '$1&#8230;')
-    .replace(reEmdash, '$1&#8212;$2')
-    .replace(reEndash, ' &#8211; ')
-    .replace(reTrademark, '$1&#8482;')
-    .replace(reRegistered, '$1&#174;')
-    .replace(reCopyright, '$1&#169;')
-    // double quotes
-    .replace(reDoublePrime, '$1&#8243;')
-    .replace(reClosingDQuote, '$1&#8221;')
-    .replace(reOpenDQuote, '&#8220;')
-    // single quotes
-    .replace(reSinglePrime, '$1&#8242;')
-    .replace(reApostrophe, '$1&#8217;$2')
-    .replace(reClosingSQuote, '$1&#8217;')
-    .replace(reOpenSQuote, '&#8216;')
-    // fractions and degrees
-    .replace(/[([]1\/4[\])]/, '&#188;')
-    .replace(/[([]1\/2[\])]/, '&#189;')
-    .replace(/[([]3\/4[\])]/, '&#190;')
-    .replace(/[([]o[\])]/, '&#176;')
-    .replace(/[([]\+\/-[\])]/, '&#177;');
+  return m;
+};
+
+const handleSingleQuote = (m, index, s, ent) => {
+  const preFix = s.slice(0, index);
+  const postFix = s.slice(index + 1);
+  // prime
+  if (
+    /(^|[^'])\d*[.,)\]]?\d[)\]]?$/.test(preFix) &&
+    /^(\s|\d|x|X|\p{P}|$)/u.test(postFix)
+  ) {
+    return ent ? toEntity(PRIME) : PRIME;
+  }
+  // single
+  if (
+    (!preFix && /^(\s|s)\b/.test(postFix)) ||
+    // "</tag>' " || "</tag>'s"
+    (/(?:\p{L}|\p{M}|\p{N}|\p{Pc}|\))$/u.test(preFix) && /^(?:\p{L}|\p{M}|\p{N}|\p{Pc})/u.test(postFix)) ||
+    // Back in '88/the '90s but not in his '90s', '1', '1.' '10m' or '5.png'
+    (/\s$/.test(preFix) && /^(\d+\w?)\b(?!\.?\w*?')/.test(postFix))
+  ) {
+    return ent ? toEntity(QUOTE_SINGLE_CLOSE) : QUOTE_SINGLE_CLOSE;
+  }
+  // single open following open bracket
+  if (/[([{]$/.test(preFix) && /^\S/.test(postFix)) {
+    return ent ? toEntity(QUOTE_SINGLE_OPEN) : QUOTE_SINGLE_OPEN;
+  }
+  // single closing
+  if (/\S$/.test(preFix) && /^(\s|\p{P}|$)/u.test(postFix)) {
+    return ent ? toEntity(QUOTE_SINGLE_CLOSE) : QUOTE_SINGLE_CLOSE;
+  }
+  // default single opening
+  return ent ? toEntity(QUOTE_SINGLE_OPEN) : QUOTE_SINGLE_OPEN;
+};
+
+const handleDoubleQuote = (m, index, s, ent) => {
+  const after = s[index + 1] || '';
+  const preFix = s.slice(0, index);
+  // prime
+  if (/\d[)\]]?$/.test(preFix) && /^(\s|x|X|\p{P}|$)/u.test(after)) {
+    return ent ? toEntity(PRIME_DOUBLE) : PRIME_DOUBLE;
+  }
+  // double open following an open bracket
+  if (/[([{]$/.test(preFix) && /^\S/.test(after)) {
+    return ent ? toEntity(QUOTE_DOUBLE_OPEN) : QUOTE_DOUBLE_OPEN;
+  }
+  // double closing
+  if (/\S$/.test(preFix) && /^(\s|\p{P}|$)/u.test(after)) {
+    return ent ? toEntity(QUOTE_DOUBLE_CLOSE) : QUOTE_DOUBLE_CLOSE;
+  }
+  // default double opening
+  return ent ? toEntity(QUOTE_DOUBLE_OPEN) : QUOTE_DOUBLE_OPEN;
+};
+
+const handleDash = (m, index, s, ent) => {
+  return (/^[ \t]/.test(s[index - 1]) && /^\s/.test(s[index + 1])) ? ent : m;
+};
+
+const handleDoubleDash = (m, index, s, ent) => {
+  return (s[index - 1] !== '-' && s[index + 2] !== '-') ? ent : m;
+};
+
+const handleEllipsis = (m, index, s, ent) => {
+  return (s[index - 1] !== '.') ? ent : m;
+};
+
+const handleArrow = (m, index, s, ent) => {
+  return (s[index - 1] !== '-') ? ent : m;
+};
+
+const handlers = {
+  // Dimension sign
+  'x': [ DIMENSION, handleDimension ],
+  'X': [ DIMENSION, handleDimension ],
+  // Apostrophe | Single open | Single closing | Single prime
+  "'": [ null, handleSingleQuote ],
+  // Double open| Double closing | Double prime
+  '"': [ null, handleDoubleQuote ],
+  // Ellipsis
+  '...': [ ELLIPSIS, handleEllipsis ],
+  // Arrow
+  '->': [ ARROW, handleArrow ],
+  // Em-dash
+  '--': [ EMDASH, handleDoubleDash ],
+  // En-dash
+  '-': [ ENDASH, handleDash ],
+  // Trademark
+  '(tm)': [ TRADEMARK, handleCopy ],
+  '(TM)': [ TRADEMARK, handleCopy ],
+  '[tm]': [ TRADEMARK, handleCopy ],
+  '[TM]': [ TRADEMARK, handleCopy ],
+  // Registered
+  '(r)': [ REGISTERED, handleCopy ],
+  '(R)': [ REGISTERED, handleCopy ],
+  '[r]': [ REGISTERED, handleCopy ],
+  '[R]': [ REGISTERED, handleCopy ],
+  // Copyright
+  '(c)': [ COPYRIGHT, handleCopy ],
+  '(C)': [ COPYRIGHT, handleCopy ],
+  '[c]': [ COPYRIGHT, handleCopy ],
+  '[C]': [ COPYRIGHT, handleCopy ],
+  // 1/4
+  '(1/4)': [ QUARTER, null ],
+  '[1/4]': [ QUARTER, null ],
+  // 1/2
+  '(1/2)': [ HALF, null ],
+  '[1/2]': [ HALF, null ],
+  // 3/4
+  '(3/4)': [ THREEQUARTERS, null ],
+  '[3/4]': [ THREEQUARTERS, null ],
+  // Degrees
+  '(o)': [ DEGREES, null ],
+  '[o]': [ DEGREES, null ],
+  // Plus minus
+  '(+/-)': [ PLUSMINUS, null ],
+  '[+/-]': [ PLUSMINUS, null ]
+};
+
+const _tokens = Object.keys(handlers).map(Re.escape);
+const re_matchGlyph = new Re().compile('(?:' + _tokens.join('|') + ')', 'g');
+
+export function parseGlyph (src, options) {
+  return src.replace(re_matchGlyph, (m, index, s) => {
+    const [ glyph, handler ] = handlers[m];
+    const ent = options.glyph_entities ? toEntity(glyph) : glyph;
+    if (handler) {
+      return handler(m, index, s, ent || options.glyph_entities);
+    }
+    return ent;
+  });
 }

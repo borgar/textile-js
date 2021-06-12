@@ -397,9 +397,9 @@ export function parseBlock (src, options) {
         node.setAttribute('href', safeHref(href, options));
       }
     }
-    // convert certain glyphs in text nodes
+    // convert glyphs in text nodes
     if (node instanceof TextNode) {
-      node.data = parseGlyph(node.data);
+      node.data = parseGlyph(node.data, options);
     }
   });
 

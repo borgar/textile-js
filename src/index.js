@@ -108,7 +108,9 @@ textile.defaults = {
     'ul'
   ],
   // id prefix
-  id_prefix: false
+  id_prefix: false,
+  // glyph entities
+  glyph_entities: false
 };
 
 textile.setOptions = opt => {
