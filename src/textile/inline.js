@@ -64,7 +64,8 @@ export function parseInline (src, options) {
     if (haveCR) {
       src.advance(1); // skip cartridge returns
     }
-    if (src.startsWith('\n')) {
+    // breaks should be added if next line does not start with a whitespace
+    if (src.startsWith('\n') && !/^\n[ \f\r\t\v\xA0\u2028\u2029]/.test(src)) {
       if (options.breaks) {
         root.appendChild(new Element('br').setPos(src.offset - haveCR, haveCR ? 2 : 1));
       }

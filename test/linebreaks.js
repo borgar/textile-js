@@ -24,7 +24,7 @@ This is line two`;
 });
 
 
-test('blocks with tabl on the blank line in between', t => {
+test('blocks with tab on the blank line in between', t => {
   const tx = `This is line one\r
 \t\r
 This is line two`;
@@ -101,6 +101,32 @@ And none replied.`;
   t.is(textile.convert(tx),
     `<p>I spoke.<br />
 And none replied.</p>`, tx);
+  t.end();
+});
+
+test('line breaks do not appear for indented lines', t => {
+  const tx = `* Item number 1 in\r
+two lines\r
+* Item number 2 in\r
+ two lines\r
+\r
+para one\r
+line two\r
+\r
+para two\r
+ line two\r
+`;
+  t.is(textile.convert(tx),
+    `<ul>
+\t<li>Item number 1 in<br />
+two lines</li>
+\t<li>Item number 2 in
+ two lines</li>
+</ul>
+<p>para one<br />
+line two</p>
+<p>para two
+ line two</p>`, tx);
   t.end();
 });
 

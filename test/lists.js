@@ -12,7 +12,23 @@ test('code in bullet list', t => {
 });
 
 
-test('hard break in list', t => {
+test('hard break in list (1)', t => {
+  const tx = `* first line
+* second
+line
+* third line`;
+  t.is(textile.convert(tx),
+    `<ul>
+\t<li>first line</li>
+\t<li>second<br />
+line</li>
+\t<li>third line</li>
+</ul>`, tx);
+  t.end();
+});
+
+
+test('hard break in list (2)', t => {
   const tx = `* first line
 * second
   line
@@ -20,7 +36,7 @@ test('hard break in list', t => {
   t.is(textile.convert(tx),
     `<ul>
 \t<li>first line</li>
-\t<li>second<br />
+\t<li>second
   line</li>
 \t<li>third line</li>
 </ul>`, tx);
