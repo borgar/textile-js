@@ -1,31 +1,30 @@
 /* textile list parser */
-const ribbon = require('../ribbon');
-const re = require('../re');
-const merge = require('../merge');
+import Re from '../Re.js';
+import { Element, TextNode } from '../VDOM.js';
+import { parseAttr } from './attr.js';
+import { parseInline } from './inline.js';
+import { txlisthd, txlisthd2 } from './re_ext.js';
 
-const { parseAttr } = require('./attr');
-const { parsePhrase } = require('./phrase');
-
-const { txlisthd, txlisthd2 } = require('./re_ext');
-re.pattern.txlisthd = txlisthd;
-re.pattern.txlisthd2 = txlisthd2;
+const re = new Re({ txlisthd, txlisthd2 });
 const reList = re.compile(/^((?:[:txlisthd:][^\0]*?(?:\r?\n|$))+)(\s*\n|$)/, 's');
-const reItem = re.compile(/^([#*]+)([^\0]+?)(\n(?=[:txlisthd2:])|$)/, 's');
+const reItem = re.compile(/^([#*]+)([^\0]+?)(\n(?=[:txlisthd2:])|$) */, 's');
 
-function listPad (n) {
-  let s = '\n';
-  while (n--) {
-    s += '\t';
-  }
-  return s;
-}
+const listPad = n => {
+  return '\n' + '\t'.repeat(n);
+};
 
-function testList (src) {
+export function testList (src) {
   return reList.exec(src);
 }
 
-function parseList (src, options) {
-  src = ribbon(src.replace(/(^|\r?\n)[\t ]+/, '$1'));
+export function parseList (src, options) {
+  const maybeMoveAttr = node => {
+    if (node.attrCount === 1) {
+      const firstChild = node.ul.children.find(d => d.tagName === 'li');
+      Object.assign(node.ul.attr, firstChild.attr);
+      firstChild.attr = {};
+    }
+  };
 
   const stack = [];
   const currIndex = {};
@@ -37,88 +36,96 @@ function parseList (src, options) {
   let s;
 
   while ((m = reItem.exec(src))) {
-    const item = [ 'li' ];
+    const item = new Element('li');
+    item.setPos(src.offset, m[0].length);
     const destLevel = m[1].length;
-    const type = (m[1].substr(-1) === '#') ? 'ol' : 'ul';
     let newLi = null;
-    let lst;
-    let par;
+    let parent;
     let pba;
-    let r;
+    const inner = src.sub(destLevel, m[2].length);
 
     // list starts and continuations
-    if ((n = /^(_|\d+)/.exec(m[2]))) {
+    if ((n = /^(_|\d+)/.exec(inner))) {
       itemIndex = isFinite(n[1])
         ? parseInt(n[1], 10)
         : lastIndex[destLevel] || currIndex[destLevel] || 1;
-      m[2] = m[2].slice(n[1].length);
+      inner.advance(n[1].length);
     }
 
-    if ((pba = parseAttr(m[2], 'li'))) {
-      m[2] = m[2].slice(pba[0]);
-      pba = pba[1];
+    const [ step, attr ] = parseAttr(inner, 'li');
+    if (step) {
+      inner.advance(step);
+      pba = attr;
     }
 
     // list control
-    if (/^\.\s*$/.test(m[2])) {
-      listAttr = pba || {};
+    if (/^\.\s*$/.test(inner)) {
+      listAttr = { ...pba };
       src.advance(m[0]);
       continue;
     }
 
     // create nesting until we have correct level
+    const startPos = src.offset;
+    const len = m[0].length;
     while (stack.length < destLevel) {
-      // list always has an attribute object, this simplifies first-pba resolution
-      lst = [ type, {}, listPad(stack.length + 1), (newLi = [ 'li' ]) ];
-      par = stack[stack.length - 1];
-      if (par) {
-        par.li.push(listPad(stack.length));
-        par.li.push(lst);
+      const listType = (m[1].substr(-1) === '#') ? 'ol' : 'ul';
+      newLi = new Element('li').setPos(startPos, len);
+      const ul = new Element(listType).setPos(startPos, len);
+      item.setPos(startPos, len);
+      ul.appendChild(new TextNode(listPad(stack.length + 1)));
+      ul.appendChild(newLi);
+      parent = stack[stack.length - 1];
+      if (parent) {
+        parent.li.appendChild([
+          new TextNode(listPad(stack.length)),
+          ul
+        ]);
       }
       stack.push({
-        ul: lst,
+        ul: ul,
         li: newLi,
         // count attributes's found per list
-        att: 0
+        attrCount: 0
       });
       currIndex[stack.length] = 1;
     }
 
     // remove nesting until we have correct level
     while (stack.length > destLevel) {
-      r = stack.pop();
-      r.ul.push(listPad(stack.length));
-      // lists have a predictable structure - move pba from listitem to list
-      if (r.att === 1 && !r.ul[3][1].substr) {
-        merge(r.ul[1], r.ul[3].splice(1, 1)[0]);
-      }
+      const ret = stack.pop();
+      ret.ul.appendChild(new TextNode(listPad(stack.length)));
+      maybeMoveAttr(ret);
     }
 
     // parent list
-    par = stack[stack.length - 1];
+    parent = stack[stack.length - 1];
 
     if (itemIndex) {
-      par.ul[1].start = itemIndex;
+      parent.ul.setAttribute('start', itemIndex);
       currIndex[destLevel] = itemIndex;
       // falsy prevents this from fireing until it is set again
       itemIndex = 0;
     }
     if (listAttr) {
       // "more than 1" prevent attribute transfers on list close
-      par.att = 9;
-      merge(par.ul[1], listAttr);
+      parent.attrCount = 9;
+      parent.ul.setAttr(listAttr);
       listAttr = null;
     }
 
     if (!newLi) {
-      par.ul.push(listPad(stack.length), item);
-      par.li = item;
+      parent.ul.appendChild([
+        new TextNode(listPad(stack.length)),
+        item
+      ]);
+      parent.li = item;
     }
     if (pba) {
-      par.li.push(pba);
-      par.att++;
+      parent.li.setAttr(pba);
+      parent.attrCount++;
     }
-    Array.prototype.push.apply(par.li, parsePhrase(m[2].trim(), options));
+    parent.li.appendChild(parseInline(inner.trim(), options));
 
     src.advance(m[0]);
     currIndex[destLevel] = (currIndex[destLevel] || 0) + 1;
@@ -129,17 +136,9 @@ function parseList (src, options) {
 
   while (stack.length) {
     s = stack.pop();
-    s.ul.push(listPad(stack.length));
-    // lists have a predictable structure - move pba from listitem to list
-    if (s.att === 1 && !s.ul[3][1].substr) {
-      merge(s.ul[1], s.ul[3].splice(1, 1)[0]);
-    }
+    s.ul.appendChild(new TextNode(listPad(stack.length)));
+    maybeMoveAttr(s);
   }
 
   return s.ul;
 }
-
-module.exports = {
-  testList: testList,
-  parseList: parseList
-};

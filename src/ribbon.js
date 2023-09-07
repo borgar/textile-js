@@ -1,62 +1,127 @@
-module.exports = function ribbon (feed) {
-  const org = String(feed);
-  let slot;
-  let pos = 0;
-  const self = {
+export default class Ribbon {
+  constructor (feed, skew = 0) {
+    this._org = String(feed);
+    this._feed = this._org;
+    this.slot = [ 0, skew ];
+    this.index = 0;
+    this.skew = skew;
+  }
 
-    index: () => {
-      return pos;
-    },
+  get offset () {
+    return this.index + this.skew;
+  }
 
-    save: () => {
-      slot = pos;
-      return self;
-    },
+  get length () {
+    return this._feed.length;
+  }
 
-    load: () => {
-      pos = slot;
-      feed = org.slice(pos);
-      return self;
-    },
+  save () {
+    this.slot = [ this.index, this.skew ];
+  }
 
-    advance: n => {
-      pos += (typeof n === 'string') ? n.length : n;
-      feed = org.slice(pos);
-      return feed;
-    },
+  load () {
+    this.index = this.slot[0];
+    this.skew = this.slot[1];
+    this._feed = this._org.slice(this.index);
+  }
 
-    skipWS: () => {
-      const ws = /^\s+/.exec(feed);
-      if (ws) {
-        pos += ws[0].length;
-        feed = org.slice(pos);
-        return ws[0];
-      }
-      return '';
-    },
+  advance (n) {
+    this.index += (typeof n === 'string') ? n.length : n;
+    this._feed = this._org.slice(this.index);
+    return this;
+  }
 
-    lookbehind: nchars => {
-      nchars = nchars == null ? 1 : nchars;
-      return org.slice(pos - nchars, pos);
-    },
+  charAt (n) {
+    return this._feed.charAt(n);
+  }
 
-    startsWith: s => {
-      return feed.substring(0, s.length) === s;
-    },
+  equals (str) {
+    return this._feed === str;
+  }
 
-    slice: (a, b) => {
-      return b != null ? feed.slice(a, b) : feed.slice(a);
-    },
-
-    valueOf: () => {
-      return feed;
-    },
-
-    toString: () => {
-      return feed;
+  skipRe (re) {
+    const m = re.exec(this._feed);
+    if (m) {
+      this.advance(m[0]);
+      return m[0];
     }
+    return '';
+  }
 
-  };
+  skipWS () {
+    return this.skipRe(/^\s+/);
+  }
 
-  return self;
-};
+  splitBy (re, cb, withDelimitier = true) {
+    let i = 0;
+    do {
+      const m = re.exec(this._feed);
+      if (m) {
+        const len = withDelimitier ? m.index + m[0].length : m.index;
+        cb(this.sub(0, len), i, m[0].length);
+        this.advance(m.index + m[0].length);
+      }
+      else {
+        cb(this.sub(0), i, 0);
+        this.advance(this.length);
+        break;
+      }
+      i++;
+    }
+    while (this.length);
+    return this;
+  }
+
+  trimStart () {
+    const start = /^\s*/.exec(this._feed)[0].length;
+    return this.sub(start);
+  }
+
+  trimEnd (_re = /\s*$/) {
+    const m = _re.exec(this._feed);
+    const end = m ? m[0].length : 0;
+    const slice = new Ribbon(this._feed.slice(0, this._feed.length - end));
+    slice.skew = this.index + this.skew;
+    return slice;
+  }
+
+  trimEndNewlines () {
+    return this.trimEnd(/\r?\n(?:\s*\n)*$/);
+  }
+
+  trim () {
+    const start = /^\s*/.exec(this._feed)[0].length;
+    const end = /\s*$/.exec(this._feed)[0].length;
+    return this.sub(start, this._feed.length - end - start);
+  }
+
+  lookbehind (nchars) {
+    nchars = nchars == null ? 1 : nchars;
+    return this._org.slice(this.index - nchars, this.index);
+  }
+
+  startsWith (s) {
+    return this._feed.slice(0, s.length) === s;
+  }
+
+  clone () {
+    return this.sub(0);
+  }
+
+  sub (start = 0, len = null) {
+    if (len == null) {
+      len = this._feed.length - start;
+    }
+    const slice = new Ribbon(this._feed.slice(start, Math.max(0, start + len)));
+    slice.skew = this.index + this.skew + start;
+    return slice;
+  }
+
+  valueOf () {
+    return this._feed;
+  }
+
+  toString () {
+    return this._feed;
+  }
+}

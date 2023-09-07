@@ -1,7 +1,7 @@
-const test = require('tape');
-const textile = require('../src');
+import test from 'tape';
+import textile from '../src/index.js';
 
-test('HTML blockquote spanning paragraphs', function (t) {
+test('HTML blockquote spanning paragraphs', t => {
   t.is(textile.convert(
     'A line break delimited block quote:\n\n' +
       '<blockquote>\n' +
@@ -11,13 +11,13 @@ test('HTML blockquote spanning paragraphs', function (t) {
   '<p>A line break delimited block quote:</p>\n' +
     '<blockquote>\n' +
     '<p>How unbearable at times are people who are happy, people for whom everything works out.</p>\n' +
-    '<p>Anton Pavlovich Chekhov &#8211; 1860-1904</p>\n' +
+    '<p>Anton Pavlovich Chekhov – 1860-1904</p>\n' +
     '</blockquote>');
   t.end();
 });
 
 
-test('User has mistaken list format for markdowns', function (t) {
+test('User has mistaken list format for markdowns', t => {
   t.is(textile.convert(
     'Here a tricky list\n\n' +
       '* item1\n' +
@@ -37,7 +37,7 @@ test('User has mistaken list format for markdowns', function (t) {
 });
 
 
-test('HTML list', function (t) {
+test('HTML list', t => {
   t.is(textile.convert(
     'Your inventory:\n\n' +
       '<ul>\n' +
@@ -57,20 +57,20 @@ test('HTML list', function (t) {
 });
 
 
-test('Span with an ending percentage', function (t) {
+test('Span with an ending percentage', t => {
   t.is(textile.convert('span %percent 10%% of stuff'),
     '<p>span <span>percent 10%</span> of stuff</p>');
   t.end();
 });
 
 
-test('Arrow glyph', function (t) {
-  t.is(textile.convert('-> arrow'), '<p>&#8594; arrow</p>');
+test('Arrow glyph', t => {
+  t.is(textile.convert('-> arrow'), '<p>→ arrow</p>');
   t.end();
 });
 
 
-test('Simple table with tailing space', function (t) {
+test('Simple table with tailing space', t => {
   t.is(textile.convert('|a|b|\n|a|b| '),
     '<table>\n' +
     '\t<tr>\n' +
@@ -86,24 +86,21 @@ test('Simple table with tailing space', function (t) {
 });
 
 
-
-test('clean trademarks #1', function (t) {
+test('clean trademarks #1', t => {
   t.is(textile.convert('(TM) and (tm), but not (Tm) or (tM)'),
-    '<p>&#8482; and &#8482;, but not (Tm) or (tM)</p>');
+    '<p>™ and ™, but not (Tm) or (tM)</p>');
   t.end();
 });
 
 
-
-test('clean trademarks #3', function (t) {
+test('clean trademarks #3', t => {
   t.is(textile.convert('(TM) and [TM], but not (TM] or [TM)'),
-    '<p>&#8482; and &#8482;, but not (TM] or [TM)</p>');
+    '<p>™ and ™, but not (TM] or [TM)</p>');
   t.end();
 });
 
 
-
-test('clean trademarks #3', function (t) {
+test('clean trademarks #3', t => {
   // escaping works in tables
   t.is(textile.convert('| cat > sed | awk ==|== less |\n| 1234 | 2345 |'),
     '<table>\n' +
@@ -120,7 +117,6 @@ test('clean trademarks #3', function (t) {
 });
 
 
-
 // Don't know about this. This doesn't work in RC or some other implementations.
 // I do expect things to work as test shows. It's disabled for now...
 /*
@@ -133,7 +129,7 @@ test( '__test_', function ( t ) {
 
 // Both RC and PHP do crazy things when faced with something like this.
 // While it IS bizarre input, we should still try to stay in control.
-test('Strange list', function (t) {
+test('Strange list', t => {
   t.is(textile.convert(
     '* a\n' +
       '*** b\n' +
@@ -156,33 +152,31 @@ test('Strange list', function (t) {
 });
 
 
-
 // RedCloth deviates from PHP in that it only allows [] fences.
 // This is good as the design gets less messy. But it causes problems as fencing links
 // then fails with PHP-style array links.
 //
 // I guess this is why the original used two fencing styles.
-test('Fenced PHP-style array link (1)', function (t) {
+test('Fenced PHP-style array link (1)', t => {
   t.is(textile.convert('["PHP array link":http://example.com/?foo[]=wewe]'),
     '<p><a href="http://example.com/?foo[]=wewe"><span class="caps">PHP</span> array link</a></p>');
   t.end();
 });
 
-test('Fenced PHP-style array link (2)', function (t) {
+test('Fenced PHP-style array link (2)', t => {
   t.is(textile.convert('["PHP array link":http://example.com/?foo[1]=wewe]'),
     '<p><a href="http://example.com/?foo[1]=wewe"><span class="caps">PHP</span> array link</a></p>');
   t.end();
 });
 
-test('Fenced PHP-style array link (3)', function (t) {
+test('Fenced PHP-style array link (3)', t => {
   t.is(textile.convert('["PHP array link":http://example.com/?foo[a]=wewe]'),
     '<p><a href="http://example.com/?foo[a]=wewe"><span class="caps">PHP</span> array link</a></p>');
   t.end();
 });
 
 
-
-test('HTML comment (1)', function (t) {
+test('HTML comment (1)', t => {
   t.is(textile.convert('line\n<!-- line -->\nline'),
     '<p>line<br />\n' +
     '<!-- line --><br />\n' +
@@ -191,7 +185,7 @@ test('HTML comment (1)', function (t) {
 });
 
 
-test('HTML comment (2)', function (t) {
+test('HTML comment (2)', t => {
   t.is(textile.convert('line\n\n<!-- line -->\n\nline'),
     '<p>line</p>\n' +
     '<!-- line -->\n' +
@@ -200,16 +194,14 @@ test('HTML comment (2)', function (t) {
 });
 
 
-
-test('ALL CAPS', function (t) {
+test('ALL CAPS', t => {
   t.is(textile.convert('REYKJAVÍK'),
     '<p><span class="caps">REYKJAVÍK</span></p>');
   t.end();
 });
 
 
-
-test('Multiple classes', function (t) {
+test('Multiple classes', t => {
   t.is(textile.convert('p(first second). some text'),
     '<p class="first second">some text</p>',
     '2 css classes');
@@ -217,7 +209,7 @@ test('Multiple classes', function (t) {
 });
 
 
-test('Multiple classes', function (t) {
+test('Multiple classes', t => {
   t.is(textile.convert('p(first second third). some text'),
     '<p class="first second third">some text</p>',
     '3 css classes');
@@ -225,7 +217,7 @@ test('Multiple classes', function (t) {
 });
 
 
-test('Multiple classes', function (t) {
+test('Multiple classes', t => {
   t.is(textile.convert('p(first second third#someid). some text'),
     '<p class="first second third" id="someid">some text</p>',
     '3 css classes + id');
@@ -233,7 +225,7 @@ test('Multiple classes', function (t) {
 });
 
 
-test('Multiple classes', function (t) {
+test('Multiple classes', t => {
   t.is(textile.convert('"(foo bar) text (link title)":http://example.com/'),
     '<p><a class="foo bar" href="http://example.com/" title="link title">text</a></p>',
     '2 classes + title on a link');
@@ -241,7 +233,7 @@ test('Multiple classes', function (t) {
 });
 
 
-test('Multiple classes', function (t) {
+test('Multiple classes', t => {
   t.is(textile.convert('| a |(eee fee). b |\n| a |( b )|'),
     '<table>\n' +
     '\t<tr>\n' +
@@ -258,7 +250,7 @@ test('Multiple classes', function (t) {
 });
 
 
-test('Multiple classes', function (t) {
+test('Multiple classes', t => {
   t.is(textile.convert(
     '_(span)_\n' +
     '_(span span)_\n' +
@@ -275,7 +267,7 @@ test('Multiple classes', function (t) {
 });
 
 
-test('Multiple classes', function (t) {
+test('Multiple classes', t => {
   t.is(textile.convert('_{display:block}(span) span (span)_'),
     '<p><em style="display:block">(span) span (span)</em></p>',
     'partal attr span parse');
@@ -283,7 +275,7 @@ test('Multiple classes', function (t) {
 });
 
 
-test('inline code with leading @', function (t) {
+test('inline code with leading @', t => {
   t.is(textile.convert('a @@var@ test'),
     '<p>a <code>@var</code> test</p>',
     'inline code with leading @');
@@ -291,7 +283,7 @@ test('inline code with leading @', function (t) {
 });
 
 
-test('inline code with a single @', function (t) {
+test('inline code with a single @', t => {
   t.is(textile.convert('a @@@ test'),
     '<p>a <code>@</code> test</p>',
     'inline code with a single @');
@@ -299,7 +291,7 @@ test('inline code with a single @', function (t) {
 });
 
 
-test('empty block 1', function (t) {
+test('empty block 1', t => {
   t.is(textile.convert('h1.'),
     '<p>h1.</p>',
     'empty block #1');
@@ -307,7 +299,7 @@ test('empty block 1', function (t) {
 });
 
 
-test('empty block 2', function (t) {
+test('empty block 2', t => {
   t.is(textile.convert('h1. '),
     '<h1></h1>',
     'empty block #2');
@@ -315,7 +307,7 @@ test('empty block 2', function (t) {
 });
 
 
-test('empty block 3', function (t) {
+test('empty block 3', t => {
   t.is(textile.convert('h1{display:block}. '),
     '<h1 style="display:block"></h1>',
     'empty block #3');
@@ -323,7 +315,7 @@ test('empty block 3', function (t) {
 });
 
 
-test('non list 1', function (t) {
+test('non list 1', t => {
   t.is(textile.convert('*'),
     '<p>*</p>',
     'non list #1');
@@ -331,7 +323,7 @@ test('non list 1', function (t) {
 });
 
 
-test('non list 2', function (t) {
+test('non list 2', t => {
   t.is(textile.convert('#'),
     '<p>#</p>',
     'non list #2');
@@ -339,7 +331,7 @@ test('non list 2', function (t) {
 });
 
 
-test('non list 3', function (t) {
+test('non list 3', t => {
   t.is(textile.convert('*\n'),
     '<p>*</p>',
     'non list #3');
@@ -347,7 +339,7 @@ test('non list 3', function (t) {
 });
 
 
-test('non list 4', function (t) {
+test('non list 4', t => {
   t.is(textile.convert('#\n'),
     '<p>#</p>',
     'non list #4');
@@ -355,7 +347,7 @@ test('non list 4', function (t) {
 });
 
 
-test('non list 5', function (t) {
+test('non list 5', t => {
   t.is(textile.convert('*\ntest'),
     '<p>*<br />\ntest</p>',
     'non list #5');
@@ -363,7 +355,7 @@ test('non list 5', function (t) {
 });
 
 
-test('empty list 1', function (t) {
+test('empty list 1', t => {
   t.is(textile.convert('* \n'),
     '<p>* </p>',
     'empty list #1');
@@ -371,7 +363,7 @@ test('empty list 1', function (t) {
 });
 
 
-test('empty list 2', function (t) {
+test('empty list 2', t => {
   t.is(textile.convert('# \n'),
     '<p># </p>',
     'empty list #2');
@@ -379,7 +371,7 @@ test('empty list 2', function (t) {
 });
 
 
-test('insert empty list 1', function (t) {
+test('insert empty list 1', t => {
   t.is(textile.convert('*\n\ntest'),
     '<p>*</p>\n<p>test</p>',
     'insert empty list #1');
@@ -387,7 +379,7 @@ test('insert empty list 1', function (t) {
 });
 
 
-test('insert empty list 2', function (t) {
+test('insert empty list 2', t => {
   t.is(textile.convert('#\n\ntest'),
     '<p>#</p>\n<p>test</p>',
     'insert empty list #2');
@@ -395,7 +387,7 @@ test('insert empty list 2', function (t) {
 });
 
 
-test('empty attributes (1)', function (t) {
+test('empty attributes (1)', t => {
   t.is(textile.convert('<input type="checkbox" checked>'),
     '<p><input type="checkbox" checked /></p>',
     'empty attributes (1)');
@@ -403,7 +395,7 @@ test('empty attributes (1)', function (t) {
 });
 
 
-test('empty attributes (2)', function (t) {
+test('empty attributes (2)', t => {
   t.is(textile.convert('<iframe width="100" height="100" src="//example.com" frameborder="0" allowfullscreen></iframe>'),
     '<p><iframe width="100" height="100" src="//example.com" frameborder="0" allowfullscreen></iframe></p>',
     'empty attributes (2)');
@@ -411,7 +403,7 @@ test('empty attributes (2)', function (t) {
 });
 
 
-test('bold line vs. list', function (t) {
+test('bold line vs. list', t => {
   t.is(textile.convert('*{color:red}bold red*'),
     '<p><strong style="color:red">bold red</strong></p>',
     'bold line vs. list');
@@ -419,7 +411,7 @@ test('bold line vs. list', function (t) {
 });
 
 
-test('strict list matching (1)', function (t) {
+test('strict list matching (1)', t => {
   t.is(textile.convert(
     '*{color:red} item*\n\n' +
       '* item*\n\n' +
@@ -436,7 +428,7 @@ test('strict list matching (1)', function (t) {
 });
 
 
-test('strict list matching (2)', function (t) {
+test('strict list matching (2)', t => {
   t.is(textile.convert(
     '*{color:red} item\n\n' +
       '* item\n\n' +
@@ -453,8 +445,7 @@ test('strict list matching (2)', function (t) {
 });
 
 
-
-test('image parsing speed bug', function (t) {
+test('image parsing speed bug', t => {
   const t1 = Date.now();
   textile.convert('!a()aaaaaaaaaaaaaaaaaaaaaaaaaa');
   const t2 = Date.now();
@@ -463,8 +454,7 @@ test('image parsing speed bug', function (t) {
 });
 
 
-
-test('image parsing speed bug 2 (issue #40)', function (t) {
+test('image parsing speed bug 2 (issue #40)', t => {
   const t1 = Date.now();
   textile.convert('!@((. tset Sûpp0rt ticket onññly... !@((. tset Sûpp0rt ticket onññly... !@((.');
   const t2 = Date.now();
@@ -473,17 +463,16 @@ test('image parsing speed bug 2 (issue #40)', function (t) {
 });
 
 
-
-test('parse inline textile in footnotes', function (t) {
+test('parse inline textile in footnotes', t => {
   t.is(textile.convert('fn1. This is _emphasized_ *strong*'),
-    '<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> This is <em>emphasized</em> <strong>strong</strong></p>',
+    '<p class="footnote" id="fn-1"><sup>1</sup> This is <em>emphasized</em> <strong>strong</strong></p>',
     'footnote inline textile');
   t.end();
 });
 
 
 // greedy globbing block parser bug [#21]
-test('block parser bug (#21)', function (t) {
+test('block parser bug (#21)', t => {
   t.is(textile.convert('pab\n\npabcde\n\nbqabcdef\n\nlast line ending in period+space. \n'),
     '<p>pab</p>\n' +
     '<p>pabcde</p>\n' +
@@ -493,16 +482,14 @@ test('block parser bug (#21)', function (t) {
 });
 
 
-
-test('trailing space linebreak bug (#26)', function (t) {
+test('trailing space linebreak bug (#26)', t => {
   t.is(textile.convert('Line 1 \nLine 2\nLine 3'),
     '<p>Line 1 <br />\nLine 2<br />\nLine 3</p>');
   t.end();
 });
 
 
-
-test('support unicode symbols (#27)', function (t) {
+test('support unicode symbols (#27)', t => {
   t.is(textile.convert(
     'Trademark(tm)\n' +
     'Registered(R)\n' +
@@ -512,43 +499,39 @@ test('support unicode symbols (#27)', function (t) {
     'Three quarters (3/4) symbol\n' +
     'Degree (o) symbol\n' +
     'Plus/minus (+/-) symbol'),
-  '<p>Trademark&#8482;<br />\n' +
-  'Registered&#174;<br />\n' +
-  'Copyright &#169; 2008<br />\n' +
-  'One quarter &#188; symbol<br />\n' +
-  'One half &#189; symbol<br />\n' +
-  'Three quarters &#190; symbol<br />\n' +
-  'Degree &#176; symbol<br />\n' +
-  'Plus/minus &#177; symbol</p>');
+  '<p>Trademark™<br />\n' +
+  'Registered®<br />\n' +
+  'Copyright © 2008<br />\n' +
+  'One quarter ¼ symbol<br />\n' +
+  'One half ½ symbol<br />\n' +
+  'Three quarters ¾ symbol<br />\n' +
+  'Degree ° symbol<br />\n' +
+  'Plus/minus ± symbol</p>');
   t.end();
 });
 
 
-
-test('footnotes should not appear directly inside tags (#26)', function (t) {
+test('footnotes should not appear directly inside tags (#26)', t => {
   t.is(textile.convert('*[1234]* _[1234]_'),
     '<p><strong>[1234]</strong> <em>[1234]</em></p>');
   t.end();
 });
 
 
-
-test('footnotes have to directly follow text (#26)', function (t) {
+test('footnotes have to directly follow text (#26)', t => {
   t.is(textile.convert('[1234]'), '<p>[1234]</p>');
   t.end();
 });
 
 
-
-test('footnote links can be disabled with !', function (t) {
+test('footnote links can be disabled with !', t => {
   t.is(textile.convert('foobar[1234!]'),
-    '<p>foobar<sup class="footnote" id="fnr1234">1234</sup></p>');
+    '<p>foobar<sup class="footnote" id="fnr-1234">1234</sup></p>');
   t.end();
 });
 
 
-
-test('bc blocks should not be terminated by lists (#45)', function (t) {
+test('bc blocks should not be terminated by lists (#45)', t => {
   t.is(textile.convert(
     'bc. # here comes foo\nFoo\n# here comes bar\nBar'
   ),
@@ -573,7 +556,7 @@ test('bc blocks should not be terminated by lists (#45)', function (t) {
 });
 
 
-test('pre blocks should not be terminated by lists (#45)', function (t) {
+test('pre blocks should not be terminated by lists (#45)', t => {
   t.is(textile.convert(
     'pre. # here comes foo\nFoo\n# here comes bar\nBar'
   ),
@@ -598,14 +581,14 @@ test('pre blocks should not be terminated by lists (#45)', function (t) {
 });
 
 
-test('nested blockquotes (#36)', function (t) {
+test('nested blockquotes (#36)', t => {
   t.is(textile.convert('<blockquote>a<blockquote>b</blockquote>c</blockquote>'),
     '<blockquote>a<blockquote>b</blockquote>c</blockquote>');
   t.end();
 });
 
 
-test('list whitespace (#47)', function (t) {
+test('list whitespace (#47)', t => {
   const tx = '* unsorted list item 1\n#    sorted list item 1\n#    sorted list item 2';
   t.is(textile.convert(tx),
     '<ul>\n\t<li>unsorted list item 1</li>\n\t<li>sorted list item 1</li>\n\t<li>sorted list item 2</li>\n</ul>');
@@ -613,7 +596,7 @@ test('list whitespace (#47)', function (t) {
 });
 
 
-test('notextile should work inline (#49)', function (t) {
+test('notextile should work inline (#49)', t => {
   const tx = 'pre <notextile>*.Catalog und *.*</notextile> post';
   t.is(textile.convert(tx),
     '<p>pre *.Catalog und *.* post</p>');
@@ -621,7 +604,7 @@ test('notextile should work inline (#49)', function (t) {
 });
 
 
-test('Lists have to start at level 1 (#56)', function (t) {
+test('Lists have to start at level 1 (#56)', t => {
   const tx = '*** foo';
   t.is(textile.convert(tx),
     '<p>*** foo</p>');
@@ -629,14 +612,15 @@ test('Lists have to start at level 1 (#56)', function (t) {
 });
 
 
-test('inline tag should bound phrase (#57)', function (t) {
+test('inline tag should bound phrase (#57)', t => {
   const tx = '*foo*<notextile></notextile>bar';
   t.is(textile.convert(tx),
     '<p><strong>foo</strong>bar</p>');
   t.end();
 });
 
-test('inline tag should bound phrase [2] (#57)', function (t) {
+
+test('inline tag should bound phrase [2] (#57)', t => {
   const tx = '*fo<i/>o*<i/>bar';
   t.is(textile.convert(tx),
     '<p><strong>fo<i></i>o</strong><i></i>bar</p>');
@@ -644,7 +628,7 @@ test('inline tag should bound phrase [2] (#57)', function (t) {
 });
 
 
-test('self referencing links (#44)', function (t) {
+test('self referencing links (#44)', t => {
   t.is(textile.convert('"$":http://example.com/sw'),
     '<p><a href="http://example.com/sw">example.com/sw</a></p>');
   t.is(textile.convert('"$":https://example.com/sw'),
@@ -659,7 +643,7 @@ test('self referencing links (#44)', function (t) {
 });
 
 
-test('linebreaks following a table (#52)', function (t) {
+test('linebreaks following a table (#52)', t => {
   const tx1 = '|a|b|\n\n\nh1. header';
   t.is(textile.convert(tx1),
     '<table>\n\t<tr>\n\t\t<td>a</td>\n\t\t<td>b</td>\n\t</tr>\n</table>\n' +
@@ -674,7 +658,7 @@ test('linebreaks following a table (#52)', function (t) {
 });
 
 
-test('prefixed links (#60)', function (t) {
+test('prefixed links (#60)', t => {
   t.is(textile.convert('user <"user@example.com":mailto:user@example.com>'),
     '<p>user &lt;<a href="mailto:user@example.com">user@example.com</a>&gt;</p>');
   t.is(textile.convert('user ["user@example.com":mailto:user@example.com'),
@@ -685,3 +669,82 @@ test('prefixed links (#60)', function (t) {
     '<p>user %<a href="mailto:user@example.com">user@example.com</a></p>');
   t.end();
 });
+
+
+test('link alias work in HTML tags', t => {
+  t.is(textile.convert('<a href="foo">link1</a> "link2":foo\n\n[foo]http://example.com'),
+    '<p><a href="http://example.com">link1</a> <a href="http://example.com">link2</a></p>');
+  t.end();
+});
+
+
+test('correct glyph convertion', t => {
+  t.is(textile.convert('p. foo -- bar _foo ==foo -- bar== bar_ @foo -- bar@\n\nnotextile. foo -- bar'),
+    '<p>foo — bar <em>foo foo -- bar bar</em> <code>foo -- bar</code></p>\nfoo -- bar');
+  t.end();
+});
+
+
+test('less liberal lang attr #76', t => {
+  t.is(textile.convert('%["red":https://example.com].%'),
+    '<p><span><a href="https://example.com">red</a>.</span></p>');
+  t.end();
+});
+
+
+test('footnote handling #74', t => {
+  t.is(
+    textile.convert('fn1. one'),
+    '<p class="footnote" id="fn-1"><sup>1</sup> one</p>',
+    'fn1. one'
+  );
+  t.is(
+    textile.convert('fn1^. one'),
+    '<p class="footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> one</p>',
+    'fn1^. one'
+  );
+  t.is(
+    textile.convert('fn1(foo). one'),
+    '<p class="foo footnote" id="fn-1"><sup>1</sup> one</p>',
+    'fn1(foo). one'
+  );
+  t.is(
+    textile.convert('fn1^(foo). one'),
+    '<p class="foo footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> one</p>',
+    'fn1^(foo). one'
+  );
+  t.is(
+    textile.convert('fn1. one\n\ntwo'),
+    '<p class="footnote" id="fn-1"><sup>1</sup> one</p>\n<p>two</p>',
+    'fn1. one\n\ntwo'
+  );
+  t.is(
+    textile.convert('fn1.. one\n\ntwo'),
+    '<p class="footnote" id="fn-1"><sup>1</sup> one<br />\n<br />\ntwo</p>',
+    'fn1.. one\n\ntwo'
+  );
+  t.is(
+    textile.convert('fn1^(foo). one\n\ntwo'),
+    '<p class="foo footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> one</p>\n<p>two</p>',
+    'fn1^(foo). one\n\ntwo'
+  );
+  t.is(
+    textile.convert('fn1^(foo).. one\n\ntwo'),
+    '<p class="foo footnote" id="fn-1"><a href="#fnr-1"><sup>1</sup></a> one<br />\n<br />\ntwo</p>',
+    'fn1^(foo).. one\n\ntwo'
+  );
+  t.end();
+});
+
+
+test('html casing', t => {
+  // http://w3c.github.io/html-reference/documents.html#case-insensitivity
+  t.is(textile.convert('<DIV ID="ONE"><SPAN CLASS="TWO">foo<BR>bar</SPAN></DIV>'),
+    '<div id="ONE"><span class="TWO">foo<br />bar</span></div>',
+    'single line');
+  t.is(textile.convert('<DIV ID="ONE">\n\n<SPAN CLASS="TWO">foo<BR>bar</SPAN>\n\n</DIV>'),
+    '<div id="ONE"><span class="TWO">foo<br />bar</span>\n</div>',
+    'split lines');
+  t.end();
+});
+

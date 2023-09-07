@@ -1,90 +1,95 @@
-const test = require('tape');
-const textile = require('../src');
+import test from 'tape';
+import textile from '../src/index.js';
 // definitions.yml
 
-test('redcloth definition list', function (t) {
-  const tx = 'here is a RedCloth definition list:\n\n\
-- yes := no\n\
-- no:=no\n\
-- maybe:= yes';
+test('redcloth definition list', t => {
+  const tx = `here is a RedCloth definition list:
+
+- yes := no
+- no:=no
+- maybe:= yes`;
   t.is(textile.convert(tx),
-    '<p>here is a RedCloth definition list:</p>\n\
-<dl>\n\
-\t<dt>yes</dt>\n\
-\t<dd>no</dd>\n\
-\t<dt>no</dt>\n\
-\t<dd>no</dd>\n\
-\t<dt>maybe</dt>\n\
-\t<dd>yes</dd>\n\
-</dl>', tx);
+    `<p>here is a RedCloth definition list:</p>
+<dl>
+\t<dt>yes</dt>
+\t<dd>no</dd>
+\t<dt>no</dt>
+\t<dd>no</dd>
+\t<dt>maybe</dt>
+\t<dd>yes</dd>
+</dl>`, tx);
   t.end();
 });
 
 
-test('with line breaks', function (t) {
-  const tx = '- term := you can have line breaks\n\
-just like other lists\n\
-- line-spanning\n\
-term := hey, slick!';
+test('with line breaks', t => {
+  const tx = `- term := you can have line breaks
+just like other lists
+- line-spanning
+term := hey, slick!`;
   t.is(textile.convert(tx),
-    '<dl>\n\
-\t<dt>term</dt>\n\
-\t<dd>you can have line breaks<br />\n\
-just like other lists</dd>\n\
-\t<dt>line-spanning<br />\n\
-term</dt>\n\
-\t<dd>hey, slick!</dd>\n\
-</dl>', tx);
+    `<dl>
+\t<dt>term</dt>
+\t<dd>you can have line breaks<br />
+just like other lists</dd>
+\t<dt>line-spanning<br />
+term</dt>
+\t<dd>hey, slick!</dd>
+</dl>`, tx);
   t.end();
 });
 
 
-test('double terms', function (t) {
-  const tx = 'You can have multiple terms before a definition:\n\n\
-- textile\n\
-- fabric\n\
-- cloth := woven threads';
+test('double terms', t => {
+  const tx = `You can have multiple terms before a definition:
+
+- textile
+- fabric
+- cloth := woven threads`;
   t.is(textile.convert(tx),
-    '<p>You can have multiple terms before a definition:</p>\n\
-<dl>\n\
-\t<dt>textile</dt>\n\
-\t<dt>fabric</dt>\n\
-\t<dt>cloth</dt>\n\
-\t<dd>woven threads</dd>\n\
-</dl>', tx);
+    `<p>You can have multiple terms before a definition:</p>
+<dl>
+\t<dt>textile</dt>
+\t<dt>fabric</dt>
+\t<dt>cloth</dt>
+\t<dd>woven threads</dd>
+</dl>`, tx);
   t.end();
 });
 
 
-test('not a definition list', function (t) {
-  const tx = '- textile\n\
-- fabric\n\
-- cloth';
+test('not a definition list', t => {
+  const tx = `- textile
+- fabric
+- cloth`;
   t.is(textile.convert(tx),
-    '<p>- textile<br />\n\
-- fabric<br />\n\
-- cloth</p>', tx);
+    `<p>- textile<br />
+- fabric<br />
+- cloth</p>`, tx);
   t.end();
 });
 
 
-test('long definition list', function (t) {
-  const tx = 'here is a long definition\n\n\
-- some term := \n\
-*sweet*\n\n\
-yes\n\n\
-ok =:\n\
-- regular term := no';
+test('long definition list', t => {
+  const tx = `here is a long definition
+
+- some term := 
+*sweet*
+
+yes
+
+ok =:
+- regular term := no`;
   t.is(textile.convert(tx),
-    '<p>here is a long definition</p>\n\
-<dl>\n\
-\t<dt>some term</dt>\n\
-\t<dd><p><strong>sweet</strong></p>\n\
-<p>yes</p>\n\
-<p>ok</p></dd>\n\
-\t<dt>regular term</dt>\n\
-\t<dd>no</dd>\n\
-</dl>', tx);
+    `<p>here is a long definition</p>
+<dl>
+\t<dt>some term</dt>
+\t<dd><p><strong>sweet</strong></p>
+<p>yes</p>
+<p>ok</p></dd>
+\t<dt>regular term</dt>
+\t<dd>no</dd>
+</dl>`, tx);
   t.end();
 });
 

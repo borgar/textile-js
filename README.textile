@@ -14,7 +14,12 @@ h2. Options
 
 The basic interface mimics "marked":https://github.com/chjj/marked, the popular markdown parser. So if you use that in your project then you can support Textile as well with minimal effort.
 
-Currently, the only supported option is @breaks@ which can be used to enable/disable the default behavior of line-breaking single newlines within blocks.
+The supported options are:
+
+* @breaks@ [default: [@true@]]
+Used to enable/disable the default behavior of line-breaking single newlines within blocks.
+* @autobacklink@ [default: [@false@]]
+Turn this on to have footnotes automatically backlink to their references (otherwise enabled by syntax: @fn1^@).
 
 
 h2. Usage

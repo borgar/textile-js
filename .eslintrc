@@ -7,7 +7,8 @@
   rules: {
     'import/export': 'error',
     'import/no-unresolved': 'error',
-    'no-use-before-define': 'error'
+    'no-use-before-define': 'error',
+    'no-multiple-empty-lines': [ 'error', { 'max': 2, 'maxBOF': 0, 'maxEOF': 1 }]
   },
   globals: {
     require,

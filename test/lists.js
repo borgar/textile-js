@@ -1,522 +1,554 @@
-const test = require('tape');
-const textile = require('../src');
+import test from 'tape';
+import textile from '../src/index.js';
 // lists.yml
 
-test('code in bullet list', function (t) {
+test('code in bullet list', t => {
   const tx = '* command run: @time ruby run-tests.rb > toto@';
   t.is(textile.convert(tx),
-    '<ul>\n\
-\t<li>command run: <code>time ruby run-tests.rb &gt; toto</code></li>\n\
-</ul>', tx);
+    `<ul>
+\t<li>command run: <code>time ruby run-tests.rb &gt; toto</code></li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('hard break in list', function (t) {
-  const tx = '* first line\n\
-* second\n\
-  line\n\
-* third line';
+test('hard break in list (1)', t => {
+  const tx = `* first line
+* second
+line
+* third line`;
   t.is(textile.convert(tx),
-    '<ul>\n\
-\t<li>first line</li>\n\
-\t<li>second<br />\n\
-line</li>\n\
-\t<li>third line</li>\n\
-</ul>', tx);
+    `<ul>
+\t<li>first line</li>
+\t<li>second<br />
+line</li>
+\t<li>third line</li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('mixed nesting', function (t) {
-  const tx = '* bullet\n\
-*# number\n\
-*# number\n\
-*#* bullet\n\
-*# number\n\
-*# number with\n\
-a break\n\
-* bullet\n\
-** okay';
+test('hard break in list (2)', t => {
+  const tx = `* first line
+* second
+  line
+* third line`;
   t.is(textile.convert(tx),
-    '<ul>\n\
-\t<li>bullet\n\
-\t<ol>\n\
-\t\t<li>number</li>\n\
-\t\t<li>number\n\
-\t\t<ul>\n\
-\t\t\t<li>bullet</li>\n\
-\t\t</ul></li>\n\
-\t\t<li>number</li>\n\
-\t\t<li>number with<br />\n\
-a break</li>\n\
-\t</ol></li>\n\
-\t<li>bullet\n\
-\t<ul>\n\
-\t\t<li>okay</li>\n\
-\t</ul></li>\n\
-</ul>', tx);
+    `<ul>
+\t<li>first line</li>
+\t<li>second
+  line</li>
+\t<li>third line</li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('list continuation', function (t) {
-  const tx = '# one\n\
-# two\n\
-# three\n\n\
-# one\n\
-# two\n\
-# three\n\n\
-#_ four\n\
-# five\n\
-# six';
+test('mixed nesting', t => {
+  const tx = `* bullet
+*# number
+*# number
+*#* bullet
+*# number
+*# number with
+a break
+* bullet
+** okay`;
   t.is(textile.convert(tx),
-    '<ol>\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>\n\
-<ol>\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>\n\
-<ol start="4">\n\
-\t<li>four</li>\n\
-\t<li>five</li>\n\
-\t<li>six</li>\n\
-</ol>', tx);
+    `<ul>
+\t<li>bullet
+\t<ol>
+\t\t<li>number</li>
+\t\t<li>number
+\t\t<ul>
+\t\t\t<li>bullet</li>
+\t\t</ul></li>
+\t\t<li>number</li>
+\t\t<li>number with<br />
+a break</li>
+\t</ol></li>
+\t<li>bullet
+\t<ul>
+\t\t<li>okay</li>
+\t</ul></li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('continue after break', function (t) {
-  const tx = '# one\n\
-# two\n\
-# three\n\n\
-test\n\n\
-#_ four\n\
-# five\n\
-# six\n\n\
-test\n\n\
-#_ seven\n\
-# eight\n\
-# nine';
+test('list continuation', t => {
+  const tx = `# one
+# two
+# three
+
+# one
+# two
+# three
+
+#_ four
+# five
+# six`;
   t.is(textile.convert(tx),
-    '<ol>\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>\n\
-<p>test</p>\n\
-<ol start="4">\n\
-\t<li>four</li>\n\
-\t<li>five</li>\n\
-\t<li>six</li>\n\
-</ol>\n\
-<p>test</p>\n\
-<ol start="7">\n\
-\t<li>seven</li>\n\
-\t<li>eight</li>\n\
-\t<li>nine</li>\n\
-</ol>', tx);
+    `<ol>
+\t<li>one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>
+<ol>
+\t<li>one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>
+<ol start="4">
+\t<li>four</li>
+\t<li>five</li>
+\t<li>six</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('continue list when prior list contained nested list', function (t) {
-  const tx = '# one\n\
-# two\n\
-# three\n\n\
-#_ four\n\
-# five\n\
-## sub-note\n\
-## another sub-note\n\
-# six\n\n\
-#_ seven\n\
-# eight\n\
-# nine';
+test('continue after break', t => {
+  const tx = `# one
+# two
+# three
+
+test
+
+#_ four
+# five
+# six
+
+test
+
+#_ seven
+# eight
+# nine`;
   t.is(textile.convert(tx),
-    '<ol>\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>\n\
-<ol start="4">\n\
-\t<li>four</li>\n\
-\t<li>five\n\
-\t<ol>\n\
-\t\t<li>sub-note</li>\n\
-\t\t<li>another sub-note</li>\n\
-\t</ol></li>\n\
-\t<li>six</li>\n\
-</ol>\n\
-<ol start="7">\n\
-\t<li>seven</li>\n\
-\t<li>eight</li>\n\
-\t<li>nine</li>\n\
-</ol>', tx);
+    `<ol>
+\t<li>one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>
+<p>test</p>
+<ol start="4">
+\t<li>four</li>
+\t<li>five</li>
+\t<li>six</li>
+</ol>
+<p>test</p>
+<ol start="7">
+\t<li>seven</li>
+\t<li>eight</li>
+\t<li>nine</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('list start number', function (t) {
-  const tx = '#293 two ninety three\n\
-# two ninety four\n\
-# two ninety five\n\n\
-#9 nine\n\
-# ten\n\
-# eleven';
+test('continue list when prior list contained nested list', t => {
+  const tx = `# one
+# two
+# three
+
+#_ four
+# five
+## sub-note
+## another sub-note
+# six
+
+#_ seven
+# eight
+# nine`;
   t.is(textile.convert(tx),
-    '<ol start="293">\n\
-\t<li>two ninety three</li>\n\
-\t<li>two ninety four</li>\n\
-\t<li>two ninety five</li>\n\
-</ol>\n\
-<ol start="9">\n\
-\t<li>nine</li>\n\
-\t<li>ten</li>\n\
-\t<li>eleven</li>\n\
-</ol>', tx);
+    `<ol>
+\t<li>one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>
+<ol start="4">
+\t<li>four</li>
+\t<li>five
+\t<ol>
+\t\t<li>sub-note</li>
+\t\t<li>another sub-note</li>
+\t</ol></li>
+\t<li>six</li>
+</ol>
+<ol start="7">
+\t<li>seven</li>
+\t<li>eight</li>
+\t<li>nine</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('continue list after started list', function (t) {
-  const tx = '#9 nine\n\
-# ten\n\
-# eleven\n\n\
-#_ twelve\n\
-# thirteen\n\
-# fourteen';
+test('list start number', t => {
+  const tx = `#293 two ninety three
+# two ninety four
+# two ninety five
+
+#9 nine
+# ten
+# eleven`;
   t.is(textile.convert(tx),
-    '<ol start="9">\n\
-\t<li>nine</li>\n\
-\t<li>ten</li>\n\
-\t<li>eleven</li>\n\
-</ol>\n\
-<ol start="12">\n\
-\t<li>twelve</li>\n\
-\t<li>thirteen</li>\n\
-\t<li>fourteen</li>\n\
-</ol>', tx);
+    `<ol start="293">
+\t<li>two ninety three</li>
+\t<li>two ninety four</li>
+\t<li>two ninety five</li>
+</ol>
+<ol start="9">
+\t<li>nine</li>
+\t<li>ten</li>
+\t<li>eleven</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('end notes', function (t) {
-  const tx = 'h2. End Notes\n\n\
-# End Notes should be a numbered list\n\
-# Like this\n\
-# They must have anchors in the text\n\n\
-h2. See Also\n\n\
-* See Also notes should be bullets\n\
-* Like this\n\
-';
+test('continue list after started list', t => {
+  const tx = `#9 nine
+# ten
+# eleven
+
+#_ twelve
+# thirteen
+# fourteen`;
   t.is(textile.convert(tx),
-    '<h2>End Notes</h2>\n\
-<ol>\n\
-\t<li>End Notes should be a numbered list</li>\n\
-\t<li>Like this</li>\n\
-\t<li>They must have anchors in the text</li>\n\
-</ol>\n\
-<h2>See Also</h2>\n\
-<ul>\n\
-\t<li>See Also notes should be bullets</li>\n\
-\t<li>Like this</li>\n\
-</ul>', tx);
+    `<ol start="9">
+\t<li>nine</li>
+\t<li>ten</li>
+\t<li>eleven</li>
+</ol>
+<ol start="12">
+\t<li>twelve</li>
+\t<li>thirteen</li>
+\t<li>fourteen</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('ordered list immediately following paragraph', function (t) {
-  const tx = 'A simple example.\n\
-# One\n\
-# Two';
+test('end notes', t => {
+  const tx = `h2. End Notes
+
+# End Notes should be a numbered list
+# Like this
+# They must have anchors in the text
+
+h2. See Also
+
+* See Also notes should be bullets
+* Like this
+`;
   t.is(textile.convert(tx),
-    '<p>A simple example.</p>\n\
-<ol>\n\
-\t<li>One</li>\n\
-\t<li>Two</li>\n\
-</ol>', tx);
+    `<h2>End Notes</h2>
+<ol>
+\t<li>End Notes should be a numbered list</li>
+\t<li>Like this</li>
+\t<li>They must have anchors in the text</li>
+</ol>
+<h2>See Also</h2>
+<ul>
+\t<li>See Also notes should be bullets</li>
+\t<li>Like this</li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('unordered list immediately following paragraph', function (t) {
-  const tx = 'A simple example.\n\
-* One\n\
-* Two';
+test('ordered list immediately following paragraph', t => {
+  const tx = `A simple example.
+# One
+# Two`;
   t.is(textile.convert(tx),
-    '<p>A simple example.</p>\n\
-<ul>\n\
-\t<li>One</li>\n\
-\t<li>Two</li>\n\
-</ul>', tx);
+    `<p>A simple example.</p>
+<ol>
+\t<li>One</li>
+\t<li>Two</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('ordered list immediately following extended block', function (t) {
-  const tx = 'div.. Here it comes.\n\n\
-A simple example.\n\
-# One\n\
-# Two';
+test('unordered list immediately following paragraph', t => {
+  const tx = `A simple example.
+* One
+* Two`;
   t.is(textile.convert(tx),
-    '<div>Here it comes.</div>\n\
-<div>A simple example.</div>\n\
-<ol>\n\
-\t<li>One</li>\n\
-\t<li>Two</li>\n\
-</ol>', tx);
+    `<p>A simple example.</p>
+<ul>
+\t<li>One</li>
+\t<li>Two</li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('unordered list immediately following extended block', function (t) {
-  const tx = 'div.. Here it comes.\n\n\
-A simple example.\n\
-* One\n\
-* Two';
+test('ordered list immediately following extended block', t => {
+  const tx = `div.. Here it comes.
+
+A simple example.
+# One
+# Two`;
   t.is(textile.convert(tx),
-    '<div>Here it comes.</div>\n\
-<div>A simple example.</div>\n\
-<ul>\n\
-\t<li>One</li>\n\
-\t<li>Two</li>\n\
-</ul>', tx);
+    `<div>Here it comes.</div>
+<div>A simple example.</div>
+<ol>
+\t<li>One</li>
+\t<li>Two</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('unordered with classes', function (t) {
-  const tx = '*(class-one) one\n\
-*(class-two) two\n\
-*(class-three) three';
+test('unordered list immediately following extended block', t => {
+  const tx = `div.. Here it comes.
+
+A simple example.
+* One
+* Two`;
   t.is(textile.convert(tx),
-    '<ul>\n\
-\t<li class="class-one">one</li>\n\
-\t<li class="class-two">two</li>\n\
-\t<li class="class-three">three</li>\n\
-</ul>', tx);
+    `<div>Here it comes.</div>
+<div>A simple example.</div>
+<ul>
+\t<li>One</li>
+\t<li>Two</li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('unordered with alignments', function (t) {
-  const tx = '*< one\n\
-*> two\n\
-*<> three\n\
-*= four';
+test('unordered with classes', t => {
+  const tx = `*(class-one) one
+*(class-two) two
+*(class-three) three`;
   t.is(textile.convert(tx),
-    '<ul>\n\
-\t<li style="text-align:left">one</li>\n\
-\t<li style="text-align:right">two</li>\n\
-\t<li style="text-align:justify">three</li>\n\
-\t<li style="text-align:center">four</li>\n\
-</ul>', tx);
+    `<ul>
+\t<li class="class-one">one</li>
+\t<li class="class-two">two</li>
+\t<li class="class-three">three</li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('with attributes that apply to the whole list', function (t) {
-  const tx = '#(class#id) one\n\
-# two\n\
-# three';
+test('unordered with alignments', t => {
+  const tx = `*< one
+*> two
+*<> three
+*= four`;
   t.is(textile.convert(tx),
-    '<ol class="class" id="id">\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>', tx);
+    `<ul>
+\t<li style="text-align:left">one</li>
+\t<li style="text-align:right">two</li>
+\t<li style="text-align:justify">three</li>
+\t<li style="text-align:center">four</li>
+</ul>`, tx);
   t.end();
 });
 
 
-test('with id on the list', function (t) {
-  const tx = '#(#my-id) one\n\
-# two\n\
-# three';
+test('with attributes that apply to the whole list', t => {
+  const tx = `#(class#id) one
+# two
+# three`;
   t.is(textile.convert(tx),
-    '<ol id="my-id">\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>', tx);
+    `<ol class="class" id="id">
+\t<li>one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('with class on the list', function (t) {
-  const tx = '#(my-class) one\n\
-# two\n\
-# three';
+test('with id on the list', t => {
+  const tx = `#(#my-id) one
+# two
+# three`;
   t.is(textile.convert(tx),
-    '<ol class="my-class">\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>', tx);
+    `<ol id="my-id">
+\t<li>one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('with id on the list item', function (t) {
-  const tx = '# one\n\
-#(#my-item) two\n\
-# three';
+test('with class on the list', t => {
+  const tx = `#(my-class) one
+# two
+# three`;
   t.is(textile.convert(tx),
-    '<ol>\n\
-\t<li>one</li>\n\
-\t<li id="my-item">two</li>\n\
-\t<li>three</li>\n\
-</ol>', tx);
+    `<ol class="my-class">
+\t<li>one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('with attributes that apply to the first list item', function (t) {
-  const tx = '#.\n\
-#(class#id) one\n\
-# two\n\
-# three';
+test('with id on the list item', t => {
+  const tx = `# one
+#(#my-item) two
+# three`;
   t.is(textile.convert(tx),
-    '<ol>\n\
-\t<li class="class" id="id">one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>', tx);
+    `<ol>
+\t<li>one</li>
+\t<li id="my-item">two</li>
+\t<li>three</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('changed from textism basics', function (t) {
-  const tx = '#{color:blue}.\n\
-# one\n\
-# two\n\
-# three';
+test('with attributes that apply to the first list item', t => {
+  const tx = `#.
+#(class#id) one
+# two
+# three`;
   t.is(textile.convert(tx),
-    '<ol style="color:blue">\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>three</li>\n\
-</ol>', tx);
+    `<ol>
+\t<li class="class" id="id">one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('item and list attributes', function (t) {
-  const tx = '#(class#id).\n\
-#(first) Item 1\n\
-#(second) Item 2\n\
-#(third) Item 3';
+test('changed from textism basics', t => {
+  const tx = `#{color:blue}.
+# one
+# two
+# three`;
   t.is(textile.convert(tx),
-    '<ol class="class" id="id">\n\
-\t<li class="first">Item 1</li>\n\
-\t<li class="second">Item 2</li>\n\
-\t<li class="third">Item 3</li>\n\
-</ol>', tx);
+    `<ol style="color:blue">
+\t<li>one</li>
+\t<li>two</li>
+\t<li>three</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('with one padding-left increment', function (t) {
+test('item and list attributes', t => {
+  const tx = `#(class#id).
+#(first) Item 1
+#(second) Item 2
+#(third) Item 3`;
+  t.is(textile.convert(tx),
+    `<ol class="class" id="id">
+\t<li class="first">Item 1</li>
+\t<li class="second">Item 2</li>
+\t<li class="third">Item 3</li>
+</ol>`, tx);
+  t.end();
+});
+
+
+test('with one padding-left increment', t => {
   const tx = '#( one';
   t.is(textile.convert(tx),
-    '<ol style="padding-left:1em">\n\
-\t<li>one</li>\n\
-</ol>', tx);
+    `<ol style="padding-left:1em">
+\t<li>one</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('with two padding-left increments', function (t) {
+test('with two padding-left increments', t => {
   const tx = '#(( two';
   t.is(textile.convert(tx),
-    '<ol style="padding-left:2em">\n\
-\t<li>two</li>\n\
-</ol>', tx);
+    `<ol style="padding-left:2em">
+\t<li>two</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('with one padding-right increment', function (t) {
+test('with one padding-right increment', t => {
   const tx = '#) one';
   t.is(textile.convert(tx),
-    '<ol style="padding-right:1em">\n\
-\t<li>one</li>\n\
-</ol>', tx);
+    `<ol style="padding-right:1em">
+\t<li>one</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('with padding-left and padding-right increments', function (t) {
+test('with padding-left and padding-right increments', t => {
   const tx = '#() two';
   t.is(textile.convert(tx),
-    '<ol style="padding-left:1em;padding-right:1em">\n\
-\t<li>two</li>\n\
-</ol>', tx);
+    `<ol style="padding-left:1em;padding-right:1em">
+\t<li>two</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('with padding-left and padding-right increments switched', function (t) {
+test('with padding-left and padding-right increments switched', t => {
   const tx = '#)( two';
   t.is(textile.convert(tx),
-    '<ol style="padding-right:1em;padding-left:1em">\n\
-\t<li>two</li>\n\
-</ol>', tx);
+    `<ol style="padding-right:1em;padding-left:1em">
+\t<li>two</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('list control items occuring-mid list should be ignored', function (t) {
-  const tx = '# one\n\
-# two\n\
-#.\n\
-# tree';
+test('list control items occuring-mid list should be ignored', t => {
+  const tx = `# one
+# two
+#.
+# tree`;
   t.is(textile.convert(tx),
-    '<ol>\n\
-\t<li>one</li>\n\
-\t<li>two</li>\n\
-\t<li>tree</li>\n\
-</ol>', tx);
+    `<ol>
+\t<li>one</li>
+\t<li>two</li>
+\t<li>tree</li>
+</ol>`, tx);
   t.end();
 });
 
 
-test('complicated case with continues and classes', function (t) {
-  const tx = '#(class#id).\n\
-#(first) Item 1\n\
-##.\n\
-##(sub1) Sub item 1\n\
-## Sub item 2\n\
-#(second) Item 2\n\
-##_(sub3) Sub item 3\n\
-## Sub item 4\n\n\
-#_(third) Item 3\n\
-##_(sub5) Sub item 5\n\
-## Sub item 6';
+test('complicated case with continues and classes', t => {
+  const tx = `#(class#id).
+#(first) Item 1
+##.
+##(sub1) Sub item 1
+## Sub item 2
+#(second) Item 2
+##_(sub3) Sub item 3
+## Sub item 4
+
+#_(third) Item 3
+##_(sub5) Sub item 5
+## Sub item 6`;
   t.is(textile.convert(tx),
-    '<ol class="class" id="id">\n\
-\t<li class="first">Item 1\n\
-\t<ol>\n\
-\t\t<li class="sub1">Sub item 1</li>\n\
-\t\t<li>Sub item 2</li>\n\
-\t</ol></li>\n\
-\t<li class="second">Item 2\n\
-\t<ol start="3" class="sub3">\n\
-\t\t<li>Sub item 3</li>\n\
-\t\t<li>Sub item 4</li>\n\
-\t</ol></li>\n\
-</ol>\n\
-<ol start="3" class="third">\n\
-\t<li>Item 3\n\
-\t<ol start="5" class="sub5">\n\
-\t\t<li>Sub item 5</li>\n\
-\t\t<li>Sub item 6</li>\n\
-\t</ol></li>\n\
-</ol>', tx);
+    `<ol class="class" id="id">
+\t<li class="first">Item 1
+\t<ol>
+\t\t<li class="sub1">Sub item 1</li>
+\t\t<li>Sub item 2</li>
+\t</ol></li>
+\t<li class="second">Item 2
+\t<ol start="3" class="sub3">
+\t\t<li>Sub item 3</li>
+\t\t<li>Sub item 4</li>
+\t</ol></li>
+</ol>
+<ol start="3" class="third">
+\t<li>Item 3
+\t<ol start="5" class="sub5">
+\t\t<li>Sub item 5</li>
+\t\t<li>Sub item 6</li>
+\t</ol></li>
+</ol>`, tx);
   t.end();
 });
 

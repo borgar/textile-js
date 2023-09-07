@@ -8,7 +8,7 @@ const reColSpan = /^\\(\d+)/;
 const reRowSpan = /^\/(\d+)/;
 const reStyles = /^\{([^}]*)\}/;
 const reCSS = /^\s*([^:\s]+)\s*:\s*(.+)\s*$/;
-const reLang = /^\[([^[\]\n]+)\]/;
+const reLang = /^\[([a-zA-Z0-9_-]+)\]/;
 
 const pbaAlignLookup = {
   '<': 'left',
@@ -23,8 +23,10 @@ const pbaVAlignLookup = {
   '-': 'middle'
 };
 
-function copyAttr (s, blacklist) {
-  if (!s) { return undefined; }
+export function copyAttr (s, blacklist) {
+  if (!s) {
+    return;
+  }
   const d = {};
   for (const k in s) {
     if (k in s && (!blacklist || !(k in blacklist))) {
@@ -55,10 +57,10 @@ function testBlock (name) {
   only accepts valid BCP 47 language tags, but who knows what atrocities are being preformed
   out there in the real world. So this attempts to emulate the other libraries.
 */
-function parseAttr (input, element, endToken) {
-  input = String(input);
+export function parseAttr (input, element, endToken) {
+  input = String(input || '');
   if (!input || element === 'notextile') {
-    return undefined;
+    return [ 0, {} ];
   }
 
   let m;
@@ -74,9 +76,11 @@ function parseAttr (input, element, endToken) {
 
   do {
     if ((m = reStyles.exec(remaining))) {
-      m[1].split(';').forEach(function (p) {
+      m[1].split(';').forEach(p => {
         const d = p.match(reCSS);
-        if (d) { st[d[1]] = d[2]; }
+        if (d) {
+          st[d[1]] = d[2];
+        }
       });
       remaining = remaining.slice(m[0].length);
       continue;
@@ -175,10 +179,5 @@ function parseAttr (input, element, endToken) {
     delete o.style;
   }
 
-  return (remaining === input) ? undefined : [ input.length - remaining.length, o ];
+  return (remaining === input) ? [ 0, {} ] : [ input.length - remaining.length, o ];
 }
-
-module.exports = {
-  copyAttr: copyAttr,
-  parseAttr: parseAttr
-};
