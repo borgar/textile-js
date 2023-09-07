@@ -167,7 +167,8 @@ export function parseHtml (tokens, lazy, rawTextOnly = false) {
       curr.appendChild(node);
     }
     else if (token.type === TEXT) {
-      // if a PRE, CODE, or SCRIPT exists as a parent, use Raw text to prevent glyph convertions
+      // if a PRE, CODE, or SCRIPT exists as a parent, use Raw text to
+      // prevent glyph convertions
       const isRawText = rawTextOnly || stack.some(d => /^(pre|code|script)$/i.test(d.tagName));
       const node = isRawText ? new RawNode(token.data) : new TextNode(token.data);
       node.html = true;

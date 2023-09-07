@@ -59,7 +59,7 @@ export function parseInline (src, options) {
   do {
     src.save();
 
-    // linebreak -- having this first keeps it from messing to much with other phrases
+    // linebreak: do this first to keep from messing to much with other phrases
     const haveCR = src.startsWith('\r\n') ? 1 : 0;
     if (haveCR) {
       src.advance(1); // skip cartridge returns
@@ -98,6 +98,7 @@ export function parseInline (src, options) {
       if (step) {
         src.advance(step);
       }
+      // eslint-disable-next-line max-len
       // FIXME: if we can't match the fence on the end, we should output fence-prefix as normal text
       // seek end
       const m2 = getMatchRe(tok, fence, isCode).exec(src);

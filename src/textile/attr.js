@@ -42,20 +42,23 @@ function testBlock (name) {
 }
 
 /*
-  The attr bit causes massive problems for span elements when parentheses are used.
-  Parentheses are a total mess and, unsurprisingly, cause trip-ups:
+  The attr bit causes massive problems for span elements when parentheses are
+  used. Parentheses are a total mess and, unsurprisingly, cause trip-ups:
 
-   RC: `_{display:block}(span) span (span)_` -> `<em style="display:block;" class="span">(span) span (span)</em>`
-   PHP: `_{display:block}(span) span (span)_` -> `<em style="display:block;">(span) span (span)</em>`
+   RC: `_{display:block}(span) span (span)_` ->
+       `<em style="display:block;" class="span">(span) span (span)</em>`
+   PHP: `_{display:block}(span) span (span)_` ->
+       `<em style="display:block;">(span) span (span)</em>`
 
-  PHP and RC seem to mostly solve this by not parsing a final attr parens on spans if the
-  following character is a non-space. I've duplicated that: Class/ID is not matched on spans
-  if it is followed by `endToken` or <space>.
+  PHP and RC seem to mostly solve this by not parsing a final attr parens on
+  spans if the following character is a non-space. I've duplicated that:
+  Class/ID is not matched on spans if it is followed by `endToken` or <space>.
 
-  Lang is not matched here if it is followed by the end token. Theoretically I could limit the lang
-  attribute to /^\[[a-z]{2+}(\-[a-zA-Z0-9]+)*\]/ because Textile is layered on top of HTML which
-  only accepts valid BCP 47 language tags, but who knows what atrocities are being preformed
-  out there in the real world. So this attempts to emulate the other libraries.
+  Lang is not matched here if it is followed by the end token. Theoretically I
+  could limit the lang attribute to /^\[[a-z]{2+}(\-[a-zA-Z0-9]+)*\]/ because
+  Textile is layered on top of HTML which only accepts valid BCP 47 language
+  tags, but who knows what atrocities are being preformed out there in the real
+  world. So this attempts to emulate the other libraries.
 */
 export function parseAttr (input, element, endToken) {
   input = String(input || '');

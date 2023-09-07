@@ -50,7 +50,7 @@ function appendTo (parent, child) {
 
 
 export class Node {
-  constructor (tagName) {
+  constructor () {
     this.nodeType = NODE;
     this.pos = {};
   }
@@ -141,7 +141,7 @@ export class CommentNode extends Node {
 
 
 export class ExtendedNode extends Node {
-  constructor (tagName, attr) {
+  constructor () {
     super();
     this.nodeType = EXTENDED_NODE;
     this.children = [];
@@ -232,7 +232,7 @@ export class Element extends Node {
 
 
 export class Document extends Node {
-  constructor (data) {
+  constructor () {
     super();
     this.nodeType = DOCUMENT_NODE;
     this.children = [];

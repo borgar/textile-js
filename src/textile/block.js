@@ -137,7 +137,8 @@ export function parseBlock (src, options) {
             attr.cite = mCite[1];
             inner.advance(mCite[0]);
           }
-          // RedCloth adds all attr to both which is bad because it produces duplicate IDs
+          // RedCloth adds all attr to both which is bad because it produces
+          // duplicate IDs
           const par = splitParagraphs(inner, {
             attr: copyAttr(attr, { cite: 1, id: 1 }),
             options: options
@@ -175,14 +176,13 @@ export function parseBlock (src, options) {
         else if (blockType === 'pre') {
           // I disagree with RedCloth, but agree with PHP here:
           // "pre(foo#bar).. line1\n\nline2" prevents multiline preformat blocks
-          // ...which seems like the whole point of having an extended pre block?
+          // which seems like the whole point of having an extended pre block?
           parentNode
             .appendChild(new Element('pre', attr).setPos(outerOffs, blockLen))
             .appendChild(new RawNode(inner.trimEndNewlines()));
         }
 
         else if ((fn = reFootnoteDef.exec(blockType))) { // footnote
-          // Need to be careful: RedCloth fails "fn1(foo#m). footnote" -- it confuses the ID
           const fnid = fn[1];
           const shouldBacklink = !!fn[2];
           attr.class = (attr.class ? attr.class + ' ' : '') + 'footnote';

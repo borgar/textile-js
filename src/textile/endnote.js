@@ -163,7 +163,7 @@ export function testNotelist (src) {
   return t ? [ RegExp.lastMatch ] : null;
 }
 
-export function parseNotelist (src, options) {
+export function parseNotelist (src) {
   const notelist = new HiddenNode();
   notelist.isNotelist = true;
   notelist.setPos(src.offset, src.length);

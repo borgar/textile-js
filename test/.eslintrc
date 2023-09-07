@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "function-paren-newline": "off",
+    "indent": "off",
+    "max-len": "off",
+    "no-multiple-empty-lines": "off",
+  },
+}

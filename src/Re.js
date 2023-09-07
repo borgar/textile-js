@@ -23,7 +23,7 @@ export default class Re {
     this.pattern = Object.assign({
       punct: '[!-/:-@\\[\\\\\\]-`{-~]',
       space: '\\s'
-    }, ...patterns);
+    }, patterns);
   }
 
   collapse (src) {

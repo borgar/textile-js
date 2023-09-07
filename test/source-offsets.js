@@ -134,8 +134,7 @@ test('fn#', t => {
       [ 'p', [ 0, 14 ], 'fn1.. one\n\ntwo' ],
       [ 'sup', [ 2, 3 ], '1' ],
       [ 'br', [ 9, 10 ], '\n' ],
-      [ 'br', [ 10, 11 ], '\n' ]
-    ],
+      [ 'br', [ 10, 11 ], '\n' ] ],
     'extended footnote'
   );
   t.deepEqual(
