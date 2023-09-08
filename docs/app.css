@@ -11,15 +11,14 @@ body {
   padding: 0;
   height: 100%;
 
-  display: flex;
-  flex-direction: column;
-  align-content: stretch;
-
-}
-
-body > * {
-  flex: 0 1 auto;
-  align-self: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 55px 25px 1fr;
+  gap: 0px 6px;
+  grid-template-areas:
+   "header header"
+   "txHead oHead"
+   "txBody oBody";
 }
 
 body > h1 {
@@ -27,86 +26,59 @@ body > h1 {
   margin: 0;
   font-size: 20px;
   color: #444;
+  grid-area: header;
 }
 
-textarea {
-  font-family: "andale mono", "lucida console", monospace;
-  font-size: 12px;
-  display: block;
-  resize: none;
+#tx_hd {
+  grid-area: txHead;
 }
 
-.row {
-  margin: 0 0;
-
-  flex: 1 1 auto;
-  align-self: stretch;
-
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch;
+#tx_body {
+  grid-area: txBody;
+  margin-top: -1px;
+  border-top: 1px solid #aaa;
 }
 
-.col {
-  position: relative;
-  box-sizing: border-box;
-  margin: 0 1rem 0 0;
-  padding: 0;
-  width: 50%;
-
-  flex: 1 1 auto;
-  align-self: stretch;
+#o_hd {
+  grid-area: oHead;
 }
-.col:first-child {
-  margin: 0 1rem 0 1rem;
-}
-
-.col {
-  display: flex;
-  flex-direction: column;
-  align-content: stretch;
-}
-
-.col .hd {
-  flex: 0 1 auto;
-  align-self: auto;
-}
-.col > div, .col textarea {
-  flex: 1 1 auto;
-  align-self: stretch;
-}
-
-
-label {
-  display: block;
-  padding: 4px 0;
-  font-weight: bold;
-  color: #777;
-}
-.tools {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0;
-}
-
-
-.panel {
-  background: #fff;
-  border: 1px solid #aaaaaa;
-  outline: none;
-  display: block;
-  margin: 0;
-  padding: 4px;
-  box-sizing: border-box;
-}
-#text_preview {
+#o_body {
+  grid-area: oBody;
   overflow: auto;
+  margin-top: -1px;
+  border-top: 1px solid #aaa;
 }
 
-#md_input {
-  background: #f6f6f6;
+#tx_body > * {
+  height: 100%;
+  box-sizing: border-box;
+  background: white;
+  font-family: consolas, "andale mono", "lucida console", monospace;
+  resize: none;
+  padding: 1rem;
+  width: 100%;
+  border: 0;
+  line-height: 1.25;
+  font-size: 14px;
+  outline: none;
+}
+
+#o_body > * {
+  box-sizing: border-box;
+  background: white;
+  padding: 1rem;
+  width: 100%;
+  border: 0;
+  color: #444;
+  min-height: 100%;
+}
+
+#syntax_guide,
+#html_output {
+  white-space: pre-wrap;
+  font-size: 14px;
+  font-family: consolas, "andale mono", "lucida console", monospace;
+  line-height: 1.25;
 }
 
 #syntax_guide,
@@ -114,22 +86,23 @@ label {
   display: none;
 }
 
-
-#credit1 {
-  background: url(http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png) -27px -15px no-repeat;
-  position: absolute;
-  top: 0;
-  right: 0;
-  text-indent: -999em;
-  display: block;
-  overflow: hidden;
-  height: 108px;
-  width: 108px;
-  zoom: .8;
+.td_hd {
+  position: relative;
 }
-
-#foot {
-  min-height: 1rem;
+.tools {
+  position: absolute;
+  bottom: 2px;
+  right: 16px;
+  padding: 0;
+}
+.tools button {
+  border: 0;
+  background: white;
+  color: #444;
+  padding: 2px 10px;
+  border-radius: 12px;
+  border-bottom: 1px solid #aaa;
+  cursor: pointer;
 }
 
 
@@ -137,33 +110,46 @@ label {
   padding: 0;
   margin: 0;
   list-style: none;
+  height: 100%;
+  box-sizing: border-box;
+  padding-left: 10px;
 }
 .tab li {
   display: inline-block;
+  height: 100%;
+  box-sizing: border-box;
 }
+.tab li label,
 .tab li a {
+  height: 100%;
   display: block;
+  box-sizing: border-box;
   padding: 4px 10px;
   text-decoration: none;
   color: #999;
   background: #eee;
   margin: 0 1px;
 }
+.tab .current label,
 .tab .current a {
   color: #555;
   background: #fff;
   padding-bottom: 5px;
-  margin: -1px 0;
+  margin: 0;
   border: 1px solid #aaa;
+  border-bottom: 1px solid #fff;
+  z-index: 213;
+  position: relative;
 }
 
 
 
 #text_preview {
-  padding: 0 1em 4px 1em;
-  color: #444;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.4;
+}
+#text_preview > *:first-child {
+  margin-top: 0;
 }
 #text_preview h1 {
   line-height: 1.1;
@@ -195,10 +181,15 @@ label {
 #text_preview table {
   border-collapse : collapse;
 }
+#text_preview th {
+  text-align: left;
+}
 #text_preview table th,
 #text_preview table td {
   padding : 4px 8px;
   border : 1px solid #aaa;
+  text-align: left;
+  vertical-align : top;
 }
 #text_preview ul {
   margin-left: 0;
@@ -222,3 +213,4 @@ label {
   text-transform: lowercase;
   letter-spacing: .1em;
 }
+

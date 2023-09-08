@@ -10,31 +10,30 @@
 
   <h1>Textile live web editor</h1>
 
-  <div class="row">
-    <div id="col_left" class="col">
-      <div class="hd">
-        <label for="tx_input">Textile input</label>
-        <span class="tools">
-          <button class="clear">Clear</button>
-        </span>
-      </div>
-      <textarea id="tx_input" cols="80" rows="20" class="panel"></textarea>
-    </div>
+  <div class="td_hd">
 
-    <div id="col_right" class="col">
-      <ul class="nav tab hd">
-        <li class="current"><a href="#text_preview">Preview</a></li>
-        <li><a href="#html_output">HTML Output</a></li>
-        <li><a href="#syntax_guide">Syntax Guide</a></li>
-      </ul>
-      <div id="text_preview" class="panel"></div>
-      <textarea id="html_output" class="panel" readonly></textarea>
-      <textarea id="syntax_guide" class="panel" readonly></textarea>
-    </div>
+    <ul id="o_hd" class="nav tab hd">
+      <li class="current"><label for="tx_input">Textile input</label></li>
+    </ul>
+    <span class="tools">
+      <button type="button" class="clear">Clear</button>
+    </span>
   </div>
 
-  <div id="foot">
-    <a id="credit1" href="https://github.com/borgar/textile-js/">JS-Textile project home.</a>
+  <div id="tx_body">
+    <textarea id="tx_input" cols="80" rows="20" class="panel"></textarea>
+  </div>
+
+  <ul id="o_hd" class="nav tab hd">
+    <li class="current"><a href="#text_preview">Preview</a></li>
+    <li><a href="#html_output">HTML Output</a></li>
+    <li><a href="#syntax_guide">Syntax Guide</a></li>
+  </ul>
+
+  <div id="o_body" class="panel">
+    <div id="text_preview"></div>
+    <div id="html_output"></div>
+    <div id="syntax_guide"></div>
   </div>
 
   <script src="app.js"></script>

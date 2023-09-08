@@ -1,6 +1,5 @@
 /* globals document fetch textile localStorage setTimeout clearTimeout  */
 (function () {
-
   function getElm (selector) {
     return document.querySelector(selector);
   }
@@ -47,7 +46,7 @@
     processing_time = endTime - startTime;
 
     text_preview.innerHTML = html;
-    html_output.value = html;
+    html_output.textContent = html;
 
     // save last output text to storage if we have it
     if (!input.value || input.value === help_text) {
@@ -59,7 +58,6 @@
   }
 
 
-  // $('.tab').minitabs();
   const tabs = Array.from(document.querySelectorAll('.tab a'));
   tabs.forEach(d => {
     d.addEventListener('click', e => {
@@ -76,7 +74,7 @@
 
 
   let convertTextTimer;
-  attach('#tx_input', 'keyup', e => {
+  attach('#tx_input', 'keyup', () => {
     clearTimeout(convertTextTimer);
     const defer_time = Math.min(processing_time, max_delay);
     convertTextTimer = setTimeout(convert_text, defer_time);
@@ -92,7 +90,7 @@
 
   // load syntax guide
   loadText('syntax.txt', txt => {
-    getElm('#syntax_guide').value = txt;
+    getElm('#syntax_guide').textContent = txt;
   });
 
   // load help text
@@ -103,10 +101,9 @@
     }
   });
 
-  attach('button.clear', 'click', e => {
+  attach('button.clear', 'click', () => {
     convert_text('');
   });
 
   convert_text();
-
 })();
