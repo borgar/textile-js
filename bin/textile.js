@@ -18,10 +18,7 @@ process.argv.slice(2).forEach(function (m, i, s) {
 const options = {};
 while (args.length) {
   const arg = args.shift();
-  if (arg === '-i' || arg === '--input') {
-    options.input = args.shift();
-  }
-  else if (arg === '-o' || arg === '--output') {
+  if (arg === '-o' || arg === '--output') {
     options.output = args.shift();
   }
   else {

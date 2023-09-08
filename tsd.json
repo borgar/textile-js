@@ -1,0 +1,12 @@
+{
+  "source": {
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "((^|\\/|\\\\)_|spec\\.js$)"
+  },
+  "opts": {
+    "template": "node_modules/@borgar/jsdoc-tsmd",
+    "destination": "console",
+    "output": "typescript",
+    "validate": true
+  }
+}

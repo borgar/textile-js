@@ -5,6 +5,8 @@
   "version": "2.1.1",
   "scripts": {
     "build": "webpack --mode production",
+    "build:types": "jsdoc -c tsd.json src>textile.d.ts",
+    "build:docs": "echo '# textile-js API\n'>API.md; jsdoc -t node_modules/@borgar/jsdoc-tsmd -d console src/>>API.md",
     "start": "webpack --mode development --watch",
     "dev": "nodemon -w test -w src -x 'tape -r @babel/register 'test/*.js'|tap-min'",
     "test": "tape -r @babel/register 'test/*js' | tap-min",
@@ -15,6 +17,7 @@
   "main": "./lib/textile.js",
   "module": "./src/index.js",
   "bin": "./bin/textile.js",
+  "types": "textiles.d.ts",
   "directories": {
     "test": "test"
   },
@@ -49,6 +52,7 @@
     "eslint": "~8.48.0",
     "eslint-plugin-import": "~2.28.1",
     "eslint-plugin-jsdoc": "~46.5.1",
+    "jsdoc": "~4.0.2",
     "nyc": "~15.1.0",
     "tap-min": "~3.0.0",
     "tape": "~5.6.6",

@@ -1,7 +1,7 @@
-const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
+import path from 'path';
+import TerserPlugin from 'terser-webpack-plugin';
 
-module.exports = {
+export default {
   mode: 'production',
   entry: path.resolve('./src/index.js'),
   devtool: 'source-map',
