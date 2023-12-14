@@ -1,5 +1,5 @@
 html {
-  overflow: hidden;
+  overflow: auto;
   height: 100%;
 }
 
@@ -159,6 +159,9 @@ label {
 
 
 
+textarea, #text_preview {
+  overflow: auto;
+}
 #text_preview {
   padding: 0 1em 4px 1em;
   color: #444;
